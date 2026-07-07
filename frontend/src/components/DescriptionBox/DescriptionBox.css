@@ -1,0 +1,39 @@
+.descriptionbox {
+  margin: 60px auto;
+  width: 85%;
+}
+
+.descriptionbox-navigator {
+  display: flex;
+}
+
+.descriptionbox-nav-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  width: 160px;
+  height: 50px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  border-bottom: none;
+}
+
+.descriptionbox-nav-box.fade {
+  background: #f9fafb;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.descriptionbox-description {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border: 1px solid #e5e7eb;
+  padding: 40px;
+  background: white;
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.7;
+}

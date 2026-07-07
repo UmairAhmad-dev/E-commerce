@@ -1,0 +1,17 @@
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #5c5c5c;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 30px auto;
+  width: 85%;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.breadcrumbs .arrow {
+  font-size: 10px;
+  color: #8c8c8c;
+}

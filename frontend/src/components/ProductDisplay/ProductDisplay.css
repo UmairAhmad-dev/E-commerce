@@ -1,0 +1,160 @@
+.productdisplay {
+  display: flex;
+  margin: 0 auto;
+  width: 85%;
+  gap: 40px;
+  padding-bottom: 60px;
+}
+
+.productdisplay-left {
+  display: flex;
+  gap: 15px;
+  flex: 1;
+}
+
+.productdisplay-img-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.productdisplay-img-list img {
+  width: 100px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.productdisplay-main-img {
+  width: 480px;
+  height: 476px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.productdisplay-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.productdisplay-right h1 {
+  color: #374151;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.productdisplay-right-stars {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  gap: 5px;
+  color: #ffc107;
+  font-size: 18px;
+}
+
+.productdisplay-right-stars .star-dull {
+  color: #d1d5db;
+}
+
+.productdisplay-right-stars p {
+  color: #4b5563;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.productdisplay-right-prices {
+  display: flex;
+  margin: 20px 0;
+  gap: 20px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.productdisplay-right-price-old {
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+.productdisplay-right-price-new {
+  color: #ff4141;
+}
+
+.productdisplay-right-description {
+  color: #4b5563;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.productdisplay-right-size h3 {
+  margin-top: 30px;
+  color: #374151;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.productdisplay-right-sizes {
+  display: flex;
+  margin: 15px 0 25px 0;
+  gap: 15px;
+}
+
+.productdisplay-right-sizes div {
+  padding: 10px 18px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.productdisplay-right-sizes div:hover {
+  background: #ff4141;
+  color: white;
+  border-color: #ff4141;
+}
+
+.productdisplay-right button {
+  padding: 15px 40px;
+  width: 200px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background: #ff4141;
+  margin-bottom: 30px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.productdisplay-right button:hover {
+  background: #e03535;
+}
+
+.productdisplay-right-category {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.productdisplay-right-category span {
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Add this to the very bottom of your existing ProductDisplay.css file */
+
+.productdisplay-right-sizes div.active {
+  background: #ff4141;
+  color: white;
+  border-color: #ff4141;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(255, 65, 65, 0.3);
+}

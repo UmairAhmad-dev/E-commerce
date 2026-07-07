@@ -1,0 +1,50 @@
+.item {
+  width: 100%;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.item:hover {
+  transform: translateY(-5px);
+}
+
+.item-image {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.item-name {
+  margin: 12px 10px 6px 10px;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.4;
+  height: 40px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.item-prices {
+  display: flex;
+  gap: 15px;
+  padding: 0 10px 15px 10px;
+  font-size: 16px;
+}
+
+.item-price-new {
+  color: #ff4141;
+  font-weight: 600;
+}
+
+.item-price-old {
+  color: #8c8c8c;
+  text-decoration: line-through;
+  font-weight: 400;
+}
