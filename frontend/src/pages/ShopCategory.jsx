@@ -6,31 +6,41 @@ import './ShopCategory.css';
 const ShopCategory = ({ category, banner }) => {
   const { allProducts } = useContext(ShopContext);
   
-  // State managers to keep track of query matching data inputs
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("All");
+  const [sortOrder, setSortOrder] = useState("default"); // Options: default, lowHigh, highLow
 
-  // Filter pipeline to match categories, types, and search queries dynamically
-  const filteredProducts = allProducts.filter((item) => {
-    const matchesCategory = category === item.category;
-    
-    // Local sub-category classification parsing logic
-    const matchesType = 
-      selectedType === "All" || 
-      (selectedType === "Stitched" && item.name.toLowerCase().includes("stitched")) ||
-      (selectedType === "Kurta" && item.name.toLowerCase().includes("kurta")) ||
-      (selectedType === "Lawn" && item.name.toLowerCase().includes("lawn"));
+  // Processing pipeline: Filter -> Sort
+  const processedProducts = allProducts
+    .filter((item) => {
+      const matchesCategory = category === item.category;
+      
+      // Dynamic filters matching modern traditional retail tags
+      const matchesType = 
+        selectedType === "All" || 
+        (selectedType === "Stitched" && item.name.toLowerCase().includes("stitched")) ||
+        (selectedType === "Kurta" && item.name.toLowerCase().includes("kurta")) ||
+        (selectedType === "Lawn" && item.name.toLowerCase().includes("lawn"));
 
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
 
-    return matchesCategory && matchesType && matchesSearch;
-  });
+      return matchesCategory && matchesType && matchesSearch;
+    })
+    .sort((a, b) => {
+      if (sortOrder === "lowHigh") {
+        return a.new_price - b.new_price;
+      }
+      if (sortOrder === "highLow") {
+        return b.new_price - a.new_price;
+      }
+      return 0; // Maintain default data ordering
+    });
 
   return (
     <div className="shop-category">
       <img className="shopcategory-banner" src={banner} alt={`${category} banner`} />
       
-      {/* Search and Advanced Filter Engine block */}
+      {/* Search and Tag Filtering Controls Row */}
       <div className="shopcategory-filter-wrapper">
         <div className="shopcategory-searchbox">
           <span>🔍</span>
@@ -56,18 +66,31 @@ const ShopCategory = ({ category, banner }) => {
         </div>
       </div>
 
+      {/* Index Counter and Sorting Dropdown Row */}
       <div className="shopcategory-indexSort">
         <p>
-          <span>Showing {filteredProducts.length}</span> out of {allProducts.filter(p => p.category === category).length} products
+          <span>Showing {processedProducts.length}</span> out of {allProducts.filter(p => p.category === category).length} products
         </p>
-        <div className="shopcategory-sort">
-          Sort by <span>▼</span>
+        
+        <div className="shopcategory-sort-container">
+          <label htmlFor="price-sort">Sort by: </label>
+          <select 
+            id="price-sort"
+            value={sortOrder} 
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="shopcategory-dropdown"
+          >
+            <option value="default">Default Features</option>
+            <option value="lowHigh">Price: Low to High</option>
+            <option value="highLow">Price: High to Low</option>
+          </select>
         </div>
       </div>
 
+      {/* Products Grid */}
       <div className="shopcategory-products">
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map((item) => (
+        {processedProducts.length > 0 ? (
+          processedProducts.map((item) => (
             <Item 
               key={item.id}
               id={item.id}
@@ -79,7 +102,7 @@ const ShopCategory = ({ category, banner }) => {
           ))
         ) : (
           <div className="shopcategory-empty-state">
-            <p>No design matches your current search parameters.</p>
+            <p>No designs match your current search parameters.</p>
           </div>
         )}
       </div>
