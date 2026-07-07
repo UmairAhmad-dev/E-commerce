@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from 'react';
 
 export const ShopContext = createContext(null);
 
-// 1. Modified to create a fresh empty cart structure
+// 1. Helper structure for a fresh empty cart dictionary matrix
 const getBlankCart = () => {
   let cart = {};
   for (let index = 1; index <= 12; index++) {
@@ -11,7 +11,7 @@ const getBlankCart = () => {
   return cart;
 };
 
-// 2. Safely extracts previous session data if it exists
+// 2. Extracts cached user configurations out of local browser cache memory
 const getDefaultCart = () => {
   const savedCart = localStorage.getItem('shopper_cart');
   if (savedCart) {
@@ -26,6 +26,7 @@ const getDefaultCart = () => {
 
 export const ShopContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(getDefaultCart());
+  const [activePromo] = useState({ code: "", discountPercent: 0 }); // Fallback coupon wrapper hook
   
   const [allProducts] = useState([
     { id: 1, name: "Premium Embroidered 3-Piece Lawn Suit - Floral Ivory", category: "women", new_price: 65.0, old_price: 95.0, image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600" },
@@ -39,7 +40,7 @@ export const ShopContextProvider = ({ children }) => {
     { id: 9, name: "Kids Hand-Embellished Cotton Shalwar Suit - Sunflower Yellow", category: "kid", new_price: 38.0, old_price: 55.0, image: "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=600" }
   ]);
 
-  // 3. Keep localStorage perfectly synced with state changes
+  // 3. Sync state mutations immediately down to local cache storage definitions
   useEffect(() => {
     localStorage.setItem('shopper_cart', JSON.stringify(cartItems));
   }, [cartItems]);
@@ -52,7 +53,7 @@ export const ShopContextProvider = ({ children }) => {
     setCartItems((prev) => ({ ...prev, [itemId]: Math.max(0, prev[itemId] - 1) }));
   };
 
-  const getTotalCartAmount = () => {
+  const getSubtotalAmount = () => {
     let totalAmount = 0;
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
@@ -65,6 +66,26 @@ export const ShopContextProvider = ({ children }) => {
     return totalAmount;
   };
 
+  const getDiscountAmount = () => {
+    return getSubtotalAmount() * (activePromo.discountPercent / 100);
+  };
+
+  const getTaxAmount = () => {
+    return (getSubtotalAmount() - getDiscountAmount()) * 0.05;
+  };
+
+  const getShippingFee = () => {
+    const subtotal = getSubtotalAmount();
+    if (subtotal === 0) return 0;
+    return subtotal > 150 ? 0 : 15.00;
+  };
+
+  const getTotalCartAmount = () => {
+    const subtotal = getSubtotalAmount();
+    if (subtotal === 0) return 0;
+    return subtotal - getDiscountAmount() + getTaxAmount() + getShippingFee();
+  };
+
   const getTotalCartItems = () => {
     let totalItem = 0;
     for (const item in cartItems) {
@@ -75,18 +96,30 @@ export const ShopContextProvider = ({ children }) => {
     return totalItem;
   };
 
+  const clearCart = () => {
+    const freshBlankCart = getBlankCart();
+    setCartItems(freshBlankCart);
+    localStorage.setItem('shopper_cart', JSON.stringify(freshBlankCart));
+  };
+
+  // --- ONLY ONE SINGLE CONTEXTVALUE OBJECT RECORD LIVES HERE NOW ---
   const contextValue = {
     allProducts,
     cartItems,
     addToCart,
     removeFromCart,
+    getSubtotalAmount,
+    getDiscountAmount,
+    getTaxAmount,
+    getShippingFee,
     getTotalCartAmount,
-    getTotalCartItems
+    getTotalCartItems,
+    clearCart
   };
 
   return (
-    <ShopContext value={contextValue}>
+    <ShopContext.Provider value={contextValue}>
       {children}
-    </ShopContext>
+    </ShopContext.Provider>
   );
 };

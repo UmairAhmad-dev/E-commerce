@@ -1,0 +1,205 @@
+.order-success-page {
+  background-color: #f8fafc;
+  min-height: 85vh;
+  padding: 60px 20px;
+}
+
+.order-success-container {
+  max-width: 680px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+/* Success Icon Header Panel */
+.success-header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.success-checkmark-circle {
+  width: 64px;
+  height: 64px;
+  background-color: #d1fae5;
+  color: #10b981;
+  font-size: 32px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin: 0 auto 20px auto;
+}
+
+.success-header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.success-header p {
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Metadata Row Grid Layout */
+.order-metadata-card {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 35px;
+}
+
+.order-metadata-card div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.order-metadata-card span {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.order-metadata-card strong {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.status-badge {
+  color: #2563eb !important;
+}
+
+/* Itemized Products Summary List */
+.order-items-breakdown h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 10px;
+}
+
+.items-table {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.items-table-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.receipt-prod-img {
+  width: 50px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #f8fafc;
+}
+
+.receipt-prod-details {
+  flex: 1;
+}
+
+.receipt-prod-details h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 2px;
+}
+
+.receipt-prod-details p {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.receipt-prod-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* Invoice Bill Rows */
+.order-receipt-totals {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 35px;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #475569;
+  margin-bottom: 10px;
+}
+
+.receipt-row.green-text {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.receipt-dashed-line {
+  border: none;
+  border-top: 1px dashed #cbd5e1;
+  margin: 14px 0;
+}
+
+.grand-total-row {
+  color: #0f172a;
+  margin-bottom: 0;
+}
+
+.grand-total-row h3 {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* Action Utility Button block */
+.success-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.continue-shopping-btn {
+  padding: 14px 32px;
+  background: #0f172a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.continue-shopping-btn:hover {
+  background: #ff4141;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .order-metadata-card {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .order-success-container {
+    padding: 24px;
+  }
+}

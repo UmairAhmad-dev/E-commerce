@@ -1,9 +1,10 @@
 import { useContext } from 'react';
 import { ShopContext } from '../../context/ShopContext';
 import './CartItems.css';
-
+import { useNavigate } from 'react-router-dom';
 const CartItems = () => {
   const { allProducts, cartItems, removeFromCart, getTotalCartAmount } = useContext(ShopContext);
+  const navigate = useNavigate();
 
   return (
     <div className="cartitems">
@@ -55,9 +56,9 @@ const CartItems = () => {
               <h3>${getTotalCartAmount().toFixed(2)}</h3>
             </div>
           </div>
-          <button onClick={() => alert("Proceeding to secure checkout gateway...")}>
-            PROCEED TO CHECKOUT
-          </button>
+          <button className="checkout-btn" onClick={() => navigate('/checkout')}>
+  PROCEED TO CHECKOUT
+</button>
         </div>
         <div className="cartitems-promocode">
           <p>If you have a promo code, enter it here:</p>
