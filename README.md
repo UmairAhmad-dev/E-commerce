@@ -6,7 +6,6 @@ A highly optimized, production-ready frontend e-commerce web application special
 
 ## 🚀 Core Features & Architectural Milestones
 
-* 🌓 **Dual-Context Theme Management Matrix:** Integrated a global `ThemeContext` tracking state shifts between Light and Dark interface configurations. Managed persistently through local browser runtime environments (`localStorage`).
 * 🔍 **Interactive Product Lens & Visual Carousel:** Upgraded the product detail page view with an automated thumbnail preview selector and a cursor-tracking coordinate magnifying zoom lens natively driven via CSS transformations.
 * 📊 **Multi-Tier Search & Content Pipelines:** Implemented granular Client-side data filters on catalog panels combining instant input search fields, structural category matches, and categorical collection tags (Stitched, Kurta, Lawn).
 * 📐 **Dynamic Price Sorting Engine:** Built a numerical list array sorting processor handling real-time budget adjustments (`Price: Low to High` / `Price: High to Low`) seamlessly in parallel with active filters.
