@@ -1,8 +1,9 @@
 import { createContext, useState, useEffect } from 'react';
 
+// 1. Named Export for the Context object
 export const ShopContext = createContext(null);
 
-// 1. Helper structure for a fresh empty cart dictionary matrix
+// Helper structure for a fresh empty cart dictionary matrix
 const getBlankCart = () => {
   let cart = {};
   for (let index = 1; index <= 12; index++) {
@@ -11,7 +12,7 @@ const getBlankCart = () => {
   return cart;
 };
 
-// 2. Extracts cached user configurations out of local browser cache memory
+// Extracts cached user configurations out of local browser cache memory
 const getDefaultCart = () => {
   const savedCart = localStorage.getItem('shopper_cart');
   if (savedCart) {
@@ -40,7 +41,7 @@ export const ShopContextProvider = ({ children }) => {
     { id: 9, name: "Kids Hand-Embellished Cotton Shalwar Suit - Sunflower Yellow", category: "kid", new_price: 38.0, old_price: 55.0, image: "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=600" }
   ]);
 
-  // 3. Sync state mutations immediately down to local cache storage definitions
+  // Sync state mutations immediately down to local cache storage definitions
   useEffect(() => {
     localStorage.setItem('shopper_cart', JSON.stringify(cartItems));
   }, [cartItems]);
@@ -102,7 +103,6 @@ export const ShopContextProvider = ({ children }) => {
     localStorage.setItem('shopper_cart', JSON.stringify(freshBlankCart));
   };
 
-  // --- ONLY ONE SINGLE CONTEXTVALUE OBJECT RECORD LIVES HERE NOW ---
   const contextValue = {
     allProducts,
     cartItems,
@@ -123,3 +123,6 @@ export const ShopContextProvider = ({ children }) => {
     </ShopContext.Provider>
   );
 };
+
+// 2. Default Export for the Provider Wrapper (Fixes the main.jsx crash)
+export default ShopContextProvider;
