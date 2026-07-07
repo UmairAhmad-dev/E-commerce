@@ -18,3 +18,14 @@ body {
   margin: 0 auto;
   padding: 0 24px;
 }
+
+/* Add this to your global index.css file to strip browser text defaults */
+a {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+li a {
+  text-decoration: none;
+  color: inherit;
+}
