@@ -146,3 +146,57 @@
   border: none;
   font-weight: 500;
 }
+
+/* --- MOBILE RESPONSIVENESS OVERRIDES --- */
+@media (max-width: 900px) {
+  .cartitems-down {
+    flex-direction: column;
+    gap: 40px;
+  }
+  
+  .cartitems-format-main {
+    grid-template-columns: 1fr 2fr 1fr 1fr;
+    font-size: 14px;
+    gap: 10px;
+  }
+
+  /* Hide Total column and Remove title on small tablets to clear layout clutter */
+  .cartitems-format-main p:nth-child(5),
+  .cartitems-format-main p:nth-child(6),
+  .cartitems-format .cartitems-remove-icon {
+    display: none;
+  }
+
+  /* Reposition individual row close buttons as absolute overlays */
+  .cartitems-format {
+    position: relative;
+  }
+  
+  .cartitems-quantity {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (max-width: 500px) {
+  .cartitems {
+    width: 92%;
+  }
+  
+  .cartitems-format-main {
+    font-size: 12px;
+  }
+  
+  .carticon-product-icon {
+    width: 45px;
+    height: 55px;
+  }
+  
+  .cartitems-promobox {
+    width: 100%;
+  }
+  
+  .cartitems-total button {
+    width: 100%;
+  }
+}
