@@ -1,7 +1,14 @@
 .hero {
-  height: 100vh;
-  background: linear-gradient(180deg, #fde1e1 0%, #e1e1e1 60%);
+  height: 65vh; /* Compressed from 100vh to fit content above the fold */
+  min-height: 480px;
+  background: linear-gradient(180deg, #fef2f2 0%, #f1f5f9 100%);
   display: flex;
+  align-items: center;
+  border-radius: 16px;
+  margin: 20px auto;
+  width: 85%;
+  max-width: 1320px;
+  overflow: hidden;
 }
 
 .hero-left {
@@ -9,65 +16,60 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 20px;
-  padding-left: 10%;
-  line-height: 1.1;
+  gap: 12px;
+  padding-left: 8%;
 }
 
 .hero-left h2 {
-  color: #090909;
-  font-size: 26px;
+  color: #ef4444;
+  font-size: 16px;
   font-weight: 600;
+  letter-spacing: 2px;
 }
 
 .hero-left p {
-  color: #171717;
-  font-size: 80px;
-  font-weight: 700;
-}
-
-.hero-hand-icon {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+  color: #0f172a;
+  font-size: 52px; /* Scaled down gracefully from 80px */
+  font-weight: 800;
+  line-height: 1.15;
 }
 
 .hero-hand-icon span {
-  font-size: 75px;
+  font-size: 45px;
 }
 
 .hero-latest-btn {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 15px;
-  width: 310px;
-  height: 70px;
-  border-radius: 75px;
-  margin-top: 30px;
+  gap: 12px;
+  width: 240px;
+  height: 54px;
+  border-radius: 8px; /* Clean look instead of the pill shape */
+  margin-top: 15px;
   background: #ff4141;
   color: white;
-  font-size: 22px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease-in-out;
 }
 
 .hero-latest-btn:hover {
-  background: #e03535;
+  background: #dc2626;
+  transform: translateY(-2px);
 }
 
 .hero-right {
   flex: 1;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .hero-right img {
-  width: 80%;
-  height: 85%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
