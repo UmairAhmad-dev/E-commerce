@@ -1,63 +1,85 @@
 .newsletter {
   width: 85%;
-  height: 40vh;
+  max-width: 1320px;
+  background: white;
+  border: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: auto;
-  padding: 0px 140px;
-  margin-bottom: 80px;
-  background: linear-gradient(180deg, #fde1e1 0%, #e1e1e1 100%);
-  gap: 30px;
-  border-radius: 16px;
+  margin: 60px auto;
+  padding: 60px 40px;
+  gap: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.05);
 }
 
 .newsletter h1 {
-  color: #454545;
-  font-size: 45px;
-  font-weight: 600;
+  color: #0f172a;
+  font-size: 36px;
+  font-weight: 800;
   text-align: center;
+  letter-spacing: -0.5px;
 }
 
 .newsletter p {
-  color: #454545;
-  font-size: 18px;
+  color: #64748b;
+  font-size: 16px;
+  margin-bottom: 10px;
 }
 
 .newsletter form {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: white;
-  width: 730px;
-  height: 70px;
-  border-radius: 80px;
-  border: 1px solid #e3e3e3;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  width: 100%;
+  max-width: 600px;
+  height: 56px;
+  border-radius: 8px;
   overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.newsletter form:focus-within {
+  border-color: #ff4141;
 }
 
 .newsletter input {
-  width: 500px;
-  margin-left: 30px;
+  flex: 1;
+  padding-left: 20px;
   border: none;
   outline: none;
-  color: #616161;
-  font-size: 16px;
+  color: #334155;
+  font-size: 15px;
+  background: transparent;
 }
 
 .newsletter button {
-  width: 210px;
-  height: 70px;
-  border-radius: 80px;
-  background: black;
+  width: 160px;
+  height: 100%;
+  background: #0f172a;
   color: white;
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
   border: none;
-  transition: opacity 0.2s;
+  transition: background 0.2s;
 }
 
 .newsletter button:hover {
-  opacity: 0.85;
+  background: #ff4141;
+}
+
+/* Global Tablet/Mobile Fixes for the Homepage */
+@media (max-width: 768px) {
+  .hero { flex-direction: column; height: auto; padding: 40px 20px; }
+  .hero-right { display: none; }
+  .hero-left p { font-size: 36px; }
+  .offers { flex-direction: column; height: auto; padding: 40px 20px; text-align: center; }
+  .offers-right { display: none; }
+  .newsletter h1 { font-size: 26px; }
+  .newsletter form { flex-direction: column; height: auto; background: transparent; border: none; gap: 12px; }
+  .newsletter input { background: #f8fafc; border: 1px solid #cbd5e1; height: 50px; border-radius: 8px; width: 100%; }
+  .newsletter button { height: 50px; border-radius: 8px; width: 100%; }
 }

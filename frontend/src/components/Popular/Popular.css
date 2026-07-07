@@ -2,30 +2,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 80px 0;
+  padding: 80px 0 40px 0;
+  background: #ffffff;
 }
 
 .popular h1 {
-  color: #171717;
-  font-size: 50px;
-  font-weight: 600;
+  color: #0f172a;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
 .popular hr {
-  width: 200px;
-  height: 60px;
-  height: 6px;
-  border-radius: 10px;
-  background: #252525;
+  width: 60px;
+  height: 4px;
+  border-radius: 4px;
+  background: #ff4141;
   border: none;
+  margin-top: 12px;
+  margin-bottom: 40px;
 }
 
 .popular-item {
-  margin-top: 50px;
-  display: flex;
-  gap: 30px;
-  flex-wrap: wrap;
-  justify-content: center;
   width: 85%;
+  max-width: 1320px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+  justify-items: center;
 }
