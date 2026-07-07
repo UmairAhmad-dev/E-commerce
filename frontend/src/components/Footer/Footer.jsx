@@ -6,6 +6,11 @@ const Footer = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Professional fall-back handler for social nodes
+  const handleSocialClick = (platform) => {
+    alert(`${platform} integration is coming soon! Our corporate media links are being verified.`);
+  };
+
   return (
     <div className="footer">
       <div className="footer-logo" onClick={handleScrollTop}>
@@ -13,7 +18,6 @@ const Footer = () => {
         <p>SHOPPER</p>
       </div>
       
-      {/* Dynamic Navigation Enclosures */}
       <ul className="footer-links">
         <li onClick={handleScrollTop}><Link to="/about">Company</Link></li>
         <li onClick={handleScrollTop}><Link to="/">Products</Link></li>
@@ -22,14 +26,15 @@ const Footer = () => {
         <li onClick={handleScrollTop}><Link to="/contact">Contact</Link></li>
       </ul>
       
+      {/* Updated interactive nodes with safe inline handlers */}
       <div className="footer-social-icon">
-        <div className="footer-icons-container" onClick={() => window.open('https://instagram.com', '_blank')}>
+        <div className="footer-icons-container" onClick={() => handleSocialClick("Instagram")}>
           <span>📸</span>
         </div>
-        <div className="footer-icons-container" onClick={() => window.open('https://pinterest.com', '_blank')}>
+        <div className="footer-icons-container" onClick={() => handleSocialClick("Pinterest")}>
           <span>📌</span>
         </div>
-        <div className="footer-icons-container" onClick={() => window.open('https://whatsapp.com', '_blank')}>
+        <div className="footer-icons-container" onClick={() => handleSocialClick("WhatsApp Support")}>
           <span>💬</span>
         </div>
       </div>
