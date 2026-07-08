@@ -4,8 +4,9 @@ import './Checkout.css';
 import { useNavigate } from 'react-router-dom';
 
 const Checkout = () => {
-  // Destructured clearCart from ShopContext
   const { 
+    allProducts,
+    cartItems,
     getSubtotalAmount, 
     getDiscountAmount, 
     getTaxAmount, 
@@ -28,10 +29,10 @@ const Checkout = () => {
   };
 
   const handlePlaceOrder = (e) => {
+    // 1. CRITICAL: Stop the browser form default submission immediately
     e.preventDefault();
-    let localErrors = {};
     
-    // Simple validation schema
+    let localErrors = {};
     if (!shippingInfo.firstName.trim()) localErrors.firstName = "Required";
     if (!shippingInfo.lastName.trim()) localErrors.lastName = "Required";
     if (!shippingInfo.address.trim()) localErrors.address = "Address is required";
@@ -41,12 +42,41 @@ const Checkout = () => {
     if (Object.keys(localErrors).length > 0) {
       setErrors(localErrors);
       alert("Please fill in all mandatory shipping fields.");
-    } else {
-      // 1. Reset the global cart state and localStorage
+      return; // Stop right here if there are input errors
+    }
+
+    try {
+      // 2. Build the snapshot safely inside a try-catch block
+      const finalItemsSnapshot = allProducts
+        .filter(product => cartItems && cartItems[product.id] > 0)
+        .map(product => ({
+          id: product.id,
+          name: product.name,
+          image: product.image,
+          new_price: product.new_price,
+          quantity: cartItems[product.id]
+        }));
+
+      const invoiceSnapshot = {
+        items: finalItemsSnapshot,
+        subtotal: getSubtotalAmount() || 0,
+        discount: getDiscountAmount() || 0,
+        tax: getTaxAmount() || 0,
+        shipping: getShippingFee() || 0,
+        grandTotal: getTotalCartAmount() || 0
+      };
+
+      console.log("Checkout built snapshot successfully:", invoiceSnapshot);
+
+      // 3. Clear cart ONLY after data is safely captured
       clearCart();
       
-      // 2. Successful checkout submission path trigger
-      navigate('/order-success');
+      // 4. Navigate with our safe state memory block
+      navigate('/order-success', { state: { invoiceSnapshot }, replace: true });
+      
+    } catch (error) {
+      console.error("An error occurred during invoice snapshot building:", error);
+      alert("Something went wrong processing your order details. Please try again.");
     }
   };
 
@@ -101,7 +131,7 @@ const Checkout = () => {
           <h2>Payment Method</h2>
           <div className="payment-options">
             <label className="radio-container">
-              <input type="radio" name="payment" defaultChecked />
+              <input type="radio" name="payment" defaultChecked readOnly />
               <span className="checkmark"></span>
               Cash on Delivery (COD)
             </label>
