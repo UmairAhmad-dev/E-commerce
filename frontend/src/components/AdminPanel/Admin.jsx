@@ -4,8 +4,9 @@ import AddProduct from './AddProduct';
 import ManageProducts from './ManageProducts';
 import ManageOrders from './ManageOrders';
 import AdminAnalytics from './AdminAnalytics';
-import ManageCoupons from './ManageCoupons'; // New
-import ManageUsers from './ManageUsers';     // New
+import ManageCoupons from './ManageCoupons'; 
+import ManageUsers from './ManageUsers';     
+
 import './Admin.css';
 
 const Admin = () => {
@@ -19,14 +20,14 @@ const Admin = () => {
       <div className="admin-sidebar">
         <div className="admin-brand-profile">
           <h2>SHOPPER</h2>
-          <span>Admin Portal v1.2</span>
+          <span>Admin Portal v1.5</span>
         </div>
         
-        {/* Sleek Admin Mini Profile Card */}
+        {/* Professional Profile Badge */}
         <div className="sidebar-user-card-profile">
-          <div className="profile-initial-circle">UA</div>
+          <div className="profile-initial-circle">UN</div>
           <div className="profile-meta-strings">
-            <h4>Umair Ahmad</h4>
+            <h4>Ch. Umair Nadeem</h4>
             <p>System Administrator</p>
           </div>
         </div>
@@ -52,6 +53,12 @@ const Admin = () => {
           <button className={`sidebar-link-btn ${activeTab === "users" ? "active" : ""}`} onClick={() => setActiveTab("users")}>
             👥 User Database
           </button>
+          <button className={`sidebar-link-btn ${activeTab === "settings" ? "active" : ""}`} onClick={() => setActiveTab("settings")}>
+            ⚙️ Global Settings
+          </button>
+          <button className={`sidebar-link-btn ${activeTab === "logs" ? "active" : ""}`} onClick={() => setActiveTab("logs")}>
+            🖥️ System Audit Logs
+          </button>
         </div>
         
         <div className="sidebar-footer-exit">
@@ -70,6 +77,8 @@ const Admin = () => {
               {activeTab === "orders" && "Order Fulfillment Terminal"}
               {activeTab === "coupons" && "Campaign Coupon Manager"}
               {activeTab === "users" && "User Database Control Panel"}
+              {activeTab === "settings" && "Global Store Configurations"}
+              {activeTab === "logs" && "System Audit Log Streaming Grid"}
             </h1>
             <p>Authorized Master Administrative Control Environment</p>
           </div>
@@ -86,6 +95,8 @@ const Admin = () => {
           {activeTab === "orders" && <ManageOrders />}
           {activeTab === "coupons" && <ManageCoupons />}
           {activeTab === "users" && <ManageUsers />}
+          {activeTab === "settings" && <AdminSettings />}
+          {activeTab === "logs" && <AdminLogs />}
         </main>
       </div>
     </div>

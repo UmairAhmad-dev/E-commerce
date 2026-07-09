@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 const AddProduct = () => {
+  const [activeStep, setActiveStep] = useState(1); // 1: Basic Info, 2: Pricing & Media
   const [productDetails, setProductDetails] = useState({
     name: "",
     old_price: "",
@@ -16,77 +17,173 @@ const AddProduct = () => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
   };
 
-  const handleImageChange = (e) => {
-    setImageFile(e.target.files[0]);
-  };
-
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    // Front-end execution simulation for team review
-    console.log("Ingesting Product Meta Object State:", productDetails, imageFile);
+    console.log("Publishing Catalog Asset State:", productDetails, imageFile);
     alert(`Successfully generated catalog mockup for: ${productDetails.name}`);
     
-    // Reset inputs
+    // Reset Form
     setProductDetails({ name: "", old_price: "", new_price: "", category: "mens", stock_qty: "", description: "", tags: "" });
     setImageFile(null);
+    setActiveStep(1);
   };
 
   return (
-    <div className="admin-card-view animated-fade">
-      <h2>Product Specifications Entry</h2>
-      <form onSubmit={handleFormSubmit} className="admin-ingestion-form">
+    <div className="admin-card-view premium-ui-card animated-fade">
+      
+      {/* MODERN STEPPER PROGRESS ROADMAP */}
+      <div className="form-stepper-container">
+        <div className={`step-node ${activeStep >= 1 ? 'active' : ''}`}>
+          <div className="node-number">1</div>
+          <span>Basic Specifications</span>
+        </div>
+        <div className="step-connector-line"></div>
+        <div className={`step-node ${activeStep === 2 ? 'active' : ''}`}>
+          <div className="node-number">2</div>
+          <span>Pricing & Media Assets</span>
+        </div>
+      </div>
+
+      <form className="admin-ingestion-form" onSubmit={handleFormSubmit}>
         
-        <div className="form-input-block">
-          <label>Product Title / Name</label>
-          <input type="text" name="name" placeholder="e.g., Men's Luxury Cotton Kurta - Charcoal Slate" value={productDetails.name} onChange={handleInputChange} required />
-        </div>
+        {/* STEP 1: BASIC INFORMATION */}
+        {activeStep === 1 && (
+          <div className="stepper-content-view animated-fade">
+            <div className="form-input-block">
+              <label>Product Title / Name</label>
+              <input 
+                type="text" 
+                name="name" 
+                placeholder="e.g., Men's Luxury Cotton Kurta - Charcoal Slate" 
+                value={productDetails.name} 
+                onChange={handleInputChange} 
+                required 
+              />
+            </div>
 
-        <div className="form-input-row-grid">
-          <div className="form-input-block">
-            <label>Original Retail Price ($)</label>
-            <input type="number" step="0.01" name="old_price" placeholder="85.00" value={productDetails.old_price} onChange={handleInputChange} required />
-          </div>
-          <div className="form-input-block">
-            <label>Sale Price / Offer Price ($)</label>
-            <input type="number" step="0.01" name="new_price" placeholder="55.00" value={productDetails.new_price} onChange={handleInputChange} required />
-          </div>
-          <div className="form-input-block">
-            <label>Initial Vault Stock Quantity</label>
-            <input type="number" name="stock_qty" placeholder="150" value={productDetails.stock_qty} onChange={handleInputChange} required />
-          </div>
-        </div>
+            <div className="form-input-row-grid items-two" style={{ marginTop: '20px' }}>
+              <div className="form-input-block">
+                <label>Core Segment Category</label>
+                <select name="category" value={productDetails.category} onChange={handleInputChange}>
+                  <option value="mens">Men's Ethnic Wear</option>
+                  <option value="womens">Women's Premium Lawn</option>
+                  <option value="kids">Junior Stitched Collection</option>
+                </select>
+              </div>
+              <div className="form-input-block">
+                <label>Search Meta Tags (Comma Separated)</label>
+                <input 
+                  type="text" 
+                  name="tags" 
+                  placeholder="Premium, Breathable, Eid Festive" 
+                  value={productDetails.tags} 
+                  onChange={handleInputChange} 
+                />
+              </div>
+            </div>
 
-        <div className="form-input-row-grid items-two">
-          <div className="form-input-block">
-            <label>Core Segment Category</label>
-            <select name="category" value={productDetails.category} onChange={handleInputChange}>
-              <option value="mens">Men's Ethnic Wear</option>
-              <option value="womens">Women's Premium Lawn</option>
-              <option value="kids">Junior Stitched Collection</option>
-            </select>
-          </div>
-          <div className="form-input-block">
-            <label>Search Meta Tags (Comma Separated)</label>
-            <input type="text" name="tags" placeholder="Premium, Breathable, Eid Festive" value={productDetails.tags} onChange={handleInputChange} />
-          </div>
-        </div>
+            <div className="form-input-block" style={{ marginTop: '20px' }}>
+              <label>Detailed Item Description</label>
+              <textarea 
+                name="description" 
+                rows="4" 
+                placeholder="Describe fabric profile composition, stitching density details..." 
+                value={productDetails.description} 
+                onChange={handleInputChange}
+                required
+              ></textarea>
+            </div>
 
-        <div className="form-input-block">
-          <label>Detailed Item Description</label>
-          <textarea name="description" rows="4" placeholder="Describe fabric profile composition, stitching density details, embroidery details..." value={productDetails.description} onChange={handleInputChange}></textarea>
-        </div>
-
-        <div className="form-input-block image-upload-zone">
-          <label>Display Imagery Resource File</label>
-          <div className="upload-box-wrapper">
-            <input type="file" id="prod-file-img" accept="image/*" onChange={handleImageChange} required />
-            <label htmlFor="prod-file-img" className="custom-upload-trigger">
-              {imageFile ? `Selected: ${imageFile.name}` : "📂 Drag & drop or browse media files"}
-            </label>
+            <button 
+              type="button" 
+              className="admin-action-submit-btn step-forward-btn" 
+              style={{ marginTop: '30px' }}
+              onClick={() => {
+                if(productDetails.name && productDetails.description) {
+                  setActiveStep(2);
+                } else {
+                  alert("Please fill in the Product Name and Description first!");
+                }
+              }}
+            >
+              Proceed to Next Step →
+            </button>
           </div>
-        </div>
+        )}
 
-        <button type="submit" className="admin-action-submit-btn">Publish Item to Catalog Mockup</button>
+        {/* STEP 2: PRICING, STOCK & IMAGERY */}
+        {activeStep === 2 && (
+          <div className="stepper-content-view animated-fade">
+            <div className="form-input-row-grid">
+              <div className="form-input-block">
+                <label>Original Retail Price ($)</label>
+                <input 
+                  type="number" 
+                  step="0.01" 
+                  name="old_price" 
+                  placeholder="85.00" 
+                  value={productDetails.old_price} 
+                  onChange={handleInputChange} 
+                  required 
+                />
+              </div>
+              <div className="form-input-block">
+                <label>Sale Price / Offer Price ($)</label>
+                <input 
+                  type="number" 
+                  step="0.01" 
+                  name="new_price" 
+                  placeholder="55.00" 
+                  value={productDetails.new_price} 
+                  onChange={handleInputChange} 
+                  required 
+                />
+              </div>
+              <div className="form-input-block">
+                <label>Initial Vault Stock Quantity</label>
+                <input 
+                  type="number" 
+                  name="stock_qty" 
+                  placeholder="150" 
+                  value={productDetails.stock_qty} 
+                  onChange={handleInputChange} 
+                  required 
+                />
+              </div>
+            </div>
+
+            <div className="form-input-block image-upload-zone" style={{ marginTop: '25px' }}>
+              <label>Display Imagery Resource File</label>
+              <div className="upload-box-wrapper">
+                <input 
+                  type="file" 
+                  id="prod-file-img" 
+                  accept="image/*" 
+                  onChange={(e) => setImageFile(e.target.files[0])} 
+                  required 
+                />
+                <label htmlFor="prod-file-img" className="custom-upload-trigger modern-dropzone">
+                  {imageFile ? ` Selected: ${imageFile.name}` : "📂 Click to browse or drop premium product media assets"}
+                </label>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '15px', marginTop: '30px' }}>
+              <button 
+                type="button" 
+                className="counter-adj-btn" 
+                style={{ padding: '0 25px' }}
+                onClick={() => setActiveStep(1)}
+              >
+                ← Back
+              </button>
+              <button type="submit" className="admin-action-submit-btn" style={{ margin: 0 }}>
+                Publish Item to Catalog
+              </button>
+            </div>
+          </div>
+        )}
+
       </form>
     </div>
   );

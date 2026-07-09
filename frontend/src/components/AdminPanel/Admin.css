@@ -551,3 +551,123 @@
   from { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.2); }
   to { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.0); }
 }
+
+/* --- PREMIUM UI STRUCTURE SHADOWS & CARD GLOW --- */
+.premium-ui-card {
+  border: 1px solid #eef2f6 !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
+  background: white;
+}
+
+/* TREND PERCENTAGE HIGHLIGHTS */
+.trend-indicator {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.trend-indicator.positive { color: #10b981; background-color: #ecfdf5; }
+.trend-indicator.negative { color: #ef4444; background-color: #fef2f2; }
+.trend-indicator small { color: #64748b; font-weight: 400; margin-left: 4px; }
+
+/* REUSABLE CHART LEGEND ACCENTS */
+.chart-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.chart-subtitle { font-size: 13px; color: #64748b; margin-top: 2px; }
+
+.chart-legend-pills { display: flex; gap: 15px; }
+.legend-pill { font-size: 12px; font-weight: 600; color: #64748b; display: flex; align-items: center; gap: 6px; }
+.legend-pill::before { content: ''; width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.legend-pill.line-item::before { background-color: #cbd5e1; }
+.legend-pill.revenue-accent::before { background-color: #ff4141; }
+
+/* HOVER TOOLTIPS FOR THE SALES BARS */
+.chart-bar .bar-tooltip {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  background-color: #0f172a;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.chart-bar:hover .bar-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+/* --- STEPPER FORM PROGRESS REGISTRATION ROADMAP --- */
+.form-stepper-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  background-color: #f8fafc;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #f1f5f9;
+}
+
+.step-node { display: flex; align-items: center; gap: 12px; color: #94a3b8; }
+.step-node.active { color: #0f172a; }
+
+.node-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.3s;
+}
+
+.step-node.active .node-number {
+  background-color: #ff4141;
+  color: white;
+  box-shadow: 0 0 0 4px rgba(255, 65, 65, 0.15);
+}
+
+.step-node span { font-size: 14px; font-weight: 600; }
+
+.step-connector-line {
+  flex: 1;
+  height: 2px;
+  background-color: #e2e8f0;
+  margin: 0 20px;
+}
+
+.step-forward-btn {
+  margin-top: 30px;
+  background-color: #0f172a;
+}
+
+.step-forward-btn:hover {
+  background-color: #1e293b;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+}
+
+.modern-dropzone {
+  padding: 40px 20px !important;
+  background-color: #f8fafc;
+  border-color: #cbd5e1 !important;
+  border-radius: 8px !important;
+}
