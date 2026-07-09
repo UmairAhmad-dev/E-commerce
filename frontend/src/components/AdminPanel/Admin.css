@@ -1,0 +1,553 @@
+/* --- GLOBAL ADMIN WORKSPACE WRAPPER --- */
+.admin-dashboard-layout {
+  display: flex;
+  min-height: 90vh;
+  background-color: #f8fafc;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* --- SIDEBAR BACKDROP ARCHITECTURE --- */
+.admin-sidebar {
+  width: 260px;
+  background-color: #0f172a; /* Slate 900 color profile to match storefront styles */
+  color: #f1f5f9;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-brand-profile h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 1px;
+}
+
+.admin-brand-profile span {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.sidebar-divider {
+  border: none;
+  height: 1px;
+  background-color: #334155;
+  margin: 25px 0;
+}
+
+.sidebar-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar-link-btn {
+  padding: 14px 16px;
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-link-btn:hover {
+  background-color: #1e293b;
+  color: white;
+}
+
+.sidebar-link-btn.active {
+  background-color: #ff4141; /* Signature Brand Red Accent */
+  color: white;
+}
+
+/* --- WORKSPACE CORE CONTROLS --- */
+.admin-main-workspace {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.workspace-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.bar-title h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.bar-title p {
+  font-size: 14px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.admin-avatar-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: white;
+  padding: 10px 18px;
+  border-radius: 30px;
+  border: 1px solid #e2e8f0;
+  font-size: 13.5px;
+}
+
+.online-indicator {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: #10b981;
+}
+
+/* --- CENTRAL CONTAINER CARDS --- */
+.admin-card-view {
+  background-color: white;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+  border: 1px solid #e2e8f0;
+}
+
+.admin-card-view h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 25px;
+}
+
+/* --- DATA ENTRIES AND SELECTOR STYLING --- */
+.admin-ingestion-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.form-input-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-input-block label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.form-input-block input,
+.form-input-block select,
+.form-input-block textarea {
+  padding: 12px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #334155;
+  outline: none;
+  background-color: #f8fafc;
+  transition: all 0.2s;
+}
+
+.form-input-block input:focus,
+.form-input-block select:focus,
+.form-input-block textarea:focus {
+  border-color: #ff4141;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(255, 65, 65, 0.1);
+}
+
+.form-input-row-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.form-input-row-grid.items-two {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* CUSTOM DRAG IMAGE ZONE */
+.upload-box-wrapper input[type="file"] {
+  display: none;
+}
+
+.custom-upload-trigger {
+  display: block;
+  padding: 30px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 6px;
+  text-align: center;
+  color: #64748b;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #f8fafc;
+  transition: all 0.2s;
+}
+
+.custom-upload-trigger:hover {
+  background-color: #fff5f5;
+  border-color: #ff4141;
+  color: #ff4141;
+}
+
+.admin-action-submit-btn {
+  padding: 14px 28px;
+  background-color: #0f172a;
+  color: white;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: all 0.2s;
+}
+
+.admin-action-submit-btn:hover {
+  background-color: #ff4141;
+  box-shadow: 0 4px 14px rgba(255, 65, 65, 0.3);
+}
+
+/* --- DATA TABLE AND LOGS DISPLAY --- */
+.table-header-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.table-header-meta h2 { margin-bottom: 0; }
+
+.total-inventory-badge {
+  background-color: #eff6ff;
+  color: #2563eb;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.admin-responsive-table-scroll {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.admin-ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.admin-ledger-table th {
+  background-color: #f1f5f9;
+  color: #475569;
+  font-weight: 600;
+  padding: 14px 18px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.admin-ledger-table td {
+  padding: 16px 18px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.table-thumb-preview {
+  width: 50px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.table-cell-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  justify-content: center;
+  min-width: 220px;
+}
+
+.table-cell-title-block strong { color: #1e293b; font-weight: 600; }
+.table-cell-title-block span { font-size: 12px; color: #94a3b8; }
+
+.table-row-category-pill {
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  background-color: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.table-cell-price-bold { font-weight: 700; color: #0f172a; }
+
+/* QUANTITY LABELS */
+.stock-status-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+.stock-status-tag.stable-high { background-color: #ecfdf5; color: #059669; }
+.stock-status-tag.warning-low { background-color: #fff7ed; color: #ea580c; }
+
+/* DYNAMIC STOCK MANAGEMENT STEPPERS */
+.table-quantity-counter-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.counter-adj-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid;
+  border-radius: 4px;
+  cursor: pointer;
+  background: white;
+  transition: all 0.15s;
+}
+
+.counter-adj-btn.type-plus { border-color: #cbd5e1; color: #334155; }
+.counter-adj-btn.type-plus:hover { background-color: #0f172a; border-color: #0f172a; color: white; }
+
+.counter-adj-btn.type-minus { border-color: #cbd5e1; color: #64748b; }
+.counter-adj-btn.type-minus:hover { background-color: #f1f5f9; color: #334155; }
+
+.table-row-delete-action-btn {
+  padding: 6px 12px;
+  background-color: #fff5f5;
+  border: 1px solid #fee2e2;
+  color: #ef4444;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12.5px;
+  transition: all 0.2s;
+}
+
+.table-row-delete-action-btn:hover {
+  background-color: #ef4444;
+  border-color: #ef4444;
+  color: white;
+}
+
+/* ANIMATION TRANSITIONS */
+.animated-fade {
+  animation: viewEntrance 0.3s ease-out forwards;
+}
+
+@keyframes viewEntrance {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- MOBILE RESPONSIVENESS MEDIA QUERIES --- */
+@media (max-width: 1024px) {
+  .admin-dashboard-layout { flex-direction: column; }
+  .admin-sidebar { width: 100%; padding: 20px; }
+  .sidebar-menu-links { flex-direction: row; }
+  .admin-main-workspace { padding: 20px; }
+  .form-input-row-grid, .form-input-row-grid.items-two { grid-template-columns: 1fr; gap: 15px; }
+}
+
+/* --- FULL RECONCILIATION OVERRIDES --- */
+.full-screen-override {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999; /* Positions dashboard overlays entirely on top of the storefront layout */
+}
+
+.sidebar-footer-exit {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.exit-portal-link {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.exit-portal-link:hover {
+  color: #ff4141;
+}
+
+/* --- ANALYTICS CARDS DISPLAY LOGIC --- */
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.metric-card {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.metric-icon {
+  font-size: 32px;
+  background-color: #f8fafc;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.metric-info span { font-size: 13px; color: #64748b; font-weight: 500; }
+.metric-info h3 { font-size: 24px; font-weight: 700; color: #0f172a; margin-top: 4px; }
+
+/* SIMULATED ANALYTICS CHART MODEL */
+.analytics-chart-mockup {
+  grid-column: span 3;
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  margin-top: 10px;
+}
+
+.analytics-chart-mockup h3 { font-size: 16px; margin-bottom: 30px; color: #1e293b; }
+
+.bar-chart-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 200px;
+  padding: 0 20px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.chart-bar {
+  width: 45px;
+  background-color: #cbd5e1;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.chart-bar::after {
+  content: attr(data-day);
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.chart-bar:hover, .chart-bar.active {
+  background-color: #ff4141;
+}
+
+/* --- ORDER TRACKING VISUAL LABELS --- */
+.order-status-pill {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.order-status-pill.pending { background-color: #fef3c7; color: #d97706; }
+.order-status-pill.shipped { background-color: #e0f2fe; color: #0284c7; }
+.order-status-pill.delivered { background-color: #dcfce7; color: #15803d; }
+
+.order-action-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.order-action-btn.dispatch { background-color: #0f172a; color: white; }
+.order-action-btn.dispatch:hover { background-color: #ff4141; }
+.order-action-btn.complete { background-color: #10b981; color: white; }
+.order-action-btn.complete:hover { background-color: #059669; }
+
+/* --- SIDEBAR MANAGER CARD PROFILE --- */
+.sidebar-user-card-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #1e293b;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 20px;
+  border: 1px solid #334155;
+}
+
+.profile-initial-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #ff4141;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.profile-meta-strings h4 {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+.profile-meta-strings p {
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 2px 0 0 0;
+}
+
+/* PULSING LOW-STOCK WARNING MOCK */
+.stock-status-tag.warning-low {
+  background-color: #fef2f2;
+  color: #ef4444;
+  border: 1px solid #fee2e2;
+  animation: pulseStock 2s infinite alternate;
+}
+
+@keyframes pulseStock {
+  from { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.2); }
+  to { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.0); }
+}

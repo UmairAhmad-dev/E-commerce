@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import Shop from './pages/Shop';
@@ -10,11 +10,20 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
+import Admin from './components/AdminPanel/Admin';
 
-function App() {
+// This wrapper component handles the conditional rendering of store layout headers/footers
+const AppContent = () => {
+  const location = useLocation();
+  
+  // Check if the current route starts with /admin
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   return (
-    <BrowserRouter>
-      <Navbar />
+    <div>
+      {/* ONLY render standard store Navbar if we aren't in the Admin Dashboard */}
+      {!isAdminRoute && <Navbar />}
+      
       <Routes>
         <Route path="/" element={<Shop />} />
         <Route path="/mens" element={<ShopCategory category="men" banner="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200" />} />
@@ -29,8 +38,20 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/order-success" element={<OrderSuccess />} />
+
+        <Route path="/admin" element={<Admin />} />
       </Routes>
-      <Footer />
+      
+      {/* ONLY render standard store Footer if we aren't in the Admin Dashboard */}
+      {!isAdminRoute && <Footer />}
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 }
