@@ -27,7 +27,7 @@ const Admin = () => {
         <div className="sidebar-user-card-profile">
           <div className="profile-initial-circle">UN</div>
           <div className="profile-meta-strings">
-            <h4>Ch. Umair Nadeem</h4>
+            <h4>Umair Ahmad</h4>
             <p>System Administrator</p>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 const AddProduct = () => {
-  const [activeStep, setActiveStep] = useState(1); // 1: Basic Info, 2: Pricing & Media
+  const [activeStep, setActiveStep] = useState(1); // 1: Basic Specifications, 2: Pricing & Media Assets
   const [productDetails, setProductDetails] = useState({
     name: "",
     old_price: "",
@@ -17,15 +17,66 @@ const AddProduct = () => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log("Publishing Catalog Asset State:", productDetails, imageFile);
-    alert(`Successfully generated catalog mockup for: ${productDetails.name}`);
     
-    // Reset Form
-    setProductDetails({ name: "", old_price: "", new_price: "", category: "mens", stock_qty: "", description: "", tags: "" });
-    setImageFile(null);
-    setActiveStep(1);
+    if (!imageFile) {
+      alert("Please select a product image file first!");
+      return;
+    }
+
+    try {
+      // Phase 1: Upload the raw image binary to your Multer media engine
+      let responseData;
+      let formData = new FormData();
+      formData.append('product', imageFile);
+
+      const uploadResponse = await fetch('http://localhost:4000/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      responseData = await uploadResponse.json();
+
+      if (responseData.success) {
+        // Phase 2: Capture the live host image URL and combine it with your product metadata
+        const updatedProduct = {
+          ...productDetails,
+          image: responseData.image_url,
+          new_price: Number(productDetails.new_price),
+          old_price: Number(productDetails.old_price),
+          stock_qty: Number(productDetails.stock_qty)
+        };
+
+        // Phase 3: Ingest the complete product data document straight into MongoDB
+        const productResponse = await fetch('http://localhost:4000/api/products/addproduct', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedProduct),
+        });
+
+        const finalData = await productResponse.json();
+        
+        if (finalData.success) {
+          alert(`🎉 Success! "${productDetails.name}" is now live in your cloud catalog.`);
+          
+          // Reset Form Fields completely on successful sync
+          setProductDetails({ name: "", old_price: "", new_price: "", category: "mens", stock_qty: "", description: "", tags: "" });
+          setImageFile(null);
+          setActiveStep(1);
+        } else {
+          alert("❌ Failed to push product meta fields to database.");
+        }
+      } else {
+        alert("❌ Image upload system rejected the file stream.");
+      }
+    } catch (error) {
+      console.error("Full-Stack integration failed:", error);
+      alert("❌ Error: Unable to connect to your backend server node.");
+    }
   };
 
   return (
@@ -189,4 +240,5 @@ const AddProduct = () => {
   );
 };
 
+// Explicit default export layout to bind accurately into your Admin.jsx router map
 export default AddProduct;
