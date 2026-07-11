@@ -7,14 +7,15 @@ import Newsletter from '../components/Newsletter/Newsletter';
 
 const Shop = () => {
   return (
-    <div>
+    <main className="storefront-homepage-canvas" style={{ animation: 'fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1)' }}>
       <Hero />
       <FabricGrid />
       <Popular />
       <Offers />
       <NewCollections />
       <Newsletter />
-    </div>
+      <style>{`@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }`}</style>
+    </main>
   );
 };
 

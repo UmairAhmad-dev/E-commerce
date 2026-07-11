@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Popular.css';
-import Item from '../Item/Item'; // Double check your relative path to Item
+import Item from '../Item/Item';
 
 const Popular = () => {
   const [popularProducts, setPopularProducts] = useState([]);
@@ -9,11 +9,9 @@ const Popular = () => {
     fetch('http://localhost:4000/api/products/popularinmen')
       .then((response) => response.json())
       .then((data) => {
-        // ✅ FIXED: Safely unpacks the array using the .products key wrapper
         if (data.success && data.products) {
           setPopularProducts(data.products);
         } else {
-          // Fallback if data is a direct raw array from old configurations
           setPopularProducts(Array.isArray(data) ? data : []);
         }
       })
@@ -21,15 +19,27 @@ const Popular = () => {
   }, []);
 
   return (
-    <div className='popular'>
-      <h1>POPULAR IN MEN</h1>
-      <hr />
-      <div className="popular-item">
-        {popularProducts.map((item, i) => {
-          return <Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price} />
-        })}
+    <section className="premium-popular-section-block" aria-label="Trending Catalog Showcase Feed">
+      <div className="popular-section-header">
+        <span className="section-mini-curation-tag">TRENDING NOW</span>
+        <h2>Popular In Men's Collection</h2>
+        <div className="section-minimalist-underline-bar" />
       </div>
-    </div>
+      
+      <div className="popular-products-flex-grid-mesh">
+        {popularProducts.slice(0, 4).map((item, i) => (
+          <div key={item.id || i} className="popular-grid-item-fade-box">
+            <Item 
+              id={item.id} 
+              name={item.name} 
+              image={item.image} 
+              new_price={item.new_price} 
+              old_price={item.old_price} 
+            />
+          </div>
+        ))}
+      </div>
+    </section>
   );
 };
 

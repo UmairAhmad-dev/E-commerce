@@ -1,74 +1,123 @@
 import React, { useContext } from "react";
 import "./CartItems.css";
 import { ShopContext } from "../../context/ShopContext";
-// 1. 👇 IMPORT THE CLIENT-SIDE ROUTER NAVIGATION HOOK
 import { useNavigate } from "react-router-dom";
 
 const CartItems = () => {
   const { all_product, cartItems, removeFromCart, getTotalCartAmount } = useContext(ShopContext);
-  
-  // 2. 👇 INITIALIZE THE NAVIGATE FUNCTION ENGINE
   const navigate = useNavigate();
 
   return (
-    <div className="cartitems">
-      <div className="cartitems-format-main">
-        <p>Products</p>
-        <p>Title</p>
-        <p>Price</p>
-        <p>Quantity</p>
-        <p>Total</p>
-        <p>Remove</p>
+    <div className="premium-cart-view-container">
+      <div className="cart-workspace-header">
+        <h1>Your Shopping Bag</h1>
+        <p>Review your luxury selections before finalizing transaction routing.</p>
       </div>
-      <hr />
-      
-      {all_product.map((e) => {
-        if (cartItems[e.id] > 0) {
-          return (
-            <div key={e.id}>
-              <div className="cartitems-format cartitems-format-main">
-                <img src={e.image} alt="" className="carticon-product-icon" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px' }} />
-                <p>{e.name}</p>
-                <p>${e.new_price}</p>
-                <button className="cartitems-quantity">{cartItems[e.id]}</button>
-                <p>${e.new_price * cartItems[e.id]}</p>
-                <span className="cartitems-remove-icon" onClick={() => { removeFromCart(e.id) }} style={{ cursor: 'pointer', color: '#ef4444', fontWeight: '600' }}>❌</span>
-              </div>
-              <hr />
-            </div>
-          );
-        }
-        return null;
-      })}
-      
-      <div className="cartitems-down" style={{ display: 'flex', margin: '80px 0', gap: '10%' }}>
-        <div className="cartitems-total" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <h1>Cart Totals</h1>
-          <div>
-            <div className="cartitems-total-item" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 0' }}>
-              <p>Subtotal</p>
-              <p>${getTotalCartAmount()}</p>
-            </div>
-            <hr />
-            <div className="cartitems-total-item" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 0' }}>
-              <p>Shipping Fee</p>
-              <p>Free</p>
-            </div>
-            <hr />
-            <div className="cartitems-total-item" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 0', fontWeight: '600' }}>
-              <h3>Total</h3>
-              <h3>${getTotalCartAmount()}</h3>
-            </div>
+
+      <div className="cart-workspace-grid-layout">
+        
+        {/* Left Side: Interactive Bag Items Stack */}
+        <div className="cart-items-stack-column">
+          <div className="cart-items-table-header">
+            <span className="th-product-meta">Product Detail</span>
+            <span className="th-price-meta">Price</span>
+            <span className="th-qty-meta">Quantity</span>
+            <span className="th-total-meta">Total</span>
+            <span className="th-action-meta">Remove</span>
           </div>
           
-          {/* 3. 🚀 CRITICAL ROUTER LINK UP - STOPS FULL WINDOW HARD RELOADS */}
-          <button 
-            style={{ width: '260px', height: '58px', outline: 'none', border: 'none', background: '#ff4141', color: '#fff', fontSize: '16px', fontWeight: '600', cursor: 'pointer', borderRadius: '4px' }}
-            onClick={() => navigate('/checkout')}
-          >
-            PROCEED TO CHECKOUT
-          </button>
+          <div className="cart-items-body-scroller">
+            {all_product.map((e) => {
+              if (cartItems[e.id] > 0) {
+                return (
+                  <div key={e.id} className="cart-line-item-row-card">
+                    <div className="item-identity-cell">
+                      <div className="item-thumbnail-frame">
+                        <img src={e.image} alt={e.name} />
+                      </div>
+                      <div className="item-name-descriptor">
+                        <h3>{e.name}</h3>
+                        <span>SKU: #{e.id}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="item-price-cell">
+                      <span className="cell-currency-symbol">$</span>{e.new_price.toFixed(2)}
+                    </div>
+                    
+                    <div className="item-qty-cell">
+                      <div className="qty-counter-badge">{cartItems[e.id]}</div>
+                    </div>
+                    
+                    <div className="item-total-cell">
+                      <span className="cell-currency-symbol">$</span>{(e.new_price * cartItems[e.id]).toFixed(2)}
+                    </div>
+                    
+                    <div className="item-remove-cell">
+                      <button 
+                        className="remove-trash-trigger" 
+                        onClick={() => removeFromCart(e.id)}
+                        aria-label="Remove item allocation"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            })}
+
+            {Object.values(cartItems).every(qty => qty === 0) && (
+              <div className="empty-bag-fallback-display">
+                <span className="fallback-bag-icon">🛍️</span>
+                <h3>Your shopping bag is empty</h3>
+                <p>Browse our lookbooks and add premium styles to get started.</p>
+              </div>
+            )}
+          </div>
         </div>
+
+        {/* Right Side: Sticky Checkout Summary & Promo Gateways */}
+        <div className="cart-summary-sidebar-panel">
+          <div className="summary-sticky-card">
+            <h2>Order Summary</h2>
+            
+            <div className="summary-calc-ledger">
+              <div className="calc-row-item">
+                <span>Subtotal</span>
+                <strong>${getTotalCartAmount().toFixed(2)}</strong>
+              </div>
+              <div className="calc-row-item">
+                <span>Estimated Shipping</span>
+                <span className="shipping-free-badge">FREE</span>
+              </div>
+              <hr className="summary-divider-line" />
+              <div className="calc-row-item total-grand-row">
+                <h4>Grand Total</h4>
+                <h4>${getTotalCartAmount().toFixed(2)}</h4>
+              </div>
+            </div>
+
+            <button 
+              className="checkout-proceed-action-trigger"
+              disabled={getTotalCartAmount() === 0}
+              onClick={() => navigate('/checkout')}
+            >
+              PROCEED TO SECURE CHECKOUT
+            </button>
+
+            {/* Promo Codes Application Field */}
+            <div className="cart-promo-activation-dock">
+              <p>Have a promotional campaign coupon code?</p>
+              <div className="promo-input-capsule">
+                <input type="text" placeholder="Enter coupon code..." />
+                <button type="button">Apply</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );

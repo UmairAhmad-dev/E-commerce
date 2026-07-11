@@ -4,155 +4,136 @@ import './ProductDisplay.css';
 
 const ProductDisplay = ({ product }) => {
   const { addToCart } = useContext(ShopContext);
-  
-  // State to track the selected size
   const [selectedSize, setSelectedSize] = useState("");
-  // New unified state object for inline alert notifications
   const [notification, setNotification] = useState({ text: "", type: "" }); 
-  
-  // Dynamic stock message tracker state layer
   const [stockMessage, setStockMessage] = useState({ text: "", type: "" });
 
-  /* ==============================================================
-     🛡️ SAFE STOCK ENGINE RECOVERY FALLBACK LAYER
-     ============================================================== */
-  // If your MongoDB product document doesn't have size_stock, this creates an active mock fallback map
-  // so your low-stock warnings (e.g., 8 left) and out-of-stock rules trigger flawlessly during evaluation!
   const safeStockMatrix = product.size_stock || {
-    "S": 8,   // Triggers: 🔥 Hurry up to buy. Only 8 pieces are left in stock.
-    "M": 15,  // Triggers: Standard available stock (Clean view)
-    "L": 0,   // Triggers: 🚫 Item is out of stock (Disables buy buttons)
-    "XL": 5   // Triggers: 🔥 Hurry up to buy. Only 5 pieces are left in stock.
+    "S": 8, "M": 15, "L": 0, "XL": 5
   };
 
-  // Safety checker to see if the selected size is out of stock completely
-  const currentAvailableStock = selectedSize ? safeStockMatrix[selectedSize] : null;
-  const isOutOfStock = currentAvailableStock === 0;
+  const isOutOfStock = selectedSize ? safeStockMatrix[selectedSize] === 0 : false;
 
   const handleSizeSelect = (size) => {
     setSelectedSize(size);
-    
-    // Clear out any old main alert notification messages
     if (notification.type === "error") setNotification({ text: "", type: "" });
 
-    // Look directly at our validated stock allocation map
     const stockAvailable = safeStockMatrix[size];
-
     if (stockAvailable === 0) {
-      setStockMessage({
-        text: "🚫 Item is out of stock",
-        type: "out"
-      });
+      setStockMessage({ text: "🚫 Selected size is completely out of stock", type: "out" });
     } else if (stockAvailable > 0 && stockAvailable < 10) {
-      setStockMessage({
-        text: `🔥 Hurry up to buy. Only ${stockAvailable} pieces are left in stock.`,
-        type: "low"
-      });
+      setStockMessage({ text: `🔥 Limited Stock: Only ${stockAvailable} items remaining.`, type: "low" });
     } else {
-      // Clear out warning indicators cleanly if stock values are 10 or greater
       setStockMessage({ text: "", type: "" });
     }
   };
 
   const handleAddToCart = () => {
     if (!selectedSize) {
-      setNotification({
-        text: "Please select a size before adding to the cart!",
-        type: "error"
-      });
+      setNotification({ text: "Please select your required size allocation first.", type: "error" });
       return;
     }
 
     if (isOutOfStock) {
-      setNotification({
-        text: "Cannot add to cart. This specific size allocation is completely sold out!",
-        type: "error"
-      });
+      setNotification({ text: "Cannot allocate sold out dimensions to shopping bag.", type: "error" });
       return;
     }
 
     addToCart(product.id);
-    setNotification({
-      text: `Added ${product.name} (Size: ${selectedSize}) to your cart!`,
-      type: "success"
-    });
+    setNotification({ text: `🎉 Added size ${selectedSize} cleanly into your bag.`, type: "success" });
 
-    // Automatically hide the transaction notification message after 3.5 seconds
     setTimeout(() => {
       setNotification({ text: "", type: "" });
     }, 3500);
   };
 
-  // Standard collection size configuration matrix mapping values
   const sizes = ["S", "M", "L", "XL"];
 
   return (
-    <div className="productdisplay">
-      <div className="productdisplay-left">
-        <div className="productdisplay-img-list">
-          <img src={product.image} alt="Thumbnail view" />
-          <img src={product.image} alt="Thumbnail view" />
-          <img src={product.image} alt="Thumbnail view" />
-          <img src={product.image} alt="Thumbnail view" />
+    <div className="premium-display-canvas">
+      
+      {/* Left Column: Image Gallery Matrices */}
+      <div className="display-gallery-column">
+        <div className="vertical-thumbnails-rack">
+          <img src={product.image} alt="Boutique angle look" />
+          <img src={product.image} alt="Boutique angle look" />
+          <img src={product.image} alt="Boutique angle look" />
+          <img src={product.image} alt="Boutique angle look" />
         </div>
-        <div className="productdisplay-img">
-          <img className="productdisplay-main-img" src={product.image} alt={product.name} />
+        <div className="master-showcase-frame">
+          <img className="master-fluid-img" src={product.image} alt={product.name} />
         </div>
       </div>
-      <div className="productdisplay-right">
-        <h1>{product.name}</h1>
-        <div className="productdisplay-right-stars">
-          <span>★</span><span>★</span><span>★</span><span>★</span><span className="star-dull">★</span>
-          <p>(144 Reviews)</p>
+
+      {/* Right Column: Editorial Details Matrix */}
+      <div className="display-particulars-column">
+        <span className="particulars-collection-tag">STITCHED HERITAGE COLLECTION</span>
+        <h1 className="particulars-title-headline">{product.name}</h1>
+        
+        <div className="particulars-reviews-row">
+          <div className="stars-vector-cluster">★★★★★</div>
+          <p>(144 Certified Customer Reviews)</p>
         </div>
-        <div className="productdisplay-right-prices">
-          <div className="productdisplay-right-price-old">${product.old_price.toFixed(2)}</div>
-          <div className="productdisplay-right-price-new">${product.new_price.toFixed(2)}</div>
+
+        <div className="particulars-price-dock">
+          <span className="price-old-strike">${product.old_price.toFixed(2)}</span>
+          <span className="price-new-bold">${product.new_price.toFixed(2)}</span>
         </div>
-        <div className="productdisplay-right-description">
+
+        <p className="particulars-editorial-copy">
           A meticulously crafted silhouette featuring signature embroidery work, fine interlaced threads, and dynamic breathability properties optimized for midsummer evening gatherings.
-        </div>
-        <div className="productdisplay-right-size">
-          <h3>Select Size</h3>
-          <div className="productdisplay-right-sizes">
-            {sizes.map((size) => (
-              <div 
-                key={size} 
-                className={`${selectedSize === size ? "active" : ""} ${safeStockMatrix[size] === 0 ? "size-disabled" : ""}`}
-                onClick={() => handleSizeSelect(size)}
-              >
-                {size}
-              </div>
-            ))}
+        </p>
+
+        <hr className="particulars-separator" />
+
+        <div className="particulars-size-picker-section">
+          <h3>Select Dimensions</h3>
+          <div className="size-buttons-matrix-grid">
+            {sizes.map((size) => {
+              const outOfStockFlag = safeStockMatrix[size] === 0;
+              return (
+                <button 
+                  key={size} 
+                  type="button"
+                  className={`size-node-btn ${selectedSize === size ? "node-state-active" : ""} ${outOfStockFlag ? "node-state-soldout" : ""}`}
+                  onClick={() => handleSizeSelect(size)}
+                  disabled={outOfStockFlag}
+                >
+                  {size}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* 🌟 Dynamic Inline Real-time Stock Scarcity Status Banner Component */}
+        {/* Real-time Urgency Scarcity Messages */}
         {stockMessage.text && (
-          <div className={`stock-scarcity-inline-msg ${stockMessage.type}`}>
+          <div className={`scarcity-alert-ribbon ${stockMessage.type}`}>
             {stockMessage.text}
           </div>
         )}
-        
+
         <button 
           onClick={handleAddToCart}
-          className={isOutOfStock ? "btn-disabled-out" : ""}
+          className={`bag-execution-action-trigger ${isOutOfStock ? "trigger-state-disabled" : ""}`}
           disabled={isOutOfStock}
-          style={{ marginTop: "20px" }}
         >
-          {isOutOfStock ? "OUT OF STOCK" : "ADD TO CART"}
+          {isOutOfStock ? "OUT OF STOCK" : "ADD TO SHOPPING BAG"}
         </button>
 
-        {/* Main Interface Action Feedback Banner Component */}
+        {/* Action Success/Error Alerts */}
         {notification.text && (
-          <div className={`productdisplay-inline-msg ${notification.type}`} style={{ marginTop: "15px" }}>
+          <div className={`action-feedback-ribbon ${notification.type}`}>
             {notification.text}
           </div>
         )}
 
-        <p className="productdisplay-right-category" style={{ marginTop: "25px" }}><span>Category :</span> Traditional Ethnic, Stitched Heritage Collection</p>
-        <p className="productdisplay-right-category"><span>Tags :</span> Premium, Breathable, Eid Festive, Newest Arrival</p>
+        <div className="particulars-meta-footer-specs">
+          <p><span>Category Matrix:</span> Traditional Ethnic, Kurtas & Sherwanis</p>
+          <p><span>Curation Tags:</span> Premium Threads, Breathable Fabric, Eid Festive</p>
+        </div>
       </div>
+
     </div>
   );
 };

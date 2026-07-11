@@ -52,7 +52,6 @@ const Checkout = () => {
       return;
     }
 
-    // 1. Structure final ordered line items array matching schema types exactly
     const finalItemsSnapshot = (all_product || [])
       .filter(product => cartItems && (cartItems[product.id] > 0 || cartItems[product._id] > 0))
       .map(product => ({
@@ -88,11 +87,10 @@ const Checkout = () => {
     try {
       setIsSubmitting(true);
 
-      // 🚀 2. SEND POST FETCH REQUEST WITH VALIDATED API ACCEPT PIPELINE HEADERS
       const response = await fetch('http://localhost:4000/api/orders/placeorder', {
         method: 'POST',
         headers: {
-          'Accept': 'application/json', // ✅ Key addition to sync with endpoint routing guidelines!
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
@@ -122,90 +120,128 @@ const Checkout = () => {
 
   if (!hasItemsInCart) {
     return (
-      <div className="checkout-empty">
-        <h2>Your shopping cart is empty.</h2>
-        <p>Add products to your cart before proceeding to checkout.</p>
+      <div className="checkout-empty-state">
+        <span className="empty-checkout-icon">🛒</span>
+        <h2>Your shopping cart is empty</h2>
+        <p style={{ marginTop: '8px' }}>Add premium products to your cart before proceeding to checkout.</p>
       </div>
     );
   }
 
   return (
-    <div className="checkout-page">
-      <div className="checkout-container">
+    <div className="premium-checkout-viewport">
+      <div className="checkout-workspace-container">
         
-        {/* Left Side: Shipping Form */}
-        <form onSubmit={handlePlaceOrder} className="checkout-form">
-          <h2>Shipping Information</h2>
+        {/* Left Side: Form Ingestion Matrix */}
+        <form onSubmit={handlePlaceOrder} className="modern-checkout-form-card">
+          <div className="form-section-header">
+            <h2>Shipping Information</h2>
+            <p>Provide accurate destination logistics details for delivery management.</p>
+          </div>
           
-          <div className="form-row">
-            <div className="input-field">
-              <input type="text" name="firstName" placeholder="First Name" value={shippingInfo.firstName} onChange={handleInputChange} className={errors.firstName ? "error-border" : ""} disabled={isSubmitting} />
-              {errors.firstName && <span className="err-msg">{errors.firstName}</span>}
+          <div className="form-row-grid">
+            <div className="input-field-wrapper">
+              <label>First Name *</label>
+              <input type="text" name="firstName" placeholder="John" value={shippingInfo.firstName} onChange={handleInputChange} className={errors.firstName ? "input-error-border" : ""} disabled={isSubmitting} />
+              {errors.firstName && <span className="input-err-msg-string">{errors.firstName}</span>}
             </div>
-            <div className="input-field">
-              <input type="text" name="lastName" placeholder="Last Name" value={shippingInfo.lastName} onChange={handleInputChange} className={errors.lastName ? "error-border" : ""} disabled={isSubmitting} />
-              {errors.lastName && <span className="err-msg">{errors.lastName}</span>}
+            <div className="input-field-wrapper">
+              <label>Last Name *</label>
+              <input type="text" name="lastName" placeholder="Doe" value={shippingInfo.lastName} onChange={handleInputChange} className={errors.lastName ? "input-error-border" : ""} disabled={isSubmitting} />
+              {errors.lastName && <span className="input-err-msg-string">{errors.lastName}</span>}
             </div>
           </div>
 
-          <input type="email" name="email" placeholder="Email Address (Optional)" value={shippingInfo.email} onChange={handleInputChange} disabled={isSubmitting} />
+          <div className="input-field-wrapper single-full-row">
+            <label>Email Address (Optional)</label>
+            <input type="email" name="email" placeholder="john.doe@example.com" value={shippingInfo.email} onChange={handleInputChange} disabled={isSubmitting} />
+          </div>
           
-          <div className="input-field">
-            <input type="text" name="address" placeholder="Street Address" value={shippingInfo.address} onChange={handleInputChange} className={errors.address ? "error-border" : ""} disabled={isSubmitting} />
-            {errors.address && <span className="err-msg">{errors.address}</span>}
+          <div className="input-field-wrapper single-full-row">
+            <label>Street Address *</label>
+            <input type="text" name="address" placeholder="123 Luxury Avenue, Apartment Block B" value={shippingInfo.address} onChange={handleInputChange} className={errors.address ? "input-error-border" : ""} disabled={isSubmitting} />
+            {errors.address && <span className="input-err-msg-string">{errors.address}</span>}
           </div>
 
-          <div className="form-row">
-            <div className="input-field">
-              <input type="text" name="city" placeholder="City" value={shippingInfo.city} onChange={handleInputChange} className={errors.city ? "error-border" : ""} disabled={isSubmitting} />
-              {errors.city && <span className="err-msg">{errors.city}</span>}
+          <div className="form-row-grid">
+            <div className="input-field-wrapper">
+              <label>City *</label>
+              <input type="text" name="city" placeholder="Sahiwal" value={shippingInfo.city} onChange={handleInputChange} className={errors.city ? "input-error-border" : ""} disabled={isSubmitting} />
+              {errors.city && <span className="input-err-msg-string">{errors.city}</span>}
             </div>
-            <input type="text" name="postalCode" placeholder="Postal Code" value={shippingInfo.postalCode} onChange={handleInputChange} disabled={isSubmitting} />
+            <div className="input-field-wrapper">
+              <label>Postal Code</label>
+              <input type="text" name="postalCode" placeholder="57000" value={shippingInfo.postalCode} onChange={handleInputChange} disabled={isSubmitting} />
+            </div>
           </div>
 
-          <div className="input-field">
-            <input type="text" name="phone" placeholder="Phone Number" value={shippingInfo.phone} onChange={handleInputChange} className={errors.phone ? "error-border" : ""} disabled={isSubmitting} />
-            {errors.phone && <span className="err-msg">{errors.phone}</span>}
+          <div className="input-field-wrapper single-full-row">
+            <label>Phone Number *</label>
+            <input type="text" name="phone" placeholder="+92 300 1234567" value={shippingInfo.phone} onChange={handleInputChange} className={errors.phone ? "input-error-border" : ""} disabled={isSubmitting} />
+            {errors.phone && <span className="input-err-msg-string">{errors.phone}</span>}
           </div>
 
-          <h2>Payment Method</h2>
-          <div className="payment-options">
-            <label className="radio-container">
+          <div className="form-section-header separation-border-top">
+            <h2>Payment Architecture</h2>
+            <p>Select your authorized transaction management clearance gateway method.</p>
+          </div>
+          
+          <div className="premium-payment-options-box">
+            <label className="custom-radio-container">
               <input type="radio" name="payment" defaultChecked readOnly />
-              <span className="checkmark"></span>
-              Cash on Delivery (COD)
+              <div className="custom-radio-indicator">
+                <div className="radio-inner-dot"></div>
+              </div>
+              <div className="radio-label-strings">
+                <strong>Cash on Delivery (COD)</strong>
+                <span>Pay securely with cash upon physical drop manifestation arrival.</span>
+              </div>
             </label>
           </div>
 
-          <button type="submit" className="place-order-btn" disabled={isSubmitting}>
-            {isSubmitting ? "TRANSMITTING PURCHASE OVER CLOUD NETWORK..." : "PLACE ORDER NOW"}
+          <button type="submit" className="premium-place-order-trigger" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <span className="submitting-pulse-label">COMMITTING ORDER TRANSACTION MATRIX...</span>
+            ) : (
+              "PLACE ORDER NOW"
+            )}
           </button>
         </form>
 
-        {/* Right Side: Order Summary sticky side bar panel */}
-        <div className="checkout-summary-panel">
-          <h3>Your Order</h3>
-          <div className="summary-card">
-            <div className="summary-row">
-              <p>Subtotal</p>
-              <p>${getSubtotalAmount().toFixed(2)}</p>
-            </div>
-            {getDiscountAmount() > 0 && (
-              <div className="summary-row discount">
-                <p>Coupon Discount</p>
-                <p>-${getDiscountAmount().toFixed(2)}</p>
+        {/* Right Side: Sticky Receipt Overview Tab */}
+        <div className="checkout-sticky-summary-column">
+          <div className="summary-canvas-header">
+            <h3>Your Order Manifest</h3>
+          </div>
+          <div className="premium-summary-sticky-card">
+            <div className="summary-itemized-calc-rows">
+              <div className="summary-calc-row">
+                <span>Cart Subtotal</span>
+                <strong>${getSubtotalAmount().toFixed(2)}</strong>
               </div>
-            )}
-            <div className="summary-row">
-              <p>Estimated GST (5%)</p>
-              <p>${getTaxAmount().toFixed(2)}</p>
+              {getDiscountAmount() > 0 && (
+                <div className="summary-calc-row state-discount-deduction">
+                  <span>Coupon Discount</span>
+                  <strong>-${getDiscountAmount().toFixed(2)}</strong>
+                </div>
+              )}
+              <div className="summary-calc-row">
+                <span>Estimated GST (5%)</span>
+                <span>${getTaxAmount().toFixed(2)}</span>
+              </div>
+              <div className="summary-calc-row">
+                <span>Shipping & Logistics</span>
+                {getShippingFee() === 0 ? (
+                  <span className="logistics-free-label">FREE</span>
+                ) : (
+                  <span>${getShippingFee().toFixed(2)}</span>
+                )}
+              </div>
             </div>
-            <div className="summary-row">
-              <p>Shipping</p>
-              <p>{getShippingFee() === 0 ? "FREE" : `$${getShippingFee().toFixed(2)}`}</p>
-            </div>
-            <hr />
-            <div className="summary-row total">
+            
+            <hr className="summary-dashed-divider" />
+            
+            <div className="summary-calc-row final-grand-invoice-row">
               <h4>Grand Total</h4>
               <h4>${getTotalCartAmount().toFixed(2)}</h4>
             </div>
