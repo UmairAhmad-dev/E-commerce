@@ -1,118 +1,227 @@
-.hero-slider-container {
+:root {
+  --hero-height: 82vh;
+  --brand-red: #ff4141;
+  --dark-slate: #0f172a;
+  --glass-white: rgba(255, 255, 255, 0.07);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --easing-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.premium-hero-viewport {
   position: relative;
   width: 100%;
-  height: 75vh;
-  background-color: #1e293b;
+  height: var(--hero-height);
+  background-color: var(--dark-slate);
   overflow: hidden;
 }
 
-.hero-slide {
+.cinematic-hero-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1;
+  transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+}
+
+.cinematic-hero-slide.slide-state-active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 10;
+}
+
+/* Cinematic Ken Burns Zoom Background Execution Layer */
+.hero-background-image-render {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-size: cover;
-  background-position: center 25%;
-  opacity: 0;
-  transform: scale(1.03);
-  transition: opacity 0.8s ease-in-out, transform 1.2s ease-out;
+  background-position: center 20%;
+  transform: scale(1.08);
+  transition: transform 6.5s linear;
+}
+
+.slide-state-active .hero-background-image-render {
+  transform: scale(1);
+}
+
+/* Rich Dark Ambient Light Curtain */
+.hero-atmosphere-curtain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg, 
+    rgba(15, 23, 42, 0.55) 0%, 
+    rgba(15, 23, 42, 0.3) 50%, 
+    rgba(15, 23, 42, 0.6) 100__
+  );
+  z-index: 2;
+}
+
+/* Split-Screen Glassomorphic Information Architecture Card */
+.hero-slide-content-stage {
+  position: relative;
+  max-width: 1440px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 4%;
   display: flex;
   align-items: center;
-  padding: 0 8%;
+  z-index: 5;
 }
 
-.hero-slide.slide-active {
-  opacity: 1;
-  transform: scale(1);
-  z-index: 10;
-}
-
-.hero-slide-content {
-  color: white;
-  max-width: 650px;
+.glassomorphic-content-card {
+  max-width: 620px;
+  padding: 40px;
+  background: var(--glass-white);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  transform: translateY(30px);
   opacity: 0;
+  transition: transform 0.8s var(--easing-expo), opacity 0.8s var(--easing-expo);
 }
 
-.hero-slide.slide-active .hero-slide-content {
+.slide-state-active .glassomorphic-content-card {
+  transform: translateY(0);
   opacity: 1;
-  animation: contentUp 0.6s ease-out 0.2s forwards;
 }
 
-@keyframes contentUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.hero-slide-content h2 {
-  font-size: 48px;
+.premium-section-tag {
+  display: inline-block;
+  font-size: 12px;
   font-weight: 800;
-  margin-bottom: 15px;
-  line-height: 1.15;
-  letter-spacing: 0.5px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
-
-.hero-slide-content p {
-  font-size: 18px;
-  font-weight: 500;
-  margin-bottom: 30px;
-  color: #f1f5f9;
-  text-shadow: 0 1px 5px rgba(0,0,0,0.3);
-}
-
-.hero-action-btn {
-  padding: 14px 36px;
-  font-size: 15px;
-  font-weight: 700;
-  color: #0f172a;
-  background-color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  letter-spacing: 2px;
+  color: var(--brand-red);
   text-transform: uppercase;
+  margin-bottom: 12px;
+  position: relative;
 }
 
-.hero-action-btn:hover {
-  background-color: #ff4141;
-  color: white;
+.hero-display-headline {
+  color: #ffffff;
+  font-size: 46px;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  margin: 0 0 16px 0;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.hero-display-subhead {
+  color: #e2e8f0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0 0 32px 0;
+  letter-spacing: -0.1px;
+}
+
+/* Micro-Animated CTA Trigger Mechanism */
+.premium-action-trigger-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 32px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: var(--brand-red);
+  border: none;
+  border-radius: 99px;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(255, 65, 65, 0.25);
+  transition: all 0.3s var(--easing-expo);
+}
+
+.btn-arrow-vector {
+  font-size: 16px;
+  transition: transform 0.3s var(--easing-expo);
+}
+
+.premium-action-trigger-btn:hover {
+  background-color: #ffffff;
+  color: var(--dark-slate);
+  box-shadow: 0 15px 30px rgba(255, 255, 255, 0.15);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 65, 65, 0.35);
 }
 
-.slider-dots-row {
+.premium-action-trigger-btn:hover .btn-arrow-vector {
+  transform: translateX(4px);
+}
+
+.premium-action-trigger-btn:active {
+  transform: translateY(0);
+}
+
+/* Sleek Minimalist Luxury Pagination Node Track */
+.luxury-slider-pagination-row {
   position: absolute;
-  bottom: 25px;
+  bottom: 35px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 12px;
-  z-index: 20;
+  gap: 10px;
+  z-index: 25;
 }
 
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.4);
+.pagination-bar-node {
+  background: none;
+  border: none;
+  outline: none;
+  width: 32px;
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.25);
   cursor: pointer;
-  transition: all 0.2s;
+  padding: 0;
+  border-radius: 2px;
+  transition: background-color 0.3s ease, width 0.3s var(--easing-expo);
 }
 
-.dot.dot-active {
-  background-color: #ff4141;
-  width: 28px;
-  border-radius: 10px;
+.pagination-bar-node.bar-node-active {
+  background-color: var(--brand-red);
+  width: 48px;
 }
 
-@media (max-width: 900px) {
-  .hero-slider-container { height: 55vh; }
-  .hero-slide-content h2 { font-size: 32px; }
+/* --- RESPONSIVE ADAPTABILITY MATRIX --- */
+@media (max-width: 1024px) {
+  :root { --hero-height: 65vh; }
+  .hero-display-headline { font-size: 38px; }
+  .glassomorphic-content-card { max-width: 500px; padding: 30px; }
+}
+
+@media (max-width: 768px) {
+  :root { --hero-height: 60vh; }
+  .hero-atmosphere-curtain {
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.75) 100%);
+  }
+  .hero-slide-content-stage {
+    align-items: flex-end;
+    padding-bottom: 60px;
+  }
+  .glassomorphic-content-card {
+    max-width: 100%;
+    width: 100%;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .hero-display-headline { font-size: 32px; }
+  .hero-display-subhead { font-size: 15px; margin-bottom: 24px; }
 }
