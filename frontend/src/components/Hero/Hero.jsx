@@ -20,9 +20,9 @@ const HERO_SLIDES = [
     link: "/womens"
   },
   {
-    image: "https://images.unsplash.com/photo-1622296089863-eb7fc530daa8?w=1600&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1604467794349-0b74285de7e7?w=500",
     tagline: "VIBRANT ARRIVALS",
-    title: "Junior Eid Arrivals",
+    title: "Bright Pastel Summer Dress",
     subtitle: "Bright, Vibrant & Comfort-First Traditional Attire",
     buttonText: "Discover Kids Wear",
     link: "/kids"
