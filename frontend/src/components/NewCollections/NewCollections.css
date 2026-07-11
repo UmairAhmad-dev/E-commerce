@@ -1,33 +1,68 @@
-.new-collections {
+.premium-collections-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60px 0;
+  padding: 100px 4%;
   background: #f8fafc;
+  max-width: 1440px;
+  margin: 0 auto;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
-.new-collections h1 {
-  color: #0f172a;
-  font-size: 38px;
+.collections-section-header {
+  text-align: center;
+  margin-bottom: 55px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section-editorial-tag {
+  font-size: 11px;
   font-weight: 800;
-  letter-spacing: -0.5px;
+  letter-spacing: 2.5px;
+  color: #ff4141;
+  margin-bottom: 6px;
 }
 
-.new-collections hr {
-  width: 60px;
-  height: 4px;
-  border-radius: 4px;
+.collections-section-header h2 {
+  color: #0f172a;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -0.8px;
+  margin: 0;
+}
+
+.section-minimalist-underline-bar {
+  width: 48px;
+  height: 3px;
+  border-radius: 99px;
   background: #ff4141;
-  border: none;
-  margin-top: 12px;
-  margin-bottom: 40px;
+  margin-top: 14px;
 }
 
-.collections {
-  width: 85%;
-  max-width: 1320px;
+.collections-grid-mesh {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 24px;
-  justify-items: center;
+  gap: 30px;
+}
+
+.collection-card-entrance-box {
+  opacity: 0;
+  transform: translateY(15px);
+  animation: collectionFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes collectionFadeIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .premium-collections-section {
+    padding: 60px 4%;
+  }
+  .collections-section-header h2 {
+    font-size: 28px;
+  }
 }
