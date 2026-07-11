@@ -4,10 +4,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 import multer from "multer";
 import path from "path";
+import orderRouter from "./routes/orderRoutes.js";
 
-// Import MVC Router
+// Import MVC Routers
 import productRouter from "./routes/productRoutes.js";
 import userRouter from "./routes/userRoutes.js";
+
 dotenv.config();
 
 const app = express();
@@ -18,13 +20,16 @@ app.use(express.json());
 app.use(cors());
 
 // Live Database Connection Pipeline
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/shopper")
   .then(() => console.log("💾 MongoDB Cluster connected successfully!"))
   .catch((err) => console.error(`❌ Database connection failure: ${err}`));
 
-  app.use("/api/products", productRouter);
+/* ==========================================
+   🛣️ APPLICATION ROUTE MODULE MOUNTING
+   ========================================== */
+app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
-
+app.use("/api/orders",orderRouter);
 
 /* ==========================================
    🖼️ MULTER MEDIA UPLOAD COMPONENT MATRIX
@@ -46,17 +51,14 @@ app.use("/images", express.static("upload/images"));
 
 // API Endpoint for Image Upload Execution
 app.post("/api/upload", upload.single("product"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ success: false, message: "No image file provided" });
+  }
   res.json({
     success: true,
     image_url: `http://localhost:${PORT}/images/${req.file.filename}` // Returns the live host URL string!
   });
 });
-
-
-/* ==========================================
-   🛣️ APPLICATION ROUTE MODULE MOUNTING
-   ========================================== */
-app.use("/api/products", productRouter);
 
 // Root Diagnostic Endpoint Route
 app.get("/", (req, res) => {

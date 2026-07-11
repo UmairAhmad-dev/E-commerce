@@ -1,90 +1,118 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useEffect, useState } from "react";
 
-// 1. Named Export for the Context object
 export const ShopContext = createContext(null);
 
-// Helper structure for a fresh empty cart dictionary matrix
-const getBlankCart = () => {
+const getDefaultCart = () => {
   let cart = {};
-  for (let index = 1; index <= 12; index++) {
+  for (let index = 0; index < 305; index++) {
     cart[index] = 0;
   }
   return cart;
 };
 
-// Extracts cached user configurations out of local browser cache memory
-const getDefaultCart = () => {
-  const savedCart = localStorage.getItem('shopper_cart');
-  if (savedCart) {
-    try {
-      return JSON.parse(savedCart);
-    } catch (e) {
-      return getBlankCart();
-    }
-  }
-  return getBlankCart();
-};
-
-export const ShopContextProvider = ({ children }) => {
+const ShopContextProvider = (props) => {
+  const [all_product, setAll_Product] = useState([]);
   const [cartItems, setCartItems] = useState(getDefaultCart());
-  const [activePromo] = useState({ code: "", discountPercent: 0 }); // Fallback coupon wrapper hook
-  
-  const [allProducts] = useState([
-    { id: 1, name: "Premium Embroidered 3-Piece Lawn Suit - Floral Ivory", category: "women", new_price: 65.0, old_price: 95.0, image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600" },
-    { id: 2, name: "Hand-Block Printed Summer Kurti - Indigo Breeze", category: "women", new_price: 35.0, old_price: 50.0, image: "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=600" },
-    { id: 3, name: "Festive Velvet Shawl & Stitched Silk Pishwas - Crimson Royal", category: "women", new_price: 120.0, old_price: 180.0, image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600" },
-    { id: 4, name: "Classic Chikankari Straight Silhouette Kurta - Mint Pastel", category: "women", new_price: 45.0, old_price: 70.0, image: "https://images.unsplash.com/photo-1621184455862-c163dfb30e0f?w=600" },
-    { id: 5, name: "Men's Luxury Cotton Kurta Shalwar - Charcoal Slate", category: "men", new_price: 55.0, old_price: 85.0, image: "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=600" },
-    { id: 6, name: "Premium Wash & Wear Festive Kurta - Deep Navy", category: "men", new_price: 48.0, old_price: 75.0, image: "https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?w=600" },
-    { id: 7, name: "Junior Girls Jacquard Lehnga Choli Set - Powder Pink", category: "kid", new_price: 40.0, old_price: 65.0, image: "https://images.unsplash.com/photo-1622296089863-eb7fc530daa8?w=600" },
-    { id: 8, name: "Toddler Boys Soft Cotton Kurta Vest Combination - Emerald Gold", category: "kid", new_price: 32.0, old_price: 50.0, image: "https://images.unsplash.com/photo-1519457431-44ccd64a579b?w=600" },
-    { id: 9, name: "Kids Hand-Embellished Cotton Shalwar Suit - Sunflower Yellow", category: "kid", new_price: 38.0, old_price: 55.0, image: "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=600" }
-  ]);
+  const [loading, setLoading] = useState(true);
 
-  // Sync state mutations immediately down to local cache storage definitions
   useEffect(() => {
-    localStorage.setItem('shopper_cart', JSON.stringify(cartItems));
-  }, [cartItems]);
+    const fetchCatalogAndCart = async () => {
+      try {
+        // 1. Fetch products and destructure the wrapped array correctly
+        const productRes = await fetch("http://localhost:4000/api/products/allproducts");
+        const productData = await productRes.json();
+        
+        if (productData.success && productData.products) {
+          setAll_Product(productData.products); // ✅ Fixed: Extracts the actual array
+        } else {
+          setAll_Product(Array.isArray(productData) ? productData : []);
+        }
 
-  const addToCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+        const userToken = localStorage.getItem("auth-token");
+        if (userToken) {
+          // 2. Fetch cart with updated modern Bearer Authorization token schemas
+          const cartRes = await fetch("http://localhost:4000/api/users/getcart", {
+            method: "POST", // Changed to POST to match typical backend cart fetches safely
+            headers: {
+              "Accept": "application/json",
+              "Authorization": `Bearer ${userToken}`, // ✅ Fixed: Aligns with your backend split pattern
+              "Content-Type": "application/json",
+            },
+          });
+          const cartData = await cartRes.json();
+          if (cartData.success && cartData.cartData) {
+            setCartItems(cartData.cartData);
+          } else if (cartData && !cartData.success) {
+            setCartItems(getDefaultCart());
+          }
+        }
+      } catch (error) {
+        console.error("Connection failure to backend:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCatalogAndCart();
+  }, []);
+
+  const addToCart = async (itemId) => {
+    setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
+
+    const userToken = localStorage.getItem("auth-token");
+    if (userToken) {
+      try {
+        await fetch("http://localhost:4000/api/users/addtocart", {
+          method: "POST",
+          headers: {
+            "Accept": "application/json",
+            "Authorization": `Bearer ${userToken}`, // ✅ Fixed: Aligns with authMiddleware
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ itemId: itemId }),
+        });
+      } catch (error) {
+        console.error("Failed to sync cart item:", error);
+      }
+    }
   };
 
-  const removeFromCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: Math.max(0, prev[itemId] - 1) }));
+  const removeFromCart = async (itemId) => {
+    setCartItems((prev) => ({ ...prev, [itemId]: Math.max((prev[itemId] || 1) - 1, 0) }));
+
+    const userToken = localStorage.getItem("auth-token");
+    if (userToken) {
+      try {
+        await fetch("http://localhost:4000/api/users/removefromcart", {
+          method: "POST",
+          headers: {
+            "Accept": "application/json",
+            "Authorization": `Bearer ${userToken}`, // ✅ Fixed: Aligns with authMiddleware
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ itemId: itemId }),
+        });
+      } catch (error) {
+        console.error("Failed to decrement cart item:", error);
+      }
+    }
   };
 
-  const getSubtotalAmount = () => {
+  const getTotalCartAmount = () => {
     let totalAmount = 0;
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
-        let itemInfo = allProducts.find((product) => product.id === Number(item));
+        let itemInfo = all_product.find(
+          (product) => 
+            Number(product.id) === Number(item) || 
+            String(product._id) === String(item)
+        );
         if (itemInfo) {
           totalAmount += itemInfo.new_price * cartItems[item];
         }
       }
     }
     return totalAmount;
-  };
-
-  const getDiscountAmount = () => {
-    return getSubtotalAmount() * (activePromo.discountPercent / 100);
-  };
-
-  const getTaxAmount = () => {
-    return (getSubtotalAmount() - getDiscountAmount()) * 0.05;
-  };
-
-  const getShippingFee = () => {
-    const subtotal = getSubtotalAmount();
-    if (subtotal === 0) return 0;
-    return subtotal > 150 ? 0 : 15.00;
-  };
-
-  const getTotalCartAmount = () => {
-    const subtotal = getSubtotalAmount();
-    if (subtotal === 0) return 0;
-    return subtotal - getDiscountAmount() + getTaxAmount() + getShippingFee();
   };
 
   const getTotalCartItems = () => {
@@ -97,32 +125,26 @@ export const ShopContextProvider = ({ children }) => {
     return totalItem;
   };
 
-  const clearCart = () => {
-    const freshBlankCart = getBlankCart();
-    setCartItems(freshBlankCart);
-    localStorage.setItem('shopper_cart', JSON.stringify(freshBlankCart));
-  };
-
   const contextValue = {
-    allProducts,
+    all_product,
     cartItems,
     addToCart,
     removeFromCart,
-    getSubtotalAmount,
-    getDiscountAmount,
-    getTaxAmount,
-    getShippingFee,
     getTotalCartAmount,
     getTotalCartItems,
-    clearCart
+    loading,
+    getSubtotalAmount: getTotalCartAmount, 
+    getDiscountAmount: () => 0, 
+    getTaxAmount: () => getTotalCartAmount() * 0.05, 
+    getShippingFee: () => 0, 
+    clearCart: () => setCartItems(getDefaultCart())
   };
 
   return (
     <ShopContext.Provider value={contextValue}>
-      {children}
+      {props.children}
     </ShopContext.Provider>
   );
 };
 
-// 2. Default Export for the Provider Wrapper (Fixes the main.jsx crash)
 export default ShopContextProvider;

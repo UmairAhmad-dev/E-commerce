@@ -10,8 +10,8 @@ export const protectUser = async (req, res, next) => {
       // Extract token from 'Bearer <token>' string layout
       token = req.headers.authorization.split(" ")[1];
 
-      // Decode token payload
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      // Decode token payload with explicit fallback signature key matching userController
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || "shopper_secret_ecom_vault_2026");
 
       // Fetch the user from the DB using decoded ID and attach it to the request object
       req.user = await User.findById(decoded.id).select("-password");
@@ -20,24 +20,23 @@ export const protectUser = async (req, res, next) => {
         return res.status(401).json({ success: false, message: "User profile no longer exists" });
       }
 
-      next(); // Pass control to the next controller function safely
+      return next(); // ✅ Added return keyword to halt function block execution line immediately!
     } catch (error) {
       console.error("Token validation error:", error);
-      res.status(401).json({ success: false, message: "Not authorized, token validation failed" });
+      return res.status(401).json({ success: false, message: "Not authorized, token validation failed" }); // ✅ Added return
     }
   }
 
   if (!token) {
-    res.status(401).json({ success: false, message: "Access denied, missing authentication token" });
+    return res.status(401).json({ success: false, message: "Access denied, missing authentication token" }); // ✅ Added return
   }
 };
 
 // Strict guard middleware to verify admin privileges
 export const protectAdmin = (req, res, next) => {
-  // Checks if protectUser successfully resolved the user and if their role configuration is admin
   if (req.user && req.user.role === "admin") {
-    next();
+    return next(); // ✅ Added return here for explicit control safety
   } else {
-    res.status(403).json({ success: false, message: "Access forbidden, administrative privileges required" });
+    return res.status(403).json({ success: false, message: "Access forbidden, administrative privileges required" }); // ✅ Added return
   }
 };

@@ -14,56 +14,82 @@ const Navbar = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (globalSearch.trim()) {
-      // Direct user straight to their active category page with custom URL search params if needed, 
-      // or simply alert clean execution for your local state preview
       alert(`Searching globally for: ${globalSearch}`);
       setGlobalSearch("");
     }
   };
 
   return (
-    <div className="navbar">
-      {/* Brand Identity */}
-      <div className="nav-logo" onClick={() => { setMenu("shop"); navigate("/"); }}>
-        <span className="logo-icon">🛍️</span>
-        <p>SHOPPER</p>
-      </div>
-
-      {/* Mobile Hamburger Toggle */}
-      <div className={`nav-toggle ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(!menuOpen)}>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-
-      {/* Core Navigation Links */}
-      <ul className={`nav-menu ${menuOpen ? "nav-menu-mobile" : ""}`}>
-        <li onClick={() => { setMenu("shop"); setMenuOpen(false); }}><Link to="/">Shop</Link>{menu === "shop" && <hr/>}</li>
-        <li onClick={() => { setMenu("mens"); setMenuOpen(false); }}><Link to="/mens">Men</Link>{menu === "mens" && <hr/>}</li>
-        <li onClick={() => { setMenu("womens"); setMenuOpen(false); }}><Link to="/womens">Women</Link>{menu === "womens" && <hr/>}</li>
-        <li onClick={() => { setMenu("kids"); setMenuOpen(false); }}><Link to="/kids">Kids</Link>{menu === "kids" && <hr/>}</li>
-      </ul>
-
-      {/* Global Center Search Engine Input */}
-      <form onSubmit={handleSearchSubmit} className="nav-search-form">
-        <input 
-          type="text" 
-          placeholder="Search products, collections..." 
-          value={globalSearch}
-          onChange={(e) => setGlobalSearch(e.target.value)}
-        />
-        <button type="submit">🔍</button>
-      </form>
-
-      {/* Action Utility Buttons */}
-      <div className="nav-login-cart">
-        <Link to="/login"><button className="login-btn">Login</button></Link>
-        <div className="nav-cart-wrapper">
-          <Link to="/cart"><span className="cart-icon">🛒</span></Link>
-          <div className="nav-cart-count">{getTotalCartItems()}</div>
+    <nav className="navbar-glass">
+      <div className="navbar-blur-wrapper">
+        
+        {/* Brand Identity */}
+        <div className="nav-brand-group" onClick={() => { setMenu("shop"); setMenuOpen(false); navigate("/"); }}>
+          <div className="logo-vector-shield">
+            <span className="logo-emoji-icon">🛍️</span>
+          </div>
+          <p className="brand-text-string">SHOPPER</p>
         </div>
+
+        {/* Core Navigation Links Layout Grid */}
+        <ul className={`nav-links-matrix ${menuOpen ? "mobile-drawer-expanded" : ""}`}>
+          <li className={menu === "shop" ? "active-link-node" : ""} onClick={() => { setMenu("shop"); setMenuOpen(false); }}>
+            <Link to="/">Shop</Link>
+          </li>
+          <li className={menu === "mens" ? "active-link-node" : ""} onClick={() => { setMenu("mens"); setMenuOpen(false); }}>
+            <Link to="/mens">Men</Link>
+          </li>
+          <li className={menu === "womens" ? "active-link-node" : ""} onClick={() => { setMenu("womens"); setMenuOpen(false); }}>
+            <Link to="/womens">Women</Link>
+          </li>
+          <li className={menu === "kids" ? "active-link-node" : ""} onClick={() => { setMenu("kids"); setMenuOpen(false); }}>
+            <Link to="/kids">Kids</Link>
+          </li>
+        </ul>
+
+        {/* Global Center Search Engine Input */}
+        <form onSubmit={handleSearchSubmit} className="nav-search-capsule">
+          <input 
+            type="text" 
+            placeholder="Search products, collections..." 
+            value={globalSearch}
+            onChange={(e) => setGlobalSearch(e.target.value)}
+            className="search-inner-input"
+          />
+          <button type="submit" className="search-trigger-lens" aria-label="Submit Search">🔍</button>
+        </form>
+
+        {/* Action Utility Buttons */}
+        <div className="nav-action-cluster">
+          <Link to="/login" className="login-link-wrapper">
+            <button className="premium-login-trigger">Sign In</button>
+          </Link>
+          
+          <div className="nav-cart-interactive-node" onClick={() => { setMenuOpen(false); navigate("/cart"); }}>
+            <div className="cart-badge-anchor">
+              <span className="cart-vector-emoji">🛒</span>
+              {getTotalCartItems() > 0 && (
+                <div className="cart-counter-bubble-pulse">
+                  <span>{getTotalCartItems()}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Modern Minimalist Hamburger Toggle */}
+          <button 
+            className={`hamburger-hollow-toggle ${menuOpen ? "toggle-active-cross" : ""}`} 
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle Navigation Menu"
+          >
+            <div className="burger-bar line-top"></div>
+            <div className="burger-bar line-mid"></div>
+            <div className="burger-bar line-bot"></div>
+          </button>
+        </div>
+
       </div>
-    </div>
+    </nav>
   );
 };
 

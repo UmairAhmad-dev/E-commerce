@@ -1,19 +1,55 @@
 /* --- GLOBAL ADMIN WORKSPACE WRAPPER --- */
 .admin-dashboard-layout {
   display: flex;
-  min-height: 90vh;
+  min-height: 100vh;
   background-color: #f8fafc;
   font-family: system-ui, -apple-system, sans-serif;
 }
 
 /* --- SIDEBAR BACKDROP ARCHITECTURE --- */
 .admin-sidebar {
-  width: 260px;
-  background-color: #0f172a; /* Slate 900 color profile to match storefront styles */
-  color: #f1f5f9;
-  padding: 30px 20px;
   display: flex;
   flex-direction: column;
+  width: 280px; /* Locked standard workspace depth layout assignment */
+  min-width: 280px;
+  height: 100vh;
+  padding: 24px;
+  background-color: #0f172a;
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+}
+
+/* Container wrapper around the logout button pushing it cleanly down */
+.sidebar-footer-exit {
+  margin-top: auto;
+  width: 100%;
+  padding-top: 20px;
+  box-sizing: border-box;
+}
+
+/* Refined Premium Red Button Layout specifications */
+.exit-portal-btn {
+  width: 100%;
+  padding: 14px 16px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
+}
+
+.exit-portal-btn:hover {
+  background-color: #e03b3b;
+  box-shadow: 0 4px 12px rgba(255, 77, 77, 0.25);
 }
 
 .admin-brand-profile h2 {
@@ -70,6 +106,7 @@
   flex: 1;
   padding: 40px;
   overflow-y: auto;
+  background-color: #f8fafc;
 }
 
 .workspace-top-bar {
@@ -164,7 +201,7 @@
 .form-input-block textarea:focus {
   border-color: #ff4141;
   background-color: white;
-  box-shadow: 0 0 0 3px rgba(255, 65, 65, 0.1);
+  box-shadow: 0 0 0 3px rgba(255, 65, 65, 0.15);
 }
 
 .form-input-row-grid {
@@ -370,24 +407,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 99999; /* Positions dashboard overlays entirely on top of the storefront layout */
-}
-
-.sidebar-footer-exit {
-  margin-top: auto;
-  padding-top: 20px;
-}
-
-.exit-portal-link {
-  color: #94a3b8;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  transition: color 0.2s;
-}
-
-.exit-portal-link:hover {
-  color: #ff4141;
+  z-index: 99999;
 }
 
 /* --- ANALYTICS CARDS DISPLAY LOGIC --- */
@@ -668,7 +688,7 @@
 /* --- MOBILE RESPONSIVENESS BREAKPOINTS --- */
 @media (max-width: 1024px) {
   .admin-dashboard-layout { flex-direction: column; }
-  .admin-sidebar { width: 100%; padding: 20px; }
+  .admin-sidebar { width: 100%; min-width: 100%; height: auto; }
   .sidebar-menu-links { flex-direction: row; flex-wrap: wrap; }
   .admin-main-workspace { padding: 20px; }
   .form-input-row-grid, .form-input-row-grid.items-two { grid-template-columns: 1fr; gap: 15px; }

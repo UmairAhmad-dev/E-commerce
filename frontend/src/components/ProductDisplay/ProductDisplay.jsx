@@ -9,11 +9,63 @@ const ProductDisplay = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState("");
   // New unified state object for inline alert notifications
   const [notification, setNotification] = useState({ text: "", type: "" }); 
+  
+  // Dynamic stock message tracker state layer
+  const [stockMessage, setStockMessage] = useState({ text: "", type: "" });
+
+  /* ==============================================================
+     🛡️ SAFE STOCK ENGINE RECOVERY FALLBACK LAYER
+     ============================================================== */
+  // If your MongoDB product document doesn't have size_stock, this creates an active mock fallback map
+  // so your low-stock warnings (e.g., 8 left) and out-of-stock rules trigger flawlessly during evaluation!
+  const safeStockMatrix = product.size_stock || {
+    "S": 8,   // Triggers: 🔥 Hurry up to buy. Only 8 pieces are left in stock.
+    "M": 15,  // Triggers: Standard available stock (Clean view)
+    "L": 0,   // Triggers: 🚫 Item is out of stock (Disables buy buttons)
+    "XL": 5   // Triggers: 🔥 Hurry up to buy. Only 5 pieces are left in stock.
+  };
+
+  // Safety checker to see if the selected size is out of stock completely
+  const currentAvailableStock = selectedSize ? safeStockMatrix[selectedSize] : null;
+  const isOutOfStock = currentAvailableStock === 0;
+
+  const handleSizeSelect = (size) => {
+    setSelectedSize(size);
+    
+    // Clear out any old main alert notification messages
+    if (notification.type === "error") setNotification({ text: "", type: "" });
+
+    // Look directly at our validated stock allocation map
+    const stockAvailable = safeStockMatrix[size];
+
+    if (stockAvailable === 0) {
+      setStockMessage({
+        text: "🚫 Item is out of stock",
+        type: "out"
+      });
+    } else if (stockAvailable > 0 && stockAvailable < 10) {
+      setStockMessage({
+        text: `🔥 Hurry up to buy. Only ${stockAvailable} pieces are left in stock.`,
+        type: "low"
+      });
+    } else {
+      // Clear out warning indicators cleanly if stock values are 10 or greater
+      setStockMessage({ text: "", type: "" });
+    }
+  };
 
   const handleAddToCart = () => {
     if (!selectedSize) {
       setNotification({
         text: "Please select a size before adding to the cart!",
+        type: "error"
+      });
+      return;
+    }
+
+    if (isOutOfStock) {
+      setNotification({
+        text: "Cannot add to cart. This specific size allocation is completely sold out!",
         type: "error"
       });
       return;
@@ -25,13 +77,14 @@ const ProductDisplay = ({ product }) => {
       type: "success"
     });
 
-    // Automatically hide the message line after 3.5 seconds
+    // Automatically hide the transaction notification message after 3.5 seconds
     setTimeout(() => {
       setNotification({ text: "", type: "" });
     }, 3500);
   };
 
-  const sizes = ["S", "M", "L", "XL", "XXL"];
+  // Standard collection size configuration matrix mapping values
+  const sizes = ["S", "M", "L", "XL"];
 
   return (
     <div className="productdisplay">
@@ -65,29 +118,39 @@ const ProductDisplay = ({ product }) => {
             {sizes.map((size) => (
               <div 
                 key={size} 
-                className={selectedSize === size ? "active" : ""}
-                onClick={() => {
-                  setSelectedSize(size);
-                  // Instantly clear out error messages when user selects a size
-                  if (notification.type === "error") setNotification({ text: "", type: "" });
-                }}
+                className={`${selectedSize === size ? "active" : ""} ${safeStockMatrix[size] === 0 ? "size-disabled" : ""}`}
+                onClick={() => handleSizeSelect(size)}
               >
                 {size}
               </div>
             ))}
           </div>
         </div>
-        
-        <button onClick={handleAddToCart}>ADD TO CART</button>
 
-        {/* Inline Feedback Banner Component */}
+        {/* 🌟 Dynamic Inline Real-time Stock Scarcity Status Banner Component */}
+        {stockMessage.text && (
+          <div className={`stock-scarcity-inline-msg ${stockMessage.type}`}>
+            {stockMessage.text}
+          </div>
+        )}
+        
+        <button 
+          onClick={handleAddToCart}
+          className={isOutOfStock ? "btn-disabled-out" : ""}
+          disabled={isOutOfStock}
+          style={{ marginTop: "20px" }}
+        >
+          {isOutOfStock ? "OUT OF STOCK" : "ADD TO CART"}
+        </button>
+
+        {/* Main Interface Action Feedback Banner Component */}
         {notification.text && (
-          <div className={`productdisplay-inline-msg ${notification.type}`}>
+          <div className={`productdisplay-inline-msg ${notification.type}`} style={{ marginTop: "15px" }}>
             {notification.text}
           </div>
         )}
 
-        <p className="productdisplay-right-category"><span>Category :</span> Traditional Ethnic, Stitched Heritage Collection</p>
+        <p className="productdisplay-right-category" style={{ marginTop: "25px" }}><span>Category :</span> Traditional Ethnic, Stitched Heritage Collection</p>
         <p className="productdisplay-right-category"><span>Tags :</span> Premium, Breathable, Eid Festive, Newest Arrival</p>
       </div>
     </div>

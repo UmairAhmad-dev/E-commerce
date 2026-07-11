@@ -35,6 +35,13 @@ const productSchema = new mongoose.Schema({
     type: Boolean,
     default: true, // Defaults to 'In Stock' when first uploaded
   },
+  // ✅ ADDED: Structural map configuration constraint for per-size dynamic stock tracking
+  size_stock: {
+    S: { type: Number, default: 0 },
+    M: { type: Number, default: 0 },
+    L: { type: Number, default: 0 },
+    XL: { type: Number, default: 0 }
+  }
 });
 
 // Compile the blueprint schema model container block

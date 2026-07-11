@@ -1,26 +1,26 @@
-import { useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import { ShopContext } from '../context/ShopContext';
-import Breadcrumbs from '../components/Breadcrumbs/Breadcrumbs';
-import ProductDisplay from '../components/ProductDisplay/ProductDisplay';
-import DescriptionBox from '../components/DescriptionBox/DescriptionBox';
+import { useContext } from "react";
+import { useParams } from "react-router-dom";
+import { ShopContext } from "../context/ShopContext";
+import ProductDisplay from "../components/ProductDisplay/ProductDisplay"; // Adjust paths to your display templates
 
 const Product = () => {
-  const { allProducts } = useContext(ShopContext);
+  const { all_product, loading } = useContext(ShopContext);
   const { productId } = useParams();
-  
-  // React 19 safety casting parameter extraction
-  const product = allProducts.find((e) => e.id === Number(productId));
+
+  if (loading) {
+    return <div style={{ textAlign: 'center', padding: '100px 0' }}>Loading Item Specifications Matrix...</div>;
+  }
+
+  // Locate the exact matching database entity structure by converting URL string params to numbers
+  const product = all_product.find((e) => e.id === Number(productId));
 
   if (!product) {
-    return <div style={{ padding: "80px", textPosition: "center" }}><h3>SKU Inventory Record Not Found.</h3></div>;
+    return <div style={{ textAlign: 'center', padding: '100px 0', color: '#ef4444', fontWeight: '600' }}>⚠️ Product Entry Not Found In Cloud Inventories.</div>;
   }
 
   return (
-    <div>
-      <Breadcrumbs product={product} />
+    <div className="product-page-wrapper">
       <ProductDisplay product={product} />
-      <DescriptionBox />
     </div>
   );
 };

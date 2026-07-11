@@ -131,7 +131,7 @@
   outline: none;
   cursor: pointer;
   border-radius: 4px;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
 }
 
 .productdisplay-right button:hover {
@@ -155,6 +155,63 @@
   border-color: #ff4141;
   transform: scale(1.05);
   box-shadow: 0 2px 8px rgba(255, 65, 65, 0.3);
+}
+
+/* ==============================================================
+   🌟 SLEEK OUT OF STOCK & SCARCITY COMPONENT MATRIX DECORATIONS
+   ============================================================== */
+
+/* Disabled style for entirely sold-out size box components */
+.productdisplay-right-sizes div.size-disabled {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+  color: #9ca3af;
+  text-decoration: line-through;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.productdisplay-right-sizes div.size-disabled:hover {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+  color: #9ca3af;
+}
+
+/* Disabled style for out of stock cart buttons */
+.productdisplay-right button.btn-disabled-out {
+  background: #9ca3af !important;
+  color: #f3f4f6 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Real-time Inline Scarcity Notifications */
+.stock-scarcity-inline-msg {
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  margin: 10px 0 15px 0;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: msgEntrance 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Low Stock Urgency Amber Styling */
+.stock-scarcity-inline-msg.low {
+  background-color: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+/* Completely Out of Stock Red Styling */
+.stock-scarcity-inline-msg.out {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
 }
 
 /* --- INLINE NOTIFICATION DESIGN AND ANIMATION --- */
@@ -184,7 +241,7 @@
 @keyframes msgEntrance {
   from {
     opacity: 0;
-    transform: translateY(-5px);
+    transform: translateY(-6px);
   }
   to {
     opacity: 1;
