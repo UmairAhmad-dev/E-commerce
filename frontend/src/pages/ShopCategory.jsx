@@ -1,51 +1,115 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ShopContext } from "../context/ShopContext"; 
 import Item from "../components/Item/Item";
+import "./ShopCategory.css";
 
 const ShopCategory = (props) => {
-  // Grab your live products array and backend loading tracker from context
   const { all_product, loading } = useContext(ShopContext);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTag, setActiveTag] = useState("all");
+  const [sortOption, setSortOption] = useState("default");
 
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', padding: '100px 0', fontWeight: '600', color: '#64748b' }}>
-        Loading Category Vault Streams...
+      <div className="category-loading-vault">
+        <div className="spinner-orbit-ring"></div>
+        <p>Streaming Premium Wardrobe Vaults...</p>
       </div>
     );
   }
 
-  // 🛠️ FLEXIBLE STRING MATCHING GATEWAY
-  // Normalizes string fields to catch "men" vs "mens", "women" vs "womens" automatically
-  const filteredProducts = all_product.filter(item => {
+  // 🛠️ Structural String Normalization Gateway
+  const categoryFiltered = (all_product || []).filter(item => {
     const itemCat = item.category ? item.category.toLowerCase().trim() : "";
     const propCat = props.category ? props.category.toLowerCase().trim() : "";
-    
     return itemCat === propCat || itemCat === `${propCat}s` || `${itemCat}s` === propCat;
   });
 
+  // 🔍 Dynamic Search Box & Tag Sub-Filter Matrix
+  const deepFilteredProducts = categoryFiltered.filter(item => {
+    const matchesSearch = item.name?.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    if (activeTag === "new") return matchesSearch && (item.id % 3 === 0); // Simulated tag parameters
+    if (activeTag === "sale") return matchesSearch && (item.old_price > item.new_price);
+    return matchesSearch;
+  });
+
+  // 📊 Multi-Criteria Price & Index Sort Sorting Matrix
+  const sortedProducts = [...deepFilteredProducts].sort((a, b) => {
+    if (sortOption === "price-low") return a.new_price - b.new_price;
+    if (sortOption === "price-high") return b.new_price - a.new_price;
+    if (sortOption === "alpha") return a.name.localeCompare(b.name);
+    return 0; // Default Mongo Collection sequencing order
+  });
+
   return (
-    <div className="shop-category">
-      <div className="shopcategory-indexSort" style={{ display: 'flex', justifyContent: 'space-between', padding: '20px 0', alignItems: 'center' }}>
-        <p>
-          <span>Showing 1-{filteredProducts.length}</span> out of {filteredProducts.length} Products
-        </p>
+    <div className="shop-category-view">
+      
+      {/* Premium Curated Collection Banner Frame */}
+      <div className="premium-category-banner-container">
+        <div className="banner-editorial-overlay" />
+        <div className="banner-editorial-typography">
+          <span className="editorial-mini-tag">CURATED COLLECTION</span>
+          <h1 className="editorial-main-headline">{props.category?.toUpperCase()} WARDROBE</h1>
+          <p className="editorial-subhead-string">Experience unmatched comfort stitched with premium traditional perfection.</p>
+        </div>
       </div>
 
-      <div className="shopcategory-products" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '30px', margin: '40px 0' }}>
-        {filteredProducts.length === 0 ? (
-          <p style={{ gridColumn: '1/-1', textAlign: 'center', color: '#94a3b8', padding: '40px' }}>
-            No live catalog items found matching this specific wardrobe segment yet.
-          </p>
+      {/* Modern Filter & Search Navigation Bar Layout */}
+      <div className="shopcategory-filter-wrapper">
+        <div className="shopcategory-searchbox">
+          <span className="search-lens-vector">🔍</span>
+          <input 
+            type="text" 
+            placeholder="Search within this collection..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+
+        <div className="shopcategory-tags">
+          <button className={activeTag === "all" ? "tag-active" : ""} onClick={() => setActiveTag("all")}>All Apparel</button>
+          <button className={activeTag === "new" ? "tag-active" : ""} onClick={() => setActiveTag("new")}>New Arrivals</button>
+          <button className={activeTag === "sale" ? "tag-active" : ""} onClick={() => setActiveTag("sale")}>Special Offers</button>
+        </div>
+      </div>
+
+      {/* Ledger Sorting & Counter Meta Line */}
+      <div className="shopcategory-indexSort">
+        <p>
+          Showing <span>1-{sortedProducts.length}</span> out of {categoryFiltered.length} boutique items
+        </p>
+        <select 
+          className="shopcategory-sort" 
+          value={sortOption} 
+          onChange={(e) => setSortOption(e.target.value)}
+        >
+          <option value="default">Sort by: Featured</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="alpha">Alphabetical (A-Z)</option>
+        </select>
+      </div>
+
+      {/* Crisp Dynamic Product Catalog Grid Grid */}
+      <div className="shopcategory-products">
+        {sortedProducts.length === 0 ? (
+          <div className="empty-catalog-fallback-box">
+            <span className="fallback-empty-icon">🧥</span>
+            <h3>No Collection Items Match Your Queries</h3>
+            <p>Try refining your spelling parameters or clear active sub-filter tags.</p>
+          </div>
         ) : (
-          filteredProducts.map((item, i) => (
-            <Item 
-              key={i} 
-              id={item.id} 
-              name={item.name} 
-              image={item.image} 
-              new_price={item.new_price} 
-              old_price={item.old_price} 
-            />
+          sortedProducts.map((item, i) => (
+            <div key={item.id || i} className="product-card-entrance-wrapper">
+              <Item 
+                id={item.id} 
+                name={item.name} 
+                image={item.image} 
+                new_price={item.new_price} 
+                old_price={item.old_price} 
+              />
+            </div>
           ))
         )}
       </div>
