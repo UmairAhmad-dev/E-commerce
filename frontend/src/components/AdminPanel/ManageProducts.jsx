@@ -4,7 +4,7 @@ import "./Admin.css";
 const ManageProducts = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editStates, setEditStates] = useState({}); // Tracks local edits per item row (prices + stock)
+  const [editStates, setEditStates] = useState({});
 
   const fetchInfo = async () => {
     try {
@@ -13,8 +13,6 @@ const ManageProducts = () => {
       
       if (data.success && data.products) {
         setAllProducts(data.products);
-        
-        // Initialize local editable state copies for price and size-stock tracking
         const initialEdits = {};
         data.products.forEach(prod => {
           initialEdits[prod.id] = {
@@ -29,21 +27,15 @@ const ManageProducts = () => {
       }
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching live inventory data:", error);
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchInfo();
-  }, []);
+  useEffect(() => { fetchInfo(); }, []);
 
-  /* =======================================================
-     💾 PUSH PRICE & STOCK MODIFICATIONS LIVE TO BACKEND
-     ======================================================= */
   const updateProductHandler = async (id) => {
     const payload = editStates[id];
-    const token = localStorage.getItem('auth-token'); // Grab active session token
+    const token = localStorage.getItem('auth-token');
 
     if (!token) {
       alert("❌ Client Error: No session token found. Please log out and log back in.");
@@ -56,40 +48,25 @@ const ManageProducts = () => {
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // 🛡️ Structured exactly as required by protectUser middleware
+          "Authorization": `Bearer ${token}` 
         },
         body: JSON.stringify({ 
-          id, 
-          old_price: payload.old_price,
-          new_price: payload.new_price,
-          size_stock: payload.size_stock 
+          id, old_price: payload.old_price, new_price: payload.new_price, size_stock: payload.size_stock 
         }),
       });
-      
       const data = await response.json();
-      
       if (data.success) {
         alert("🎉 Inventory details synchronized cleanly inside cloud ledger clusters!");
         fetchInfo();
-      } else {
-        alert(`❌ Server Rejected Request: ${data.message || "No error details provided."}`);
       }
     } catch (error) {
-      console.error("Full-stack update dispatch breakdown:", error);
       alert(`❌ Network/Fetch Error: ${error.message}`);
     }
   };
 
-  /* ==========================================
-     🗑️ PRODUCT SKUS PURGE REMOVAL HANDLER
-     ========================================== */
   const removeProductHandler = async (id) => {
     const token = localStorage.getItem('auth-token');
-
-    if (!token) {
-      alert("❌ Client Error: No session token found.");
-      return;
-    }
+    if (!token) return;
 
     if (window.confirm("Are you sure you want to delete this product from the database?")) {
       try {
@@ -98,7 +75,7 @@ const ManageProducts = () => {
           headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}` // 🛡️ Structured identically to secure the deletion route
+            "Authorization": `Bearer ${token}` 
           },
           body: JSON.stringify({ id: id }),
         });
@@ -106,19 +83,14 @@ const ManageProducts = () => {
         if (data.success) {
           alert("🗑️ Product removed successfully from database.");
           await fetchInfo();
-        } else {
-          alert(`❌ Server Rejected Deletion: ${data.message || "Unknown error"}`);
         }
       } catch (error) {
-        console.error("Error deleting product:", error);
         alert(`❌ Deletion Network Error: ${error.message}`);
       }
     }
   };
 
-  if (loading) {
-    return <div className="loading-state">Syncing secure database matrix streams...</div>;
-  }
+  if (loading) return <div className="admin-component-wireframe-loader">Syncing secure database matrix streams...</div>;
 
   return (
     <div className="admin-card-view premium-ui-card animated-fade">
@@ -126,7 +98,7 @@ const ManageProducts = () => {
         <h3>Live Product Inventory Ledgers ({allProducts.length} Total Items)</h3>
       </div>
 
-      <div className="table-scroll-container">
+      <div className="admin-responsive-table-scroll">
         <table className="inventory-data-table">
           <thead>
             <tr>
@@ -141,65 +113,39 @@ const ManageProducts = () => {
           </thead>
           <tbody>
             {allProducts.length === 0 ? (
-              <tr><td colSpan="7" style={{ textAlign: "center", padding: "40px" }}>No products found in database.</td></tr>
+              <tr><td colSpan="7" className="empty-table-cell">No products found in database.</td></tr>
             ) : (
               allProducts.map((product) => (
                 <tr key={product.id}>
                   <td>
-                    <img src={product.image} alt={product.name} style={{ width: "50px", height: "50px", objectFit: "cover", borderRadius: "6px" }} />
+                    <img src={product.image} alt={product.name} className="table-thumb-preview" />
                   </td>
                   <td>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div className="table-cell-title-block">
                       <strong>{product.name}</strong>
-                      <span style={{ fontSize: "11px", color: "#64748b" }}>SKU-{product.id}</span>
+                      <span>SKU-{product.id}</span>
                     </div>
                   </td>
-                  <td className="category-text-transform">{product.category}</td>
+                  <td><span className="table-row-category-pill">{product.category}</span></td>
                   
-                  {/* 📊 PER-SIZE QUANTITY STEPPER FIELD GRID */}
                   <td>
-                    <div style={{ display: "flex", gap: "8px", justifyContent: "center", alignItems: "center" }}>
+                    <div className="size-stock-stepper-matrix-row">
                       {["S", "M", "L", "XL"].map((size) => {
                         const currentSizeStock = editStates[product.id]?.size_stock?.[size] || 0;
-
                         return (
-                          <div key={size} style={{ 
-                            display: "flex", 
-                            flexDirection: "column", 
-                            alignItems: "center",
-                            gap: "4px",
-                            padding: "6px 10px",
-                            border: "1px solid #e2e8f0",
-                            borderRadius: "6px",
-                            backgroundColor: currentSizeStock > 0 ? "#fff" : "#f1f5f9"
-                          }}>
-                            <span style={{ fontSize: "11px", fontWeight: "800", color: "#475569" }}>{size}</span>
+                          <div key={size} className={`stepper-input-node ${currentSizeStock > 0 ? "has-stock" : "empty-stock"}`}>
+                            <span>{size}</span>
                             <input 
-                              type="number" 
-                              min="0"
-                              value={currentSizeStock}
+                              type="number" min="0" value={currentSizeStock}
                               onChange={(e) => {
                                 const updatedValue = Number(e.target.value);
                                 setEditStates(prev => ({
                                   ...prev,
                                   [product.id]: {
                                     ...prev[product.id],
-                                    size_stock: {
-                                      ...prev[product.id].size_stock,
-                                      [size]: updatedValue
-                                    }
+                                    size_stock: { ...prev[product.id].size_stock, [size]: updatedValue }
                                   }
                                 }));
-                              }}
-                              style={{ 
-                                width: "45px", 
-                                padding: "4px", 
-                                fontSize: "12px", 
-                                textAlign: "center", 
-                                borderRadius: "4px", 
-                                border: "1px solid #cbd5e1",
-                                fontWeight: "700",
-                                outline: "none"
                               }}
                             />
                           </div>
@@ -208,13 +154,11 @@ const ManageProducts = () => {
                     </div>
                   </td>
 
-                  {/* 🏷️ EDITABLE ORIGINAL PRICE */}
                   <td>
                     <input 
-                      type="number"
-                      step="0.01"
-                      min="0"
+                      type="number" step="0.01" min="0" 
                       value={editStates[product.id]?.old_price || 0}
+                      className="table-numeric-edit-input old-price-strike"
                       onChange={(e) => {
                         const updatedValue = Number(e.target.value);
                         setEditStates(prev => ({
@@ -222,25 +166,14 @@ const ManageProducts = () => {
                           [product.id]: { ...prev[product.id], old_price: updatedValue }
                         }));
                       }}
-                      style={{
-                        width: "70px",
-                        padding: "6px",
-                        borderRadius: "4px",
-                        border: "1px solid #cbd5e1",
-                        fontWeight: "600",
-                        color: "#64748b",
-                        textDecoration: "line-through"
-                      }}
                     />
                   </td>
 
-                  {/* 🏷️ EDITABLE SALE/OFFER PRICE */}
                   <td>
                     <input 
-                      type="number"
-                      step="0.01"
-                      min="0"
+                      type="number" step="0.01" min="0" 
                       value={editStates[product.id]?.new_price || 0}
+                      className="table-numeric-edit-input new-price-bold"
                       onChange={(e) => {
                         const updatedValue = Number(e.target.value);
                         setEditStates(prev => ({
@@ -248,32 +181,13 @@ const ManageProducts = () => {
                           [product.id]: { ...prev[product.id], new_price: updatedValue }
                         }));
                       }}
-                      style={{
-                        width: "70px",
-                        padding: "6px",
-                        borderRadius: "4px",
-                        border: "1px solid #cbd5e1",
-                        fontWeight: "700",
-                        color: "#10b981"
-                      }}
                     />
                   </td>
                   
-                  {/* 🛠️ CONTROLS PANEL */}
                   <td>
-                    <div style={{ display: "flex", gap: "8px" }}>
-                      <button 
-                        onClick={() => updateProductHandler(product.id)} 
-                        style={{ backgroundColor: "#10b981", color: "white", border: "none", padding: "6px 12px", borderRadius: "4px", cursor: "pointer", fontWeight: "600" }}
-                      >
-                        Save 💾
-                      </button>
-                      <button 
-                        onClick={() => removeProductHandler(product.id)} 
-                        style={{ backgroundColor: "#ff4d4d", color: "white", border: "none", padding: "6px 12px", borderRadius: "4px", cursor: "pointer" }}
-                      >
-                        Delete 🗑️
-                      </button>
+                    <div className="table-row-action-buttons-cluster">
+                      <button onClick={() => updateProductHandler(product.id)} className="table-action-save-btn">Save 💾</button>
+                      <button onClick={() => removeProductHandler(product.id)} className="table-row-delete-action-btn">Delete 🗑️</button>
                     </div>
                   </td>
                 </tr>

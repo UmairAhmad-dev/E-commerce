@@ -1,6 +1,8 @@
 import express from 'express';
 import { signupUser, login, getUserProfile, getAllUsers } from '../controllers/userController.js'; 
 import { protectUser, protectAdmin } from '../middleware/authMiddleware.js'; 
+// 🚀 FIXED: Imported the missing User model to resolve the ReferenceError crash
+import User from '../models/User.js'; 
 
 const router = express.Router();
 
@@ -13,11 +15,8 @@ router.post('/login', login);
 /* ==========================================
    🛡️ PROTECTED USER PROFILE ENDPOINTS
    ========================================== */
-// Lightweight role check gateway for structural system access handshakes
 router.get('/profile', protectUser, getUserProfile);
-
-// Secure administrative endpoint to query consumer tables grid matrix records
-router.get('/allusers', protectUser, protectAdmin, getAllUsers); // ✅ Added secure user lookup route!
+router.get('/allusers', protectUser, protectAdmin, getAllUsers); 
 
 /* ==========================================
    🛒 PROTECTED SHOPPING CART INTERFACES 

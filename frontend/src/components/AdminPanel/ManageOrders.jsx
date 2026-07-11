@@ -4,37 +4,27 @@ const ManageOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [orderSearch, setOrderSearch] = useState("");
-  const [selectedOrder, setSelectedOrder] = useState(null); // Tracks modal popup view target
+  const [selectedOrder, setSelectedOrder] = useState(null); 
 
-  // 🔄 FETCH ALL LOGGED ORDERS FROM BACKEND MATRIX
   const fetchOrders = async () => {
     const token = localStorage.getItem('auth-token');
     try {
       setLoading(true);
       const res = await fetch("http://localhost:4000/api/orders/allorders", {
         method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}` // 🛡️ Clears backend protectUser/protectAdmin guards
-        }
+        headers: { "Authorization": `Bearer ${token}` }
       });
       const data = await res.json();
-      if (data.success) {
-        setOrders(data.orders || []);
-      } else {
-        console.error("Server rejected orders query:", data.message);
-      }
+      if (data.success) setOrders(data.orders || []);
     } catch (error) {
-      console.error("Error pulling live checkout orders stream:", error);
-    } finally {
+      console.error(error);
+    }  {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
+  useEffect(() => { fetchOrders(); }, []);
 
-  // 🚚 DISPATCH ORDER STATUS TIMELINE STATE CHANGES LIVE TO DB
   const updateOrderStatus = async (orderId, newStatus) => {
     const token = localStorage.getItem('auth-token');
     try {
@@ -50,8 +40,6 @@ const ManageOrders = () => {
       
       if (data.success) {
         alert(`🎉 Status tracker shifted cleanly to ${newStatus}`);
-        
-        // Optimistically update frontend UI collections and active modal reference state
         setOrders(prev => prev.map(order => order.orderId === orderId ? { ...order, status: newStatus } : order));
         if (selectedOrder && selectedOrder.orderId === orderId) {
           setSelectedOrder({ ...selectedOrder, status: newStatus });
@@ -60,12 +48,10 @@ const ManageOrders = () => {
         alert(`❌ Error shifting timeline state: ${data.message}`);
       }
     } catch (error) {
-      console.error("Status dispatch error context:", error);
       alert("❌ Server exception handling status mutation.");
     }
   };
 
-  // 🔍 DYNAMIC SEARCH MATRIX FILTER (Matches custom orderId reference or customer fullName)
   const filteredOrders = orders.filter(o => {
     const customerName = o.shippingAddress?.fullName?.toLowerCase() || "";
     const orderIdRef = o.orderId || "";
@@ -73,25 +59,25 @@ const ManageOrders = () => {
     return customerName.includes(query) || orderIdRef.includes(query);
   });
 
-  if (loading) {
-    return <div className="loading-state">Streaming secure customer logistics matrices...</div>;
-  }
+  if (loading) return <div className="admin-component-wireframe-loader">Streaming secure customer logistics matrices...</div>;
 
   return (
-    <div className="admin-card-view animated-fade">
-      <div className="table-header-meta" style={{ flexDirection: 'column', alignItems: 'stretch', gap: '20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2>Customer Order Fulfillment Queue</h2>
-          <span className="total-inventory-badge status-blue">Active Queue Tasks: {filteredOrders.length}</span>
+    <div className="admin-card-view premium-ui-card animated-fade">
+      <div className="table-header-meta stack-layout">
+        <div className="headline-badge-row">
+          <h3>Customer Order Fulfillment Queue</h3>
+          <span className="total-inventory-badge">Active Queue Tasks: {filteredOrders.length}</span>
         </div>
 
-        <input 
-          type="text" 
-          placeholder="🔍 Search queues by customer title name or exact Order ID..." 
-          value={orderSearch}
-          onChange={(e) => setOrderSearch(e.target.value)}
-          style={{ padding: '10px 16px', border: '1px solid #cbd5e1', borderRadius: '6px', width: '100%', fontSize: '14px' }}
-        />
+        <div className="search-bar-wrapper">
+          <input 
+            type="text" 
+            placeholder="Search queues by customer name or exact Order ID..." 
+            value={orderSearch}
+            onChange={(e) => setOrderSearch(e.target.value)}
+            className="admin-control-search-input"
+          />
+        </div>
       </div>
 
       <div className="admin-responsive-table-scroll">
@@ -109,7 +95,7 @@ const ManageOrders = () => {
           </thead>
           <tbody>
             {filteredOrders.length === 0 ? (
-              <tr><td colSpan="7" style={{ textAlign: "center", padding: "40px", color: "#64748b" }}>No active fulfillment matching queries.</td></tr>
+              <tr><td colSpan="7" className="empty-table-cell">No active fulfillment matching queries.</td></tr>
             ) : (
               filteredOrders.map((order) => (
                 <tr key={order.orderId}>
@@ -119,18 +105,18 @@ const ManageOrders = () => {
                   <td className="table-cell-price-bold">${order.totalAmount ? order.totalAmount.toFixed(2) : "0.00"}</td>
                   <td><span className={`order-status-pill ${order.status?.toLowerCase()}`}>{order.status}</span></td>
                   <td style={{textAlign: 'center'}}>
-                    <button className="counter-adj-btn" onClick={() => setSelectedOrder(order)} style={{ fontSize: '12px' }}>🔎 Inspect</button>
+                    <button className="table-action-inspect-btn" onClick={() => setSelectedOrder(order)}>Inspect 🔎</button>
                   </td>
                   <td>
-                    <div className="table-quantity-counter-actions" style={{ justifyContent: 'center' }}>
+                    <div className="table-quantity-counter-actions centered">
                       {order.status === "Pending" && (
                         <button className="order-action-btn dispatch" onClick={() => updateOrderStatus(order.orderId, "Shipped")}>🚚 Ship</button>
                       )}
                       {order.status === "Shipped" && (
                         <button className="order-action-btn complete" onClick={() => updateOrderStatus(order.orderId, "Delivered")}>✅ Complete</button>
                       )}
-                      {order.status === "Delivered" && <span style={{fontSize: '12px', color: '#10b981', fontWeight: 600}}>Archived</span>}
-                      {order.status === "Cancelled" && <span style={{fontSize: '12px', color: '#ef4444', fontWeight: 600}}>Cancelled</span>}
+                      {order.status === "Delivered" && <span className="archive-badge-text green">Archived</span>}
+                      {order.status === "Cancelled" && <span className="archive-badge-text red">Cancelled</span>}
                     </div>
                   </td>
                 </tr>
@@ -142,39 +128,44 @@ const ManageOrders = () => {
 
       {/* DETAILED MANIFEST OVERLAY MODAL */}
       {selectedOrder && (
-        <div className="admin-modal-backdrop" onClick={() => setSelectedOrder(null)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(15,23,42,0.6)', zIndex: 999999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div className="admin-card-view animated-fade" onClick={(e) => e.stopPropagation()} style={{ width: '500px', height: 'fit-content', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+        <div className="admin-modal-backdrop" onClick={() => setSelectedOrder(null)}>
+          <div className="admin-modal-content-card animated-fade" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header-dock">
               <h3>Shipping Manifest: #{selectedOrder.orderId}</h3>
-              <button onClick={() => setSelectedOrder(null)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#64748b' }}>×</button>
+              <button className="modal-close-trigger" onClick={() => setSelectedOrder(null)}>×</button>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', color: '#334155' }}>
-              <p><strong>Customer Name:</strong> {selectedOrder.shippingAddress?.fullName}</p>
-              <p><strong>Contact Line:</strong> {selectedOrder.shippingAddress?.phone}</p>
-              <p><strong>Destination Drop:</strong> {selectedOrder.shippingAddress?.addressLine}, {selectedOrder.shippingAddress?.city}</p>
+            
+            <div className="modal-details-ledger-body">
+              <p><strong>Customer:</strong> {selectedOrder.shippingAddress?.fullName}</p>
+              <p><strong>Contact:</strong> {selectedOrder.shippingAddress?.phone}</p>
+              <p><strong>Destination:</strong> {selectedOrder.shippingAddress?.addressLine}, {selectedOrder.shippingAddress?.city}</p>
               
-              <div style={{ borderTop: "1px solid #e2e8f0", paddingTop: "10px", marginTop: "5px" }}>
-                <p><strong>Line Items Bought:</strong></p>
-                <div style={{ display: "flex", flexDirection: "column", gap: "6px", background: "#f8fafc", padding: "10px", borderRadius: "6px", marginTop: "5px" }}>
+              <div className="modal-items-sub-card">
+                <p className="sub-card-title">Line Items Bought:</p>
+                <div className="itemized-manifest-list">
                   {selectedOrder.items?.map((item, idx) => (
-                    <div key={idx} style={{ display: "flex", justifyContent: "space-between", fontSize: "13px" }}>
-                      <span>👕 {item.name} ({item.size}) <strong style={{ color: "#64748b" }}>x{item.quantity}</strong></span>
-                      <span style={{ fontWeight: 600 }}>${(item.price * item.quantity).toFixed(2)}</span>
+                    <div key={idx} className="manifest-item-line-row">
+                      <span>👕 {item.name} ({item.size}) <strong className="qty-muted">x{item.quantity}</strong></span>
+                      <strong>${(item.price * item.quantity).toFixed(2)}</strong>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <p style={{ marginTop: "5px" }}><strong>Grand Invoice:</strong> <span style={{ fontSize: "16px", fontWeight: 800, color: "#10b981" }}>${selectedOrder.totalAmount?.toFixed(2)}</span></p>
-              <p>
-                <strong>Current Status:</strong> 
-                <span className={`order-status-pill ${selectedOrder.status?.toLowerCase()}`} style={{ marginLeft: '10px' }}>{selectedOrder.status}</span>
+              <div className="modal-grand-invoice-footer">
+                <span>Grand Invoice:</span>
+                <span className="grand-invoice-price">${selectedOrder.totalAmount?.toFixed(2)}</span>
+              </div>
+              <p className="modal-status-footer-line">
+                <strong>Fulfillment Tracker Status:</strong> 
+                <span className={`order-status-pill ${selectedOrder.status?.toLowerCase()}`}>{selectedOrder.status}</span>
               </p>
             </div>
-            <div style={{ marginTop: '30px', display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-              {selectedOrder.status === "Pending" && <button className="admin-action-submit-btn" onClick={() => updateOrderStatus(selectedOrder.orderId, "Shipped")} style={{ margin: 0 }}>Mark Shipped</button>}
-              {selectedOrder.status === "Shipped" && <button className="admin-action-submit-btn" onClick={() => updateOrderStatus(selectedOrder.orderId, "Delivered")} style={{ margin: 0, background: '#10b981' }}>Mark Delivered</button>}
-              <button className="counter-adj-btn" onClick={() => setSelectedOrder(null)}>Dismiss</button>
+            
+            <div className="modal-actions-bar">
+              {selectedOrder.status === "Pending" && <button className="admin-action-submit-btn compact" onClick={() => updateOrderStatus(selectedOrder.orderId, "Shipped")}>Mark Shipped</button>}
+              {selectedOrder.status === "Shipped" && <button className="admin-action-submit-btn compact green-bg" onClick={() => updateOrderStatus(selectedOrder.orderId, "Delivered")}>Mark Delivered</button>}
+              <button className="table-action-inspect-btn text-muted" onClick={() => setSelectedOrder(null)}>Dismiss</button>
             </div>
           </div>
         </div>

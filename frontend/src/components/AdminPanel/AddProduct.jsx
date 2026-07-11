@@ -1,15 +1,9 @@
 import { useState } from 'react';
 
 const AddProduct = () => {
-  const [activeStep, setActiveStep] = useState(1); // 1: Basic Specifications, 2: Pricing & Media Assets
+  const [activeStep, setActiveStep] = useState(1); 
   const [productDetails, setProductDetails] = useState({
-    name: "",
-    old_price: "",
-    new_price: "",
-    category: "mens",
-    stock_qty: "",
-    description: "",
-    tags: ""
+    name: "", old_price: "", new_price: "", category: "mens", stock_qty: "", description: "", tags: ""
   });
   const [imageFile, setImageFile] = useState(null);
 
@@ -19,15 +13,12 @@ const AddProduct = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    
     if (!imageFile) {
       alert("Please select a product image file first!");
       return;
     }
 
     try {
-      // Phase 1: Upload the raw image binary to your Multer media engine
-      let responseData;
       let formData = new FormData();
       formData.append('product', imageFile);
 
@@ -36,10 +27,9 @@ const AddProduct = () => {
         body: formData,
       });
       
-      responseData = await uploadResponse.json();
+      const responseData = await uploadResponse.json();
 
       if (responseData.success) {
-        // Phase 2: Capture the live host image URL and combine it with your product metadata
         const updatedProduct = {
           ...productDetails,
           image: responseData.image_url,
@@ -48,7 +38,6 @@ const AddProduct = () => {
           stock_qty: Number(productDetails.stock_qty)
         };
 
-        // Phase 3: Ingest the complete product data document straight into MongoDB
         const productResponse = await fetch('http://localhost:4000/api/products/addproduct', {
           method: 'POST',
           headers: {
@@ -62,8 +51,6 @@ const AddProduct = () => {
         
         if (finalData.success) {
           alert(`🎉 Success! "${productDetails.name}" is now live in your cloud catalog.`);
-          
-          // Reset Form Fields completely on successful sync
           setProductDetails({ name: "", old_price: "", new_price: "", category: "mens", stock_qty: "", description: "", tags: "" });
           setImageFile(null);
           setActiveStep(1);
@@ -112,7 +99,7 @@ const AddProduct = () => {
               />
             </div>
 
-            <div className="form-input-row-grid items-two" style={{ marginTop: '20px' }}>
+            <div className="form-input-row-grid items-two">
               <div className="form-input-block">
                 <label>Core Segment Category</label>
                 <select name="category" value={productDetails.category} onChange={handleInputChange}>
@@ -122,7 +109,7 @@ const AddProduct = () => {
                 </select>
               </div>
               <div className="form-input-block">
-                <label>Search Meta Tags (Comma Separated)</label>
+                <label>Search Meta Tags</label>
                 <input 
                   type="text" 
                   name="tags" 
@@ -133,7 +120,7 @@ const AddProduct = () => {
               </div>
             </div>
 
-            <div className="form-input-block" style={{ marginTop: '20px' }}>
+            <div className="form-input-block">
               <label>Detailed Item Description</label>
               <textarea 
                 name="description" 
@@ -145,20 +132,21 @@ const AddProduct = () => {
               ></textarea>
             </div>
 
-            <button 
-              type="button" 
-              className="admin-action-submit-btn step-forward-btn" 
-              style={{ marginTop: '30px' }}
-              onClick={() => {
-                if(productDetails.name && productDetails.description) {
-                  setActiveStep(2);
-                } else {
-                  alert("Please fill in the Product Name and Description first!");
-                }
-              }}
-            >
-              Proceed to Next Step →
-            </button>
+            <div className="stepper-actions-row">
+              <button 
+                type="button" 
+                className="step-next-action-trigger" 
+                onClick={() => {
+                  if(productDetails.name && productDetails.description) {
+                    setActiveStep(2);
+                  } else {
+                    alert("Please fill in the Product Name and Description first!");
+                  }
+                }}
+              >
+                Proceed to Next Step →
+              </button>
+            </div>
           </div>
         )}
 
@@ -168,67 +156,36 @@ const AddProduct = () => {
             <div className="form-input-row-grid">
               <div className="form-input-block">
                 <label>Original Retail Price ($)</label>
-                <input 
-                  type="number" 
-                  step="0.01" 
-                  name="old_price" 
-                  placeholder="85.00" 
-                  value={productDetails.old_price} 
-                  onChange={handleInputChange} 
-                  required 
-                />
+                <input type="number" step="0.01" name="old_price" placeholder="85.00" value={productDetails.old_price} onChange={handleInputChange} required />
               </div>
               <div className="form-input-block">
-                <label>Sale Price / Offer Price ($)</label>
-                <input 
-                  type="number" 
-                  step="0.01" 
-                  name="new_price" 
-                  placeholder="55.00" 
-                  value={productDetails.new_price} 
-                  onChange={handleInputChange} 
-                  required 
-                />
+                <label>Sale Price ($)</label>
+                <input type="number" step="0.01" name="new_price" placeholder="55.00" value={productDetails.new_price} onChange={handleInputChange} required />
               </div>
               <div className="form-input-block">
-                <label>Initial Vault Stock Quantity</label>
-                <input 
-                  type="number" 
-                  name="stock_qty" 
-                  placeholder="150" 
-                  value={productDetails.stock_qty} 
-                  onChange={handleInputChange} 
-                  required 
-                />
+                <label>Vault Stock Quantity</label>
+                <input type="number" name="stock_qty" placeholder="150" value={productDetails.stock_qty} onChange={handleInputChange} required />
               </div>
             </div>
 
-            <div className="form-input-block image-upload-zone" style={{ marginTop: '25px' }}>
+            <div className="form-input-block image-upload-zone">
               <label>Display Imagery Resource File</label>
               <div className="upload-box-wrapper">
-                <input 
-                  type="file" 
-                  id="prod-file-img" 
-                  accept="image/*" 
-                  onChange={(e) => setImageFile(e.target.files[0])} 
-                  required 
-                />
+                <input type="file" id="prod-file-img" accept="image/*" onChange={(e) => setImageFile(e.target.files[0])} required />
                 <label htmlFor="prod-file-img" className="custom-upload-trigger modern-dropzone">
-                  {imageFile ? ` Selected: ${imageFile.name}` : "📂 Click to browse or drop premium product media assets"}
+                  <div className="dropzone-inner-prompt">
+                    <span className="cloud-upload-emoji">📂</span>
+                    <p>{imageFile ? `Selected: ${imageFile.name}` : "Click to browse or drop premium product media assets"}</p>
+                  </div>
                 </label>
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '15px', marginTop: '30px' }}>
-              <button 
-                type="button" 
-                className="counter-adj-btn" 
-                style={{ padding: '0 25px' }}
-                onClick={() => setActiveStep(1)}
-              >
+            <div className="stepper-actions-row split-dock">
+              <button type="button" className="step-back-action-trigger" onClick={() => setActiveStep(1)}>
                 ← Back
               </button>
-              <button type="submit" className="admin-action-submit-btn" style={{ margin: 0 }}>
+              <button type="submit" className="admin-action-submit-btn">
                 Publish Item to Catalog
               </button>
             </div>
@@ -240,5 +197,4 @@ const AddProduct = () => {
   );
 };
 
-// Explicit default export layout to bind accurately into your Admin.jsx router map
 export default AddProduct;

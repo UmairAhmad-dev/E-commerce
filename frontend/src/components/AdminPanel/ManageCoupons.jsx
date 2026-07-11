@@ -5,11 +5,7 @@ const ManageCoupons = () => {
   const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newCoupon, setNewCoupon] = useState({
-    code: "",
-    discountType: "percentage",
-    discountValue: "",
-    minOrderAmount: "",
-    expiryDate: ""
+    code: "", discountType: "percentage", discountValue: "", minOrderAmount: "", expiryDate: ""
   });
 
   const fetchCoupons = async () => {
@@ -21,15 +17,13 @@ const ManageCoupons = () => {
       const data = await res.json();
       if (data.success) setCoupons(data.coupons || []);
     } catch (error) {
-      console.error("Error fetching campaign coupons:", error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchCoupons();
-  }, []);
+  useEffect(() => { fetchCoupons(); }, []);
 
   const handleInputChange = (e) => {
     setNewCoupon({ ...newCoupon, [e.target.name]: e.target.value });
@@ -56,7 +50,7 @@ const ManageCoupons = () => {
         alert(`❌ Failed: ${data.message}`);
       }
     } catch (error) {
-      console.error("Coupon insertion breakdown:", error);
+      console.error(error);
     }
   };
 
@@ -78,26 +72,25 @@ const ManageCoupons = () => {
           fetchCoupons();
         }
       } catch (error) {
-        console.error("Coupon deletion error context:", error);
+        console.error(error);
       }
     }
   };
 
-  if (loading) return <div className="loading-state">Loading active marketing campaigns...</div>;
+  if (loading) return <div className="admin-component-wireframe-loader">Loading active marketing campaigns...</div>;
 
   return (
-    <div className="admin-coupon-workspace animated-fade" style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "25px" }}>
+    <div className="admin-dual-pane-layout animated-fade">
       
-      {/* LEFT: INGESTION FORM CONTAINER */}
       <div className="admin-card-view premium-ui-card">
         <h3>Create Promo Code</h3>
-        <form onSubmit={handleFormSubmit} className="admin-ingestion-form" style={{ marginTop: "15px" }}>
+        <form onSubmit={handleFormSubmit} className="admin-ingestion-form">
           <div className="form-input-block">
             <label>Coupon Code Name</label>
             <input type="text" name="code" placeholder="e.g., FESTIVE20" value={newCoupon.code} onChange={handleInputChange} required style={{ textTransform: "uppercase" }} />
           </div>
 
-          <div className="form-input-block" style={{ marginTop: "15px" }}>
+          <div className="form-input-block">
             <label>Discount Vector Type</label>
             <select name="discountType" value={newCoupon.discountType} onChange={handleInputChange}>
               <option value="percentage">Percentage Off (%)</option>
@@ -105,29 +98,28 @@ const ManageCoupons = () => {
             </select>
           </div>
 
-          <div className="form-input-block" style={{ marginTop: "15px" }}>
+          <div className="form-input-block">
             <label>Deduction Value</label>
-            <input type="number" min="1" name="discountValue" placeholder={newCoupon.discountType === "percentage" ? "e.g., 20" : "e.g., 15"} value={newCoupon.discountValue} onChange={handleInputChange} required />
+            <input type="number" min="1" name="discountValue" placeholder={newCoupon.discountType === "percentage" ? "20" : "15"} value={newCoupon.discountValue} onChange={handleInputChange} required />
           </div>
 
-          <div className="form-input-block" style={{ marginTop: "15px" }}>
+          <div className="form-input-block">
             <label>Minimum Basket Limit ($)</label>
-            <input type="number" min="0" name="minOrderAmount" placeholder="e.g., 50" value={newCoupon.minOrderAmount} onChange={handleInputChange} />
+            <input type="number" min="0" name="minOrderAmount" placeholder="50" value={newCoupon.minOrderAmount} onChange={handleInputChange} />
           </div>
 
-          <div className="form-input-block" style={{ marginTop: "15px" }}>
+          <div className="form-input-block">
             <label>Campaign Expiry Deadline</label>
             <input type="date" name="expiryDate" value={newCoupon.expiryDate} onChange={handleInputChange} required />
           </div>
 
-          <button type="submit" className="admin-action-submit-btn" style={{ marginTop: "25px", width: "100%" }}>🚀 Issue Campaign Coupon</button>
+          <button type="submit" className="admin-action-submit-btn-wide">🚀 Issue Campaign Coupon</button>
         </form>
       </div>
 
-      {/* RIGHT: LIVE LEDGER LEDGER GRID */}
       <div className="admin-card-view premium-ui-card">
         <h3>Active Campaign Coupons Ledger</h3>
-        <div className="admin-responsive-table-scroll" style={{ marginTop: "15px" }}>
+        <div className="admin-responsive-table-scroll">
           <table className="admin-ledger-table">
             <thead>
               <tr>
@@ -140,16 +132,16 @@ const ManageCoupons = () => {
             </thead>
             <tbody>
               {coupons.length === 0 ? (
-                <tr><td colSpan="5" style={{ textAlign: "center", padding: "40px", color: "#64748b" }}>No promotional coupons currently running.</td></tr>
+                <tr><td colSpan="5" className="empty-table-cell">No promotional campaigns currently running.</td></tr>
               ) : (
                 coupons.map((coupon) => (
                   <tr key={coupon._id}>
-                    <td><strong style={{ letterSpacing: "1px", color: "#2563eb" }}>{coupon.code}</strong></td>
-                    <td>{coupon.discountType === "percentage" ? `${coupon.discountValue}% Off` : `$${coupon.discountValue} Off`}</td>
+                    <td><span className="coupon-code-pill">{coupon.code}</span></td>
+                    <td><strong>{coupon.discountType === "percentage" ? `${coupon.discountValue}% Off` : `$${coupon.discountValue} Off`}</strong></td>
                     <td>${coupon.minOrderAmount || "0"}.00</td>
                     <td>{new Date(coupon.expiryDate).toLocaleDateString()}</td>
                     <td style={{ textAlign: "center" }}>
-                      <button className="table-row-delete-action-btn" onClick={() => deleteCouponHandler(coupon._id)} style={{ padding: "4px 10px", fontSize: "12px" }}>Purge 🗑️</button>
+                      <button className="table-row-delete-action-btn" onClick={() => deleteCouponHandler(coupon._id)}>Purge 🗑️</button>
                     </td>
                   </tr>
                 ))

@@ -9,6 +9,7 @@ import orderRouter from "./routes/orderRoutes.js";
 // Import MVC Routers
 import productRouter from "./routes/productRoutes.js";
 import userRouter from "./routes/userRoutes.js";
+import analyticsRoutes from './routes/analyticsRoutes.js';
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/shopper")
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 app.use("/api/orders",orderRouter);
+app.use('/api/analytics', analyticsRoutes);
 
 /* ==========================================
    🖼️ MULTER MEDIA UPLOAD COMPONENT MATRIX
