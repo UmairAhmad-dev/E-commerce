@@ -1,104 +1,181 @@
-.fabric-collections-section {
-  max-width: 1200px;
-  margin: 70px auto;
-  padding: 0 20px;
+:root {
+  --slate-dark: #0f172a;
+  --text-grey: #475569;
+  --brand-red: #ff4141;
+  --border-slate: #e2e8f0;
+  --easing-cubic: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.section-title-block {
+.premium-fabric-collections-container {
+  max-width: 1440px;
+  margin: 100px auto 60px auto;
+  padding: 0 4%;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.fabric-section-editorial-header {
   text-align: center;
-  margin-bottom: 45px;
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.section-title-block h2 {
-  font-size: 32px;
-  font-weight: 700;
-  color: #374151;
-  letter-spacing: 0.5px;
+.fabric-mini-curation-tag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  color: var(--brand-red);
+  margin-bottom: 6px;
 }
 
-.section-title-block hr {
-  width: 70px;
-  height: 4px;
-  background: #ff4141;
-  border: none;
-  margin: 12px auto;
-  border-radius: 10px;
+.fabric-section-editorial-header h2 {
+  color: var(--slate-dark);
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -0.8px;
+  margin: 0;
 }
 
-.section-title-block p {
-  color: #4b5563;
+.fabric-minimalist-underline-bar {
+  width: 48px;
+  height: 3px;
+  border-radius: 99px;
+  background: var(--brand-red);
+  margin-top: 14px;
+  margin-bottom: 16px;
+}
+
+.fabric-section-editorial-header p {
+  color: var(--text-grey);
   font-size: 15px;
+  font-weight: 500;
+  max-width: 540px;
+  margin: 0;
+  line-height: 1.5;
 }
 
-.fabric-cards-grid {
+/* Luxury Interactive Grid Architecture */
+.luxury-fabric-asymmetric-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
+  gap: 30px;
+  width: 100%;
 }
 
-.fabric-card {
+.luxury-fabric-card {
   position: relative;
-  height: 380px;
-  border-radius: 8px;
+  height: 420px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+  border: 1px solid var(--border-slate);
+  box-shadow: 0 4px 30px rgba(15, 23, 42, 0.02);
+  background-color: var(--slate-dark);
 }
 
-.fabric-img-wrapper {
+.luxury-fabric-img-frame {
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
-.fabric-img-wrapper img {
+.fabric-fluid-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s ease;
+  transition: transform 0.7s var(--easing-cubic);
 }
 
-.fabric-card:hover .fabric-img-wrapper img {
-  transform: scale(1.06);
+.luxury-fabric-card:hover .fabric-fluid-img {
+  transform: scale(1.05);
 }
 
-.fabric-card-overlay {
+/* Soft Cinema Ambient Overlay Shield */
+.fabric-dark-ambient-gradient {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to top, rgba(15, 23, 42, 0.85) 15%, rgba(0,0,0,0.1) 70%);
+  background: linear-gradient(
+    180deg, 
+    rgba(15, 23, 42, 0.1) 0%, 
+    rgba(15, 23, 42, 0.4) 50%, 
+    rgba(15, 23, 42, 0.85) 100%
+  );
+}
+
+/* Content Text Overlays Details Matrix */
+.luxury-fabric-card-overlay-details {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 30px;
-  color: white;
+  padding: 36px;
+  z-index: 5;
 }
 
-.fabric-card-overlay h3 {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  letter-spacing: 0.5px;
+.fabric-collection-headline {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.3px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.fabric-explore-btn {
-  padding: 10px 20px;
+.fabric-router-anchor-link {
+  text-decoration: none;
+  width: max-content;
+}
+
+.premium-explore-hollow-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 24px;
+  height: 42px;
   background: transparent;
-  border: 1.5px solid white;
-  color: white;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  color: #ffffff;
   font-size: 13px;
-  font-weight: 600;
-  border-radius: 4px;
+  font-weight: 700;
+  border-radius: 99px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s var(--easing-cubic);
 }
 
-.fabric-explore-btn:hover {
-  background: #ff4141;
-  border-color: #ff4141;
+.explore-arrow-vector {
+  font-size: 14px;
+  transition: transform 0.3s var(--easing-cubic);
 }
 
-@media (max-width: 900px) {
-  .fabric-cards-grid { grid-template-columns: 1fr; gap: 20px; }
-  .fabric-card { height: 320px; }
+.premium-explore-hollow-btn:hover {
+  background: #ffffff;
+  color: var(--slate-dark);
+  border-color: #ffffff;
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
+}
+
+.premium-explore-hollow-btn:hover .explore-arrow-vector {
+  transform: translateX(3px);
+}
+
+/* --- RESPONSIVE WORKSPACE MEDIA QUERIES --- */
+@media (max-width: 1024px) {
+  .luxury-fabric-card { height: 360px; }
+  .fabric-collection-headline { font-size: 20px; }
+  .luxury-fabric-card-overlay-details { padding: 24px; }
+}
+
+@media (max-width: 768px) {
+  .luxury-fabric-asymmetric-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .luxury-fabric-card { height: 320px; }
 }
