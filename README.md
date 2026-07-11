@@ -87,5 +87,5 @@ Ensure you have **Node.js (v18+)** and a **MongoDB Atlas Cluster Connection Stri
 
 ### 🏁 1. Clone the Code Repository Base
 ```bash
-git clone [https://github.com/yourusername/shopper-ecommerce.git](https://github.com/yourusername/shopper-ecommerce.git)
+git clone [https://github.com/UmairAhmad-dev/shopper-ecommerce.git](https://github.com/UmairAhmad-dev/shopper-ecommerce.git)
 cd shopper-ecommerce
