@@ -5,21 +5,21 @@ import ManageOrders from './ManageOrders';
 import AdminAnalytics from './AdminAnalytics';
 import ManageCoupons from './ManageCoupons'; 
 import ManageUsers from './ManageUsers';     
-import AdminPortalAuth from './AdminPortalAuth'; // 🚀 Imported to render inline on /admin path
 import './Admin.css';
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("analytics");
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [loading, setLoading] = useState(true); // Added clean loading execution state
 
+ 
   useEffect(() => {
     const checkAdminAuthorization = async () => {
       const token = localStorage.getItem('auth-token');
       
       if (!token) {
-        setLoading(false);
-        return; // Halt process quietly so the inline login card can take over the render tree
+        alert("⚠️ Access Denied: Authentication credentials missing. Redirecting to validation gateway.");
+        window.location.href = "http://localhost:5173/login";
+        return;
       }
 
       try {
@@ -35,12 +35,13 @@ const Admin = () => {
         if (response.ok && data.success && data.role === "admin") {
           setIsAuthorized(true);
         } else {
-          localStorage.removeItem('auth-token'); // Clear corrupted/expired token structures
+          alert("🚫 Restricted Area: Administrative access credentials required.");
+          window.location.href = "http://localhost:5173/login";
         }
       } catch (error) {
         console.error("Security handshake verification error context:", error);
-      } finally {
-        setLoading(false);
+        alert("❌ System connection timeout during verification. Evacuating panel area.");
+        window.location.href = "http://localhost:5173/login";
       }
     };
 
@@ -49,13 +50,12 @@ const Admin = () => {
 
   const logoutHandler = () => {
     if (window.confirm("Are you sure you want to log out of the Admin Control Panel?")) {
-      localStorage.removeItem('auth-token');  
-      setIsAuthorized(false); // Drop authority state instantly to flip layout back to the auth page view
+      localStorage.clear();  
+      window.location.href = "http://localhost:5173/login";
     }
   };
 
-  // Display a crisp, animated verification loader while parsing active JWT browser states
-  if (loading) {
+  if (!isAuthorized) {
     return (
       <div className="admin-gate-pulse-loader">
         <div className="security-spinner-ring"></div>
@@ -64,15 +64,6 @@ const Admin = () => {
     );
   }
 
-  /* ===================================================================
-     🔒 INLINE SECURITY GUARD INTERCEPTOR
-     If authority verification fails, swap layout directly for the login gate
-     =================================================================== */
-  if (!isAuthorized) {
-    return <AdminPortalAuth onLoginSuccess={() => setIsAuthorized(true)} />;
-  }
-
-  // 📊 AUTHORIZED STATE: Render the complete administrative dashboard workspace layout
   return (
     <div className="admin-dashboard-layout full-screen-override">
       
@@ -86,7 +77,7 @@ const Admin = () => {
         <div className="sidebar-user-card-profile">
           <div className="profile-initial-circle">UN</div>
           <div className="profile-meta-strings">
-            <h4>Ch. Umair Nadeem</h4> {/* 🚀 Synchronized to match profile metadata perfectly */}
+            <h4>Umair Ahmad</h4>
             <span className="role-indicator-badge">System Administrator</span>
           </div>
         </div>
