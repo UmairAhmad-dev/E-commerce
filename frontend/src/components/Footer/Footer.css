@@ -3,79 +3,109 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 50px;
-  padding-top: 60px;
-  background: #f8f9fa;
+  gap: 45px;
+  padding: 80px 4% 40px 4%;
+  background: #ffffff; /* Shifted to clean white layout canvas */
+  border-top: 1px solid #f1f5f9;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
 .footer-logo {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 14px;
+  cursor: pointer;
 }
 
 .footer-logo-icon {
-  font-size: 40px;
+  font-size: 32px;
 }
 
 .footer-logo p {
-  color: #383838;
-  font-size: 46px;
-  font-weight: 700;
+  color: #0f172a;
+  font-size: 30px;
+  font-weight: 950;
+  letter-spacing: -1px;
+  margin: 0;
 }
 
 .footer-links {
   display: flex;
   list-style: none;
-  gap: 50px;
-  color: #252525;
-  font-size: 20px;
+  gap: 45px;
+  padding: 0;
+  margin: 0;
 }
 
-.footer-links li {
-  cursor: pointer;
-  transition: color 0.2s;
+.footer-links li a {
+  text-decoration: none;
+  color: #475569;
+  font-size: 15px;
+  font-weight: 700;
+  transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.footer-links li:hover {
+.footer-links li:hover a {
   color: #ff4141;
 }
 
 .footer-social-icon {
   display: flex;
-  gap: 20px;
+  gap: 16px;
 }
 
+/* Interactive Floating Social Capsule Nodes */
 .footer-icons-container {
-  padding: 10px;
-  padding-bottom: 6px;
-  background: #fbfbfb;
-  border: 1px solid #ebebeb;
-  border-radius: 8px;
+  width: 44px;
+  height: 44px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 50%; /* Smooth geometric circles */
   cursor: pointer;
-  font-size: 22px;
-  transition: background 0.2s;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .footer-icons-container:hover {
-  background: #f0f0f0;
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.2);
 }
 
 .footer-copyright {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 30px;
+  gap: 24px;
   width: 100%;
-  color: #1a1a1a;
-  font-size: 16px;
-  padding-bottom: 30px;
+  color: #94a3b8;
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-top: 10px;
 }
 
 .footer-copyright hr {
-  width: 85%;
+  width: 100%;
+  max-width: 1320px;
   border: none;
-  border-radius: 10px;
-  height: 3px;
-  background: #c7c7c7;
+  height: 1px;
+  background: #e2e8f0; /* Crisp thin minimalist rule line */
+  margin: 0;
+}
+
+.footer-copyright p {
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+/* Responsive Scaling Overhaul */
+@media (max-width: 640px) {
+  .footer { gap: 36px; padding: 60px 24px 30px 24px; }
+  .footer-links { flex-wrap: wrap; justify-content: center; gap: 24px 32px; }
+  .footer-logo p { font-size: 26px; }
 }
