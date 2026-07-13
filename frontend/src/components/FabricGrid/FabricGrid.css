@@ -8,14 +8,14 @@
 
 .premium-fabric-collections-container {
   max-width: 1440px;
-  margin: 100px auto 60px auto;
+  margin: 120px auto 80px auto; /* Breathable editorial layout grid spacing */
   padding: 0 4%;
   font-family: system-ui, -apple-system, sans-serif;
 }
 
 .fabric-section-editorial-header {
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,53 +24,54 @@
 .fabric-mini-curation-tag {
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: 2.5px;
+  letter-spacing: 3px;
   color: var(--brand-red);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .fabric-section-editorial-header h2 {
   color: var(--slate-dark);
-  font-size: 34px;
+  font-size: 38px;
   font-weight: 900;
-  letter-spacing: -0.8px;
+  letter-spacing: -1px;
   margin: 0;
 }
 
 .fabric-minimalist-underline-bar {
-  width: 48px;
+  width: 40px;
   height: 3px;
   border-radius: 99px;
   background: var(--brand-red);
-  margin-top: 14px;
-  margin-bottom: 16px;
+  margin-top: 16px;
+  margin-bottom: 20px;
 }
 
 .fabric-section-editorial-header p {
   color: var(--text-grey);
-  font-size: 15px;
+  font-size: 15.5px;
   font-weight: 500;
-  max-width: 540px;
+  max-width: 580px;
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-/* Luxury Interactive Grid Architecture */
+/* 🚀 Luxury Interactive Asymmetric Floating Grid */
 .luxury-fabric-asymmetric-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  gap: 32px;
   width: 100%;
 }
 
 .luxury-fabric-card {
   position: relative;
-  height: 420px;
-  border-radius: 20px;
+  height: 460px; /* Elevated scale ratios */
+  border-radius: 24px;
   overflow: hidden;
   border: 1px solid var(--border-slate);
-  box-shadow: 0 4px 30px rgba(15, 23, 42, 0.02);
+  box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.04);
   background-color: var(--slate-dark);
+  transition: all 0.4s var(--easing-cubic);
 }
 
 .luxury-fabric-img-frame {
@@ -83,14 +84,20 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.7s var(--easing-cubic);
+  transition: transform 0.8s var(--easing-cubic);
+}
+
+/* 🚀 Elevate card upward gently on focus hooks */
+.luxury-fabric-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 50px -20px rgba(15, 23, 42, 0.12);
 }
 
 .luxury-fabric-card:hover .fabric-fluid-img {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
-/* Soft Cinema Ambient Overlay Shield */
+/* Deep Cinema Cinematic Gradient Shield */
 .fabric-dark-ambient-gradient {
   position: absolute;
   top: 0;
@@ -99,13 +106,13 @@
   height: 100%;
   background: linear-gradient(
     180deg, 
-    rgba(15, 23, 42, 0.1) 0%, 
-    rgba(15, 23, 42, 0.4) 50%, 
-    rgba(15, 23, 42, 0.85) 100%
+    rgba(15, 23, 42, 0.05) 0%, 
+    rgba(15, 23, 42, 0.35) 45%, 
+    rgba(15, 23, 42, 0.75) 100-3377777% /* Fixed matching layout logic layers */
   );
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.05) 0%, rgba(15, 23, 42, 0.35) 45%, rgba(15, 23, 42, 0.75) 100%);
 }
 
-/* Content Text Overlays Details Matrix */
 .luxury-fabric-card-overlay-details {
   position: absolute;
   top: 0;
@@ -115,16 +122,16 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 36px;
+  padding: 40px;
   z-index: 5;
 }
 
 .fabric-collection-headline {
-  font-size: 24px;
-  font-weight: 800;
+  font-size: 26px;
+  font-weight: 850;
   color: #ffffff;
-  margin: 0 0 16px 0;
-  letter-spacing: -0.3px;
+  margin: 0 0 18px 0;
+  letter-spacing: -0.5px;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -133,16 +140,17 @@
   width: max-content;
 }
 
+/* Luxury Satin Hollow Action Pill Trigger */
 .premium-explore-hollow-btn {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 0 24px;
-  height: 42px;
+  gap: 12px;
+  padding: 0 26px;
+  height: 44px;
   background: transparent;
-  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  border: 1.5px solid rgba(255, 255, 255, 0.65);
   color: #ffffff;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 700;
   border-radius: 99px;
   cursor: pointer;
@@ -150,7 +158,7 @@
 }
 
 .explore-arrow-vector {
-  font-size: 14px;
+  font-size: 15px;
   transition: transform 0.3s var(--easing-cubic);
 }
 
@@ -158,24 +166,21 @@
   background: #ffffff;
   color: var(--slate-dark);
   border-color: #ffffff;
-  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.15);
 }
 
 .premium-explore-hollow-btn:hover .explore-arrow-vector {
-  transform: translateX(3px);
+  transform: translateX(4px);
 }
 
-/* --- RESPONSIVE WORKSPACE MEDIA QUERIES --- */
 @media (max-width: 1024px) {
-  .luxury-fabric-card { height: 360px; }
-  .fabric-collection-headline { font-size: 20px; }
-  .luxury-fabric-card-overlay-details { padding: 24px; }
+  .luxury-fabric-card { height: 380px; }
+  .fabric-collection-headline { font-size: 22px; }
+  .luxury-fabric-card-overlay-details { padding: 28px; }
 }
 
 @media (max-width: 768px) {
-  .luxury-fabric-asymmetric-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  .luxury-fabric-card { height: 320px; }
+  .premium-fabric-collections-container { margin: 80px auto 40px auto; }
+  .luxury-fabric-asymmetric-grid { grid-template-columns: 1fr; gap: 24px; }
+  .luxury-fabric-card { height: 340px; }
 }
