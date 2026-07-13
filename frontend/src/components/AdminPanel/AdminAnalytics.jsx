@@ -63,7 +63,6 @@ const AdminAnalytics = () => {
   return (
     <div className="analytics-grid animated-fade">
       
-      {/* Dynamic Status Connection Banner */}
       {connectionError && (
         <div style={{ gridColumn: 'span 3', padding: '12px 16px', background: '#fff7ed', color: '#c2410c', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #ffedd5' }}>
           ⚠️ Notice: Offline connection fallback mode active. Displaying mock visualization parameters.
@@ -74,7 +73,8 @@ const AdminAnalytics = () => {
         <div className="metric-icon revenue-bg">💰</div>
         <div className="metric-info">
           <span>Gross Retail Income</span>
-          <h3>${currentMetrics.totalRevenue ? currentMetrics.totalRevenue.toFixed(2) : "0.00"}</h3>
+          {/* 🚀 Changed from $ to Rs. */}
+          <h3>Rs. {currentMetrics.totalRevenue ? currentMetrics.totalRevenue.toLocaleString('en-PK') : "0"}</h3>
           <span className="trend-indicator positive">✨ Active Pipeline</span>
         </div>
       </div>

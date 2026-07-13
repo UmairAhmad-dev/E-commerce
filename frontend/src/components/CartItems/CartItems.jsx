@@ -16,7 +16,6 @@ const CartItems = () => {
 
       <div className="cart-workspace-grid-layout">
         
-        {/* Left Side: Interactive Bag Items Stack */}
         <div className="cart-items-stack-column">
           <div className="cart-items-table-header">
             <span className="th-product-meta">Product Detail</span>
@@ -41,8 +40,9 @@ const CartItems = () => {
                       </div>
                     </div>
                     
+                    {/* 🚀 Changed cell markers to Rs. */}
                     <div className="item-price-cell">
-                      <span className="cell-currency-symbol">$</span>{e.new_price.toFixed(2)}
+                      <span className="cell-currency-symbol">Rs.</span>{e.new_price.toLocaleString('en-PK')}
                     </div>
                     
                     <div className="item-qty-cell">
@@ -50,7 +50,7 @@ const CartItems = () => {
                     </div>
                     
                     <div className="item-total-cell">
-                      <span className="cell-currency-symbol">$</span>{(e.new_price * cartItems[e.id]).toFixed(2)}
+                      <span className="cell-currency-symbol">Rs.</span>{(e.new_price * cartItems[e.id]).toLocaleString('en-PK')}
                     </div>
                     
                     <div className="item-remove-cell">
@@ -78,7 +78,6 @@ const CartItems = () => {
           </div>
         </div>
 
-        {/* Right Side: Sticky Checkout Summary & Promo Gateways */}
         <div className="cart-summary-sidebar-panel">
           <div className="summary-sticky-card">
             <h2>Order Summary</h2>
@@ -86,7 +85,8 @@ const CartItems = () => {
             <div className="summary-calc-ledger">
               <div className="calc-row-item">
                 <span>Subtotal</span>
-                <strong>${getTotalCartAmount().toFixed(2)}</strong>
+                {/* 🚀 Changed to Rs. */}
+                <strong>Rs. {getTotalCartAmount().toLocaleString('en-PK')}</strong>
               </div>
               <div className="calc-row-item">
                 <span>Estimated Shipping</span>
@@ -95,7 +95,8 @@ const CartItems = () => {
               <hr className="summary-divider-line" />
               <div className="calc-row-item total-grand-row">
                 <h4>Grand Total</h4>
-                <h4>${getTotalCartAmount().toFixed(2)}</h4>
+                {/* 🚀 Changed to Rs. */}
+                <h4>Rs. {getTotalCartAmount().toLocaleString('en-PK')}</h4>
               </div>
             </div>
 
@@ -107,7 +108,6 @@ const CartItems = () => {
               PROCEED TO SECURE CHECKOUT
             </button>
 
-            {/* Promo Codes Application Field */}
             <div className="cart-promo-activation-dock">
               <p>Have a promotional campaign coupon code?</p>
               <div className="promo-input-capsule">

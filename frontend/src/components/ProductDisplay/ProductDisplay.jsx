@@ -52,7 +52,6 @@ const ProductDisplay = ({ product }) => {
   return (
     <div className="premium-display-canvas">
       
-      {/* Left Column: Image Gallery Matrices */}
       <div className="display-gallery-column">
         <div className="vertical-thumbnails-rack">
           <img src={product.image} alt="Boutique angle look" />
@@ -65,7 +64,6 @@ const ProductDisplay = ({ product }) => {
         </div>
       </div>
 
-      {/* Right Column: Editorial Details Matrix */}
       <div className="display-particulars-column">
         <span className="particulars-collection-tag">STITCHED HERITAGE COLLECTION</span>
         <h1 className="particulars-title-headline">{product.name}</h1>
@@ -76,8 +74,9 @@ const ProductDisplay = ({ product }) => {
         </div>
 
         <div className="particulars-price-dock">
-          <span className="price-old-strike">${product.old_price.toFixed(2)}</span>
-          <span className="price-new-bold">${product.new_price.toFixed(2)}</span>
+          {/* 🚀 Changed from $ to Rs. */}
+          <span className="price-old-strike">Rs. {product.old_price.toLocaleString('en-PK')}</span>
+          <span className="price-new-bold">Rs. {product.new_price.toLocaleString('en-PK')}</span>
         </div>
 
         <p className="particulars-editorial-copy">
@@ -106,7 +105,6 @@ const ProductDisplay = ({ product }) => {
           </div>
         </div>
 
-        {/* Real-time Urgency Scarcity Messages */}
         {stockMessage.text && (
           <div className={`scarcity-alert-ribbon ${stockMessage.type}`}>
             {stockMessage.text}
@@ -121,7 +119,6 @@ const ProductDisplay = ({ product }) => {
           {isOutOfStock ? "OUT OF STOCK" : "ADD TO SHOPPING BAG"}
         </button>
 
-        {/* Action Success/Error Alerts */}
         {notification.text && (
           <div className={`action-feedback-ribbon ${notification.type}`}>
             {notification.text}

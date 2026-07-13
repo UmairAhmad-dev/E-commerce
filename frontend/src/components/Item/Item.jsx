@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import './Item.css';
 
 const Item = ({ id, name, image, new_price, old_price }) => {
-  // Compute if the specific boutique item features a live promotional markdown reduction
   const hasDiscount = old_price > new_price;
 
   return (
@@ -23,9 +22,10 @@ const Item = ({ id, name, image, new_price, old_price }) => {
         <h3 className="card-product-title-string">{name}</h3>
         
         <div className="card-pricing-ledger-dock">
-          <span className="price-tag-new-bold">${new_price.toFixed(2)}</span>
+          {/* 🚀 Changed from $ to Rs. */}
+          <span className="price-tag-new-bold">Rs. {new_price.toLocaleString('en-PK')}</span>
           {hasDiscount && (
-            <span className="price-tag-old-strike">${old_price.toFixed(2)}</span>
+            <span className="price-tag-old-strike">Rs. {old_price.toLocaleString('en-PK')}</span>
           )}
         </div>
       </div>

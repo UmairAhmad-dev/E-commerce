@@ -106,8 +106,9 @@ const ManageProducts = () => {
               <th>Product Title</th>
               <th>Category</th>
               <th style={{ textAlign: "center" }}>Per-Size Inventory Stock Matrix</th>
-              <th>Original Price ($)</th>
-              <th>Offer Price ($)</th>
+              {/* 🚀 Header descriptions switched to Rupees */}
+              <th>Original Price (Rs.)</th>
+              <th>Offer Price (Rs.)</th>
               <th>Actions Terminal</th>
             </tr>
           </thead>
@@ -156,7 +157,7 @@ const ManageProducts = () => {
 
                   <td>
                     <input 
-                      type="number" step="0.01" min="0" 
+                      type="number" min="0" 
                       value={editStates[product.id]?.old_price || 0}
                       className="table-numeric-edit-input old-price-strike"
                       onChange={(e) => {
@@ -171,7 +172,7 @@ const ManageProducts = () => {
 
                   <td>
                     <input 
-                      type="number" step="0.01" min="0" 
+                      type="number" min="0" 
                       value={editStates[product.id]?.new_price || 0}
                       className="table-numeric-edit-input new-price-bold"
                       onChange={(e) => {

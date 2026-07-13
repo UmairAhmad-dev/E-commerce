@@ -94,18 +94,20 @@ const ManageCoupons = () => {
             <label>Discount Vector Type</label>
             <select name="discountType" value={newCoupon.discountType} onChange={handleInputChange}>
               <option value="percentage">Percentage Off (%)</option>
-              <option value="fixed">Fixed Price Reduction ($)</option>
+              {/* 🚀 Updated Label text to reflect Rupees */}
+              <option value="fixed">Fixed Price Reduction (Rs.)</option>
             </select>
           </div>
 
           <div className="form-input-block">
             <label>Deduction Value</label>
-            <input type="number" min="1" name="discountValue" placeholder={newCoupon.discountType === "percentage" ? "20" : "15"} value={newCoupon.discountValue} onChange={handleInputChange} required />
+            <input type="number" min="1" name="discountValue" placeholder={newCoupon.discountType === "percentage" ? "20" : "500"} value={newCoupon.discountValue} onChange={handleInputChange} required />
           </div>
 
+          {/* 🚀 Changed label string placeholder descriptor hint to Rs. */}
           <div className="form-input-block">
-            <label>Minimum Basket Limit ($)</label>
-            <input type="number" min="0" name="minOrderAmount" placeholder="50" value={newCoupon.minOrderAmount} onChange={handleInputChange} />
+            <label>Minimum Basket Limit (Rs.)</label>
+            <input type="number" min="0" name="minOrderAmount" placeholder="2500" value={newCoupon.minOrderAmount} onChange={handleInputChange} />
           </div>
 
           <div className="form-input-block">
@@ -137,8 +139,9 @@ const ManageCoupons = () => {
                 coupons.map((coupon) => (
                   <tr key={coupon._id}>
                     <td><span className="coupon-code-pill">{coupon.code}</span></td>
-                    <td><strong>{coupon.discountType === "percentage" ? `${coupon.discountValue}% Off` : `$${coupon.discountValue} Off`}</strong></td>
-                    <td>${coupon.minOrderAmount || "0"}.00</td>
+                    {/* 🚀 Dynamic presentation string adjustments */}
+                    <td><strong>{coupon.discountType === "percentage" ? `${coupon.discountValue}% Off` : `Rs. ${coupon.discountValue} Off`}</strong></td>
+                    <td>Rs. {coupon.minOrderAmount || "0"}</td>
                     <td>{new Date(coupon.expiryDate).toLocaleDateString()}</td>
                     <td style={{ textAlign: "center" }}>
                       <button className="table-row-delete-action-btn" onClick={() => deleteCouponHandler(coupon._id)}>Purge 🗑️</button>

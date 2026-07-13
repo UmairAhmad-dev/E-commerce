@@ -18,7 +18,7 @@ const ManageOrders = () => {
       if (data.success) setOrders(data.orders || []);
     } catch (error) {
       console.error(error);
-    }  {
+    } finally {
       setLoading(false);
     }
   };
@@ -102,7 +102,8 @@ const ManageOrders = () => {
                   <td><strong>#{order.orderId}</strong></td>
                   <td>{order.shippingAddress?.fullName}</td>
                   <td>{new Date(order.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}</td>
-                  <td className="table-cell-price-bold">${order.totalAmount ? order.totalAmount.toFixed(2) : "0.00"}</td>
+                  {/* 🚀 Swapped $ symbol for Rs. */}
+                  <td className="table-cell-price-bold">Rs. {order.totalAmount ? order.totalAmount.toLocaleString('en-PK') : "0"}</td>
                   <td><span className={`order-status-pill ${order.status?.toLowerCase()}`}>{order.status}</span></td>
                   <td style={{textAlign: 'center'}}>
                     <button className="table-action-inspect-btn" onClick={() => setSelectedOrder(order)}>Inspect 🔎</button>
@@ -126,7 +127,6 @@ const ManageOrders = () => {
         </table>
       </div>
 
-      {/* DETAILED MANIFEST OVERLAY MODAL */}
       {selectedOrder && (
         <div className="admin-modal-backdrop" onClick={() => setSelectedOrder(null)}>
           <div className="admin-modal-content-card animated-fade" onClick={(e) => e.stopPropagation()}>
@@ -145,8 +145,9 @@ const ManageOrders = () => {
                 <div className="itemized-manifest-list">
                   {selectedOrder.items?.map((item, idx) => (
                     <div key={idx} className="manifest-item-line-row">
+                      {/* 🚀 Inner table fields formatting updated */}
                       <span>👕 {item.name} ({item.size}) <strong className="qty-muted">x{item.quantity}</strong></span>
-                      <strong>${(item.price * item.quantity).toFixed(2)}</strong>
+                      <strong>Rs. {(item.price * item.quantity).toLocaleString('en-PK')}</strong>
                     </div>
                   ))}
                 </div>
@@ -154,7 +155,8 @@ const ManageOrders = () => {
 
               <div className="modal-grand-invoice-footer">
                 <span>Grand Invoice:</span>
-                <span className="grand-invoice-price">${selectedOrder.totalAmount?.toFixed(2)}</span>
+                {/* 🚀 Grand Invoice overlay conversion */}
+                <span className="grand-invoice-price">Rs. {selectedOrder.totalAmount ? selectedOrder.totalAmount.toLocaleString('en-PK') : "0"}</span>
               </div>
               <p className="modal-status-footer-line">
                 <strong>Fulfillment Tracker Status:</strong> 
