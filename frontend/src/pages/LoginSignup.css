@@ -1,43 +1,117 @@
-.loginsignup {
-  width: 100%;
-  min-height: 85vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  padding: 80px 20px;
+:root {
+  --slate-dark: #0f172a;
+  --text-grey: #475569;
+  --text-muted: #94a3b8;
+  --brand-red: #ff4141;
+  --brand-red-hover: #e03535;
+  --easing-cubic: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 🚀 FIX: FIXED BOUNDARY FILL MATRIX OVERHAUL
+   Forces container canvas layout to lock seamlessly edge-to-edge */
+.loginsignup-viewport {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   align-items: center;
-                         
-  font-family: 'system-ui', -apple-system, sans-serif;
   justify-content: center;
+  overflow: hidden;
+  font-family: 'system-ui', -apple-system, sans-serif;
+  padding: 24px;
+  z-index: 99999;
 }
 
-.loginsignup-container {
+/* 🚀 FULL-SCALE CINEMATIC BACKGROUND VIDEO */
+.auth-video-background {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  max-width: 460px;
-  background: #ffffff;
-  border-radius: 12px;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+/* Dark layout tint layer optimizing structural text safety values */
+.video-dark-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg, 
+    rgba(15, 23, 42, 0.45) 0%, 
+    rgba(15, 23, 42, 0.65) 100%
+  );
+  z-index: -1;
+}
+
+/* 🚀 HIGH-END DEEP FROSTED GLASS CONTAINER CARD */
+.loginsignup-glass-card {
+  width: 100%;
+  max-width: 450px;
+  background: rgba(15, 23, 42, 0.45); /* Deep translucent slate layer */
+  backdrop-filter: blur(24px); /* Deep cinematic frost blur interaction hook */
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12); /* Polished fine satin perimeter border */
+  border-radius: 24px;
   padding: 45px 40px;
-  box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 10px 10px -5px rgba(15, 23, 42, 0.04);
-  border: 1px solid #edf2f7;
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.5), 
+              0 0 50px 0 rgba(255, 255, 255, 0.02) inset;
+  transition: opacity 0.25s ease, transform 0.25s var(--easing-cubic);
+  animation: cardEntranceTimeline 0.5s var(--easing-cubic) forwards;
 }
 
-.loginsignup-header {
-  text-align: center;
-  margin-bottom: 30px;
+.loginsignup-glass-card.state-leaving {
+  opacity: 0;
+  transform: scale(0.96) translateY(6px);
 }
 
-.loginsignup-container h1 {
+.loginsignup-glass-card h1 {
   margin: 0 0 8px 0;
-  font-size: 30px;
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.5px;
+  font-size: 32px;
+  font-weight: 850;
+  color: #ffffff;
+  text-align: center;
+  letter-spacing: -0.75px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .loginsignup-subtitle {
   font-size: 14px;
-  color: #64748b;
+  color: #cbd5e1;
+  text-align: center;
   line-height: 1.5;
   margin: 0;
+}
+
+/* REACTION RESPONSE MESSAGING STYLES */
+.auth-inline-feedback-msg {
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+  line-height: 1.4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: inlineErrorDrop 0.3s var(--easing-cubic) forwards;
+}
+
+.auth-inline-feedback-msg.msg-error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #fca5a5;
+}
+
+.auth-inline-feedback-msg.msg-success {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #a7f3d0;
 }
 
 .loginsignup-form-shell {
@@ -50,61 +124,79 @@
 .loginsignup-fields {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
 }
 
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+/* 🚀 MICRO-INTERACTION LABELS FRAMEWORK ROUTINES */
+.input-group-animated {
+  position: relative;
   width: 100%;
 }
 
-.field-meta-label {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: #334155;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.loginsignup-fields input {
-  height: 48px;
+.input-group-animated input {
+  height: 54px;
   width: 100%;
-  padding: 0 16px;
-  border: 1px solid #cbd5e1;
+  padding: 18px 16px 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   outline: none;
-  color: #0f172a;
+  color: #ffffff;
   font-size: 15px;
-  border-radius: 6px;
-  background-color: #f8fafc;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  font-weight: 500;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  transition: all 0.25s var(--easing-cubic);
 }
 
-.loginsignup-fields input:focus {
-  border-color: #ff4141;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(255, 65, 65, 0.12);
+.input-group-animated .floating-placeholder {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  font-size: 14px;
+  font-weight: 500;
+  color: #94a3b8;
+  pointer-events: none;
+  transition: all 0.2s var(--easing-cubic);
 }
 
+/* State selector triggers responding to standard client focus loops */
+.input-group-animated input:focus,
+.input-group-animated input:not(:placeholder-shown) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--brand-red);
+  box-shadow: 0 0 0 4px rgba(255, 65, 65, 0.15);
+}
+
+.input-group-animated input:focus + .floating-placeholder,
+.input-group-animated input:not(:placeholder-shown) + .floating-placeholder {
+  top: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brand-red);
+  text-transform: uppercase;
+  letter-spacing: 0.75px;
+}
+
+/* 🚀 MASTER CTA AUTH ACTION TRIGGER TRIGGER */
 .auth-action-trigger-btn {
   width: 100%;
-  height: 50px;
+  height: 52px;
   color: #ffffff;
-  background: #ff4141;
+  background: var(--brand-red);
   border: none;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 6px -1px rgba(255, 65, 65, 0.2);
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+  transition: all 0.2s var(--easing-cubic);
+  box-shadow: 0 10px 20px -5px rgba(255, 65, 65, 0.35);
 }
 
 .auth-action-trigger-btn:hover {
-  background: #e03535;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 12px -1px rgba(255, 65, 65, 0.3);
+  background: var(--brand-red-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(255, 65, 65, 0.55); /* Precision tech bloom effect */
 }
 
 .auth-action-trigger-btn:active {
@@ -114,83 +206,68 @@
 .loginsignup-agree {
   display: flex;
   align-items: flex-start;
-  margin-top: 20px;
-  gap: 10px;
-  color: #64748b;
-  font-size: 13px;
+  gap: 12px;
+  color: #cbd5e1;
+  font-size: 12.5px;
   font-weight: 500;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .loginsignup-agree input[type="checkbox"] {
   margin-top: 2px;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   cursor: pointer;
-  accent-color: #ff4141;
-}
-
-.loginsignup-agree label {
-  cursor: pointer;
-  user-select: none;
+  accent-color: var(--brand-red);
 }
 
 .auth-structural-divider {
   border: 0;
   height: 1px;
-  background: #e2e8f0;
-  margin: 25px 0 20px 0;
-}
-
-.auth-toggle-footer-wrapper {
-  text-align: center;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 24px 0 20px 0;
 }
 
 .loginsignup-login {
   margin: 0;
-  color: #475569;
-  font-size: 14.5px;
+  color: #cbd5e1;
+  font-size: 14px;
   font-weight: 500;
+  text-align: center;
 }
 
 .loginsignup-login span {
-  color: #ff4141;
+  color: var(--brand-red);
   font-weight: 700;
   cursor: pointer;
   margin-left: 4px;
-  transition: color 0.2s;
+  transition: color 0.15s ease;
 }
 
 .loginsignup-login span:hover {
-  color: #e03535;
+  color: var(--brand-red-hover);
   text-decoration: underline;
 }
 
-/* Validation Exceptions Matrix UI Rules */
-.loginsignup-fields input.input-error {
-  border-color: #ef4444;
-  background-color: #fef2f2;
-}
-
-.error-text {
-  color: #ef4444;
-  font-size: 12px;
-  font-weight: 600;
-  padding-left: 4px;
-}
-
-/* Micro-interaction Entrance Keyframes Animation */
-.animated-fade {
-  animation: authFormSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes authFormSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
+/* 🚀 ENGINE GRAPHICS KEYFRAME TIMELINES */
+@keyframes cardEntranceTimeline {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px) scale(0.97); 
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+@keyframes inlineErrorDrop {
+  from { 
+    opacity: 0; 
+    transform: translateY(-6px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
   }
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './LoginSignup.css'; 
 import { useNavigate } from 'react-router-dom';
+import videoBg from '../assets/auth-bg.mp4'; // 🚀 Import the looping background video
 
 const LoginSignup = () => {
   const [state, setState] = useState("Login");
@@ -10,15 +11,26 @@ const LoginSignup = () => {
     email: ""
   });
   
+  const [authError, setAuthError] = useState("");
+  const [isAnimating, setIsAnimating] = useState(false);
   const navigate = useNavigate();
 
   const changeHandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (authError) setAuthError(""); 
   };
 
-  // 🔑 1. CALL BACKEND LOGIN ENDPOINT
+  const handleStateToggle = (targetState) => {
+    setIsAnimating(true);
+    setAuthError("");
+    setTimeout(() => {
+      setState(targetState);
+      setIsAnimating(false);
+    }, 200); 
+  };
+
   const login = async () => {
-    console.log("Executing client validation check...", formData);
+    setAuthError("");
     try {
       const response = await fetch('http://localhost:4000/api/users/login', {
         method: 'POST',
@@ -32,34 +44,26 @@ const LoginSignup = () => {
       const data = await response.json();
 
       if (data.success) {
-        // Save the JWT secure token and metadata inside local browser memory
         localStorage.setItem('auth-token', data.token);
         localStorage.setItem('user-name', data.user.name);
         localStorage.setItem('user-role', data.user.role);
 
-        // 🛡️ ROLE SEPARATION GATEWAY
         if (data.user.role === 'admin') {
-          alert(`Welcome back Administrator ${data.user.name}! Redirecting to Admin Dashboard.`);
-          // ⏳ Gives the DOM 100ms to dismiss the alert state before executing navigation
-          setTimeout(() => {
-            navigate('/admin');
-          }, 100);
+          setAuthError("🎉 Verified Administrator. Launching console...");
+          setTimeout(() => { navigate('/admin'); }, 1500);
         } else {
-          // If a standard customer, take them right back to complete their checkout or browse
           window.location.replace('/cart');
         }
       } else {
-        alert(data.message || "Invalid email or password credentials.");
+        setAuthError(data.message || "Invalid credentials.");
       }
     } catch (error) {
-      console.error("Login component execution error:", error);
-      alert("Backend validation server is currently unreachable.");
+      setAuthError("❌ Backend validation server is offline.");
     }
   };
 
-  // 📝 2. CALL BACKEND SIGNUP ENDPOINT
   const signUp = async () => {
-    console.log("Executing client profile creation sequence...", formData);
+    setAuthError("");
     try {
       const response = await fetch('http://localhost:4000/api/users/signup', {
         method: 'POST',
@@ -77,76 +81,62 @@ const LoginSignup = () => {
         localStorage.setItem('user-name', data.user.name);
         localStorage.setItem('user-role', data.user.role);
 
-        alert("Account profile registered successfully!");
-        window.location.replace('/');
+        setAuthError("🎉 Profile registered successfully!");
+        setTimeout(() => { window.location.replace('/'); }, 1500);
       } else {
-        alert(data.message || "Registration failed. Email might already be taken.");
+        setAuthError(data.message || "Registration failed.");
       }
     } catch (error) {
-      console.error("Signup component execution error:", error);
-      alert("Backend registration server is currently unreachable.");
+      setAuthError("❌ Backend registration server is offline.");
     }
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (state === "Login") {
-      login();
-    } else {
-      signUp();
-    }
+    state === "Login" ? login() : signUp();
   };
 
   return (
-    <div className='loginsignup'>
-      <div className="loginsignup-container animated-fade">
+    <div className='loginsignup-viewport'>
+      {/* 🚀 VIDEO BACKGROUND CORE ENGINE */}
+      <video className="auth-video-background" src={videoBg} autoPlay loop muted playsInline />
+      
+      {/* Dark overlay sheet to maintain crisp text contrast ratios */}
+      <div className="video-dark-overlay"></div>
+
+      <div className={`loginsignup-glass-card ${isAnimating ? 'state-leaving' : ''}`}>
         <div className="loginsignup-header">
           <h1>{state === "Login" ? "Welcome Back" : "Create Account"}</h1>
           <p className="loginsignup-subtitle">
             {state === "Login" 
-              ? "Sign in to access your secure profile and dashboard matrix layout settings." 
-              : "Join our master collection deployment matrix environment."}
+              ? "Access your secure profile layout settings." 
+              : "Join our master collection deployment matrix."}
           </p>
         </div>
+
+        {authError && (
+          <div className={`auth-inline-feedback-msg ${authError.startsWith('🎉') ? 'msg-success' : 'msg-error'}`}>
+            {authError}
+          </div>
+        )}
 
         <form onSubmit={handleFormSubmit} className="loginsignup-form-shell">
           <div className="loginsignup-fields">
             {state === "Sign Up" && (
-              <div className="input-group">
-                <label className="field-meta-label">Full Name</label>
-                <input 
-                  type="text" 
-                  name='username' 
-                  value={formData.username} 
-                  onChange={changeHandler} 
-                  placeholder='Your Name' 
-                  required
-                />
+              <div className="input-group-animated">
+                <input type="text" name='username' value={formData.username} onChange={changeHandler} placeholder=' ' required />
+                <label className="floating-placeholder">Full Name</label>
               </div>
             )}
             
-            <div className="input-group">
-              <label className="field-meta-label">Email Address</label>
-              <input 
-                type="email" 
-                name='email' 
-                value={formData.email} 
-                onChange={changeHandler} 
-                placeholder='name@example.com' 
-                required
-              />
+            <div className="input-group-animated">
+              <input type="email" name='email' value={formData.email} onChange={changeHandler} placeholder=' ' required />
+              <label className="floating-placeholder">Email Address</label>
             </div>
             
-            <div className="input-group">
-              <label className="field-meta-label">Password Account Code</label>
-              <input 
-                type="password" 
-                name='password' 
-                value={formData.password} 
-                onChange={changeHandler} 
-                placeholder='••••••••' 
-                required
-              />
+            <div className="input-group-animated">
+              <input type="password" name='password' value={formData.password} onChange={changeHandler} placeholder=' ' required />
+              <label className="floating-placeholder">Password</label>
             </div>
           </div>
           
@@ -158,7 +148,7 @@ const LoginSignup = () => {
         <div className="loginsignup-agree">
           <input type="checkbox" id='agree-checkbox' defaultChecked required />
           <label htmlFor='agree-checkbox'>
-            By continuing, I explicitly agree to the structural terms of use & data privacy protection protocols.
+            I agree to the structural terms of use & privacy protocols.
           </label>
         </div>
 
@@ -167,11 +157,11 @@ const LoginSignup = () => {
         <div className="auth-toggle-footer-wrapper">
           {state === "Sign Up" ? (
             <p className="loginsignup-login">
-              Already have verified operational credentials? <span onClick={() => { setState("Login") }}>Login here</span>
+              Already verified? <span onClick={() => handleStateToggle("Login")}>Login here</span>
             </p>
           ) : (
             <p className="loginsignup-login">
-              Need to establish a system profile vector? <span onClick={() => { setState("Sign Up") }}>Create account</span>
+              Need a system profile? <span onClick={() => handleStateToggle("Sign Up")}>Create account</span>
             </p>
           )}
         </div>

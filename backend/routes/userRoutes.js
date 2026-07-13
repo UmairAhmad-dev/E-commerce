@@ -1,16 +1,21 @@
 import express from 'express';
-import { signupUser, login, getUserProfile, getAllUsers } from '../controllers/userController.js'; 
+import { signupUser, login, getUserProfile, getAllUsers, adminLogin, adminSignup } from '../controllers/userController.js'; 
 import { protectUser, protectAdmin } from '../middleware/authMiddleware.js'; 
-// 🚀 FIXED: Imported the missing User model to resolve the ReferenceError crash
 import User from '../models/User.js'; 
 
 const router = express.Router();
 
 /* ==========================================
-   🔑 PUBLIC AUTH REGISTRATION ENDPOINTS
+   🔑 PUBLIC AUTH REGISTRATION ENDPOINTS (RETAIL SITE)
    ========================================== */
 router.post('/signup', signupUser);
 router.post('/login', login);
+
+/* ==========================================
+   🛠️ ADMINISTRATIVE ISOLATION PORTAL ROUTING GATEWAYS
+   ========================================== */
+router.post('/admin-login', adminLogin);
+router.post('/admin-signup', adminSignup);
 
 /* ==========================================
    🛡️ PROTECTED USER PROFILE ENDPOINTS
