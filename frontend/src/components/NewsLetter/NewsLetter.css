@@ -13,10 +13,10 @@
   max-width: 1320px;
   background: #ffffff;
   border: 1px solid var(--border-slate);
-  margin: 80px auto 100px auto;
-  padding: 80px 40px;
-  border-radius: 24px;
-  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.02);
+  margin: 100px auto 120px auto;
+  padding: 90px 40px;
+  border-radius: 32px; /* Softer, premium curves */
+  box-shadow: 0 30px 60px -25px rgba(15, 23, 42, 0.04);
   overflow: hidden;
   font-family: system-ui, -apple-system, sans-serif;
 }
@@ -26,9 +26,9 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80%;
+  width: 90%;
   height: 100%;
-  background: radial-gradient(circle, rgba(255, 65, 65, 0.03) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 65, 65, 0.04) 0%, transparent 60%);
   pointer-events: none;
   z-index: 1;
 }
@@ -45,58 +45,58 @@
 .newsletter-curated-tag {
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: 2.5px;
+  letter-spacing: 3px;
   color: var(--brand-red);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .newsletter-inner-content-wrapper h1 {
   color: var(--slate-dark);
-  font-size: 36px;
+  font-size: 42px; /* Elevated typography size scaling */
   font-weight: 900;
-  letter-spacing: -0.8px;
-  margin: 0 0 12px 0;
-  max-width: 650px;
-  line-height: 1.15;
+  letter-spacing: -1.2px;
+  margin: 0 0 14px 0;
+  max-width: 700px;
+  line-height: 1.1;
 }
 
 .newsletter-inner-content-wrapper p {
   color: var(--text-grey);
   font-size: 15px;
   font-weight: 500;
-  max-width: 520px;
-  margin: 0 0 36px 0;
-  line-height: 1.5;
+  max-width: 550px;
+  margin: 0 0 40px 0;
+  line-height: 1.6;
 }
 
-/* Premium Rounded Form Capsule Input Field */
+/* 🚀 Curated Capsule Form Container */
 .premium-newsletter-form-capsule {
   display: flex;
   align-items: center;
   background: var(--bg-matte);
   border: 1px solid var(--border-slate);
   width: 100%;
-  max-width: 560px;
-  height: 52px;
+  max-width: 580px;
+  height: 56px;
   border-radius: 99px;
   overflow: hidden;
-  padding: 4px;
-  transition: all 0.25s var(--easing-cubic);
+  padding: 5px;
+  transition: all 0.3s var(--easing-cubic);
 }
 
 .premium-newsletter-form-capsule:focus-within {
   background: #ffffff;
   border-color: var(--slate-dark);
-  box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 0 0 5px rgba(15, 23, 42, 0.04);
 }
 
 .newsletter-inner-input {
   flex: 1;
-  padding-left: 20px;
+  padding-left: 24px;
   border: none;
   outline: none;
   color: var(--slate-dark);
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 500;
   background: transparent;
 }
@@ -106,7 +106,7 @@
 }
 
 .newsletter-action-submit-btn {
-  padding: 0 28px;
+  padding: 0 36px;
   height: 100%;
   background: var(--slate-dark);
   color: #ffffff;
@@ -115,43 +115,18 @@
   cursor: pointer;
   border: none;
   border-radius: 99px;
-  transition: all 0.2s ease;
+  transition: all 0.25s var(--easing-cubic);
 }
 
 .newsletter-action-submit-btn:hover {
   background: var(--brand-red);
-  box-shadow: 0 4px 12px rgba(255, 65, 65, 0.2);
+  box-shadow: 0 8px 20px rgba(255, 65, 65, 0.25);
 }
 
-/* --- TABLET/MOBILE BREAKPOINT OVERRIDES --- */
 @media (max-width: 768px) {
-  .premium-newsletter-section {
-    padding: 50px 24px;
-    width: 92%;
-    margin: 40px auto 60px auto;
-  }
-  .newsletter-inner-content-wrapper h1 { font-size: 26px; }
-  .newsletter-inner-content-wrapper p { font-size: 14px; margin-bottom: 24px; }
-  
-  .premium-newsletter-form-capsule {
-    flex-direction: column;
-    height: auto;
-    background: transparent;
-    border: none;
-    gap: 12px;
-    padding: 0;
-  }
-  .newsletter-inner-input {
-    background: var(--bg-matte);
-    border: 1px solid var(--border-slate);
-    height: 48px;
-    border-radius: 99px;
-    width: 100%;
-    padding: 0 20px;
-  }
-  .newsletter-action-submit-btn {
-    height: 48px;
-    border-radius: 99px;
-    width: 100%;
-  }
+  .premium-newsletter-section { padding: 60px 24px; width: 92%; }
+  .newsletter-inner-content-wrapper h1 { font-size: 30px; }
+  .premium-newsletter-form-capsule { flex-direction: column; height: auto; background: transparent; border: none; gap: 14px; padding: 0; }
+  .newsletter-inner-input { background: var(--bg-matte); border: 1px solid var(--border-slate); height: 52px; border-radius: 99px; width: 100%; padding: 0 20px; }
+  .newsletter-action-submit-btn { height: 52px; border-radius: 99px; width: 100%; }
 }
