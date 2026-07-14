@@ -7,7 +7,7 @@ const AddProduct = () => {
   });
   const [imageFile, setImageFile] = useState(null);
   
-  // Custom feedback state replacing standard alert systems
+  // Custom feedback state replacing standard browser alert systems
   const [feedback, setFeedback] = useState({ text: "", type: "" });
 
   const showFeedback = (text, type) => {
@@ -30,12 +30,23 @@ const AddProduct = () => {
       return;
     }
 
+    // 1. Retrieve the session token from sessionStorage (matches your Admin authentication structure)
+    const token = sessionStorage.getItem('auth-token');
+    if (!token) {
+      showFeedback("❌ Session Expired: Please log out and log back in to verify security clearance.", "error");
+      return;
+    }
+
     try {
       let formData = new FormData();
       formData.append('product', imageFile);
 
+      // 2. Upload image file with authorization headers included
       const uploadResponse = await fetch('http://localhost:4000/api/upload', {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
         body: formData,
       });
       
@@ -50,11 +61,13 @@ const AddProduct = () => {
           stock_qty: Number(productDetails.stock_qty)
         };
 
+        // 3. Post master product specifications to backend database with authorization clearance
         const productResponse = await fetch('http://localhost:4000/api/products/addproduct', {
           method: 'POST',
           headers: {
-            Accept: 'application/json',
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Sends verified secure token to pass protectAdmin
           },
           body: JSON.stringify(updatedProduct),
         });
@@ -67,7 +80,7 @@ const AddProduct = () => {
           setImageFile(null);
           setActiveStep(1);
         } else {
-          showFeedback("❌ Failed to push product meta fields to database.", "error");
+          showFeedback(`❌ Failed: ${finalData.message || "Could not save catalog details."}`, "error");
         }
       } else {
         showFeedback("❌ Image upload system rejected the file stream.", "error");
@@ -114,7 +127,8 @@ const AddProduct = () => {
         </div>
       </div>
 
-      <form className="admin-ingestion-form" onSubmit={handleFormSubmit}>
+      {/* Isolated form class name to avoid style bleeding conflicts with coupons page */}
+      <form className="product-ingestion-form-stepper" onSubmit={handleFormSubmit}>
         
         {/* STEP 1: BASIC INFORMATION */}
         {activeStep === 1 && (
