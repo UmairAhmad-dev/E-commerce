@@ -22,7 +22,6 @@ const UserProfile = () => {
 
       try {
         setLoading(true);
-        // 1. Fetch current profile data
         const profileRes = await fetch('http://localhost:4000/api/users/profile', {
           method: 'GET',
           headers: { 'Authorization': `Bearer ${token}` }
@@ -40,7 +39,6 @@ const UserProfile = () => {
           }));
         }
 
-        // 2. Fetch authenticated order history logs
         const ordersRes = await fetch('http://localhost:4000/api/orders/myorders', {
           method: 'GET',
           headers: { 'Authorization': `Bearer ${token}` }
@@ -81,7 +79,7 @@ const UserProfile = () => {
       const data = await res.json();
 
       if (data.success) {
-        setMessage({ text: '🎉 Profile settings successfully updated inside the matrix ledger!', type: 'success' });
+        setMessage({ text: '🎉 Profile settings successfully updated!', type: 'success' });
         setProfileData(prev => ({ ...prev, currentPassword: '', newPassword: '' }));
       } else {
         setMessage({ text: `❌ Update Rejected: ${data.message}`, type: 'error' });
@@ -106,7 +104,7 @@ const UserProfile = () => {
     <div className="premium-profile-viewport">
       <div className="profile-workspace-container">
         
-        {/* Left Side: Modern Identity Panel card */}
+        {/* Left Side Navigation Sidebar Card */}
         <aside className="profile-identity-card">
           <div className="user-avatar-avatar-badge">
             {profileData.name ? profileData.name.substring(0, 2).toUpperCase() : 'US'}
@@ -119,18 +117,18 @@ const UserProfile = () => {
               className={`profile-nav-tab-btn ${activeTab === 'profile' ? 'tab-active' : ''}`}
               onClick={() => { setActiveTab('profile'); setMessage({ text: '', type: '' }); }}
             >
-              👤 Profile Information
+              <span className="tab-icon">👤</span> Profile Information
             </button>
             <button 
               className={`profile-nav-tab-btn ${activeTab === 'orders' ? 'tab-active' : ''}`}
               onClick={() => { setActiveTab('orders'); setMessage({ text: '', type: '' }); }}
             >
-              📦 Order History ({orders.length})
+              <span className="tab-icon">📦</span> Order History ({orders.length})
             </button>
           </div>
         </aside>
 
-        {/* Right Side: Main Settings Grid View */}
+        {/* Right Side Settings Dashboard */}
         <main className="profile-main-settings-card">
           {message.text && (
             <div className={`profile-inline-feedback-banner ${message.type}`}>
@@ -142,39 +140,79 @@ const UserProfile = () => {
             <div className="settings-content-view animated-fade">
               <div className="settings-section-header">
                 <h2>Account Settings</h2>
-                <p>Update your shipping specifications, contact methods, and master access codes.</p>
+                <p>Update your shipping specifications, contact methods, and access configuration parameters.</p>
               </div>
 
               <form onSubmit={handleUpdateProfile} className="profile-ingestion-form">
                 <div className="form-row-grid">
                   <div className="input-field-wrapper">
-                    <label>Full Name</label>
-                    <input type="text" name="name" value={profileData.name} onChange={handleInputChange} required placeholder="John Doe" />
+                    <input 
+                      type="text" 
+                      name="name" 
+                      value={profileData.name} 
+                      onChange={handleInputChange} 
+                      required 
+                      placeholder=" "
+                    />
+                    <label className="floating-label">Full Name</label>
                   </div>
+                  
                   <div className="input-field-wrapper">
-                    <label>Phone Number</label>
-                    <input type="text" name="phone" value={profileData.phone} onChange={handleInputChange} placeholder="+92 300 1234567" />
+                    <input 
+                      type="text" 
+                      name="phone" 
+                      value={profileData.phone} 
+                      onChange={handleInputChange} 
+                      placeholder=" "
+                    />
+                    <label className="floating-label">Phone Number</label>
                   </div>
                 </div>
 
                 <div className="input-field-wrapper single-full-row">
-                  <label>Email Address</label>
-                  <input type="email" name="email" value={profileData.email} disabled className="disabled-input" />
+                  <input 
+                    type="email" 
+                    name="email" 
+                    value={profileData.email} 
+                    disabled 
+                    className="disabled-input" 
+                    placeholder=" "
+                  />
+                  <label className="floating-label">Email Address</label>
                 </div>
 
                 <div className="input-field-wrapper single-full-row">
-                  <label>Street Address</label>
-                  <input type="text" name="address" value={profileData.address} onChange={handleInputChange} placeholder="123 Luxury Avenue, Apartment Block B" />
+                  <input 
+                    type="text" 
+                    name="address" 
+                    value={profileData.address} 
+                    onChange={handleInputChange} 
+                    placeholder=" "
+                  />
+                    <label className="floating-label">Street Address</label>
                 </div>
 
                 <div className="form-row-grid">
                   <div className="input-field-wrapper">
-                    <label>City</label>
-                    <input type="text" name="city" value={profileData.city} onChange={handleInputChange} placeholder="Sahiwal" />
+                    <input 
+                      type="text" 
+                      name="city" 
+                      value={profileData.city} 
+                      onChange={handleInputChange} 
+                      placeholder=" "
+                    />
+                    <label className="floating-label">City</label>
                   </div>
+                  
                   <div className="input-field-wrapper">
-                    <label>Postal Code</label>
-                    <input type="text" name="postalCode" value={profileData.postalCode} onChange={handleInputChange} placeholder="57000" />
+                    <input 
+                      type="text" 
+                      name="postalCode" 
+                      value={profileData.postalCode} 
+                      onChange={handleInputChange} 
+                      placeholder=" "
+                    />
+                    <label className="floating-label">Postal Code</label>
                   </div>
                 </div>
 
@@ -182,17 +220,30 @@ const UserProfile = () => {
 
                 <div className="settings-section-header">
                   <h2>Update Security Credentials</h2>
-                  <p>Leave fields blank if you do not wish to modify your active portal password.</p>
+                  <p>Provide secure credential parameters to modify your portal passkey.</p>
                 </div>
 
                 <div className="form-row-grid">
                   <div className="input-field-wrapper">
-                    <label>Current Password</label>
-                    <input type="password" name="currentPassword" value={profileData.currentPassword} onChange={handleInputChange} placeholder="••••••••" />
+                    <input 
+                      type="password" 
+                      name="currentPassword" 
+                      value={profileData.currentPassword} 
+                      onChange={handleInputChange} 
+                      placeholder=" " 
+                    />
+                    <label className="floating-label">Current Password</label>
                   </div>
+                  
                   <div className="input-field-wrapper">
-                    <label>New Passkey / Password</label>
-                    <input type="password" name="newPassword" value={profileData.newPassword} onChange={handleInputChange} placeholder="••••••••" />
+                    <input 
+                      type="password" 
+                      name="newPassword" 
+                      value={profileData.newPassword} 
+                      onChange={handleInputChange} 
+                      placeholder=" " 
+                    />
+                    <label className="floating-label">New Password</label>
                   </div>
                 </div>
 

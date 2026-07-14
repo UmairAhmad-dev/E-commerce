@@ -1,5 +1,6 @@
 import express from 'express';
-import { signupUser, login, getUserProfile, getAllUsers, adminLogin, adminSignup } from '../controllers/userController.js'; 
+// 🚀 Added 'updateUserProfile' to the imported controller functions
+import { signupUser, login, getUserProfile, getAllUsers, adminLogin, adminSignup, updateUserProfile } from '../controllers/userController.js'; 
 import { protectUser, protectAdmin } from '../middleware/authMiddleware.js'; 
 import User from '../models/User.js'; 
 
@@ -21,6 +22,8 @@ router.post('/admin-signup', adminSignup);
    🛡️ PROTECTED USER PROFILE ENDPOINTS
    ========================================== */
 router.get('/profile', protectUser, getUserProfile);
+// 🚀 NEW ROUTE: Handles profile updates (Name, Phone, Address, City, Postal Code, and Password)
+router.put('/profile/update', protectUser, updateUserProfile);
 router.get('/allusers', protectUser, protectAdmin, getAllUsers); 
 
 /* ==========================================

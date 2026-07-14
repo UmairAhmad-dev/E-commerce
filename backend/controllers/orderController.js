@@ -36,6 +36,24 @@ export const placeOrder = async (req, res) => {
   }
 };
 
+// @desc    Fetch personal order history for the logged-in customer
+// @route   GET /api/orders/myorders
+export const getMyOrders = async (req, res) => {
+  try {
+    // Extract user._id injected by your protectUser middleware guard
+    const userId = req.user._id;
+
+    // Find all orders that map to this user's object reference
+    const orders = await Order.find({ userId: userId }).sort({ date: -1 });
+
+    console.log(`👤 Personal Orders: Found ${orders.length} orders for customer ref ${userId}`);
+    res.json({ success: true, orders });
+  } catch (error) {
+    console.error("❌ Fetch Personal Orders Controller Error:", error);
+    res.status(500).json({ success: false, message: "Database read failure" });
+  }
+};
+
 // @desc    Fetch all customer orders for administration management
 // @route   GET /api/orders/allorders
 export const getAllOrders = async (req, res) => {

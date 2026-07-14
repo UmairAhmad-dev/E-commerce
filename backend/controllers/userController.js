@@ -191,14 +191,28 @@ export const adminSignup = async (req, res) => {
   }
 };
 
-// 🛡️ 5. PROFILE CHECKPOINT CONTROLLER FUNCTION
+// ========================================================
+// 🛡️ 5. PROFILE CHECKPOINT CONTROLLER FUNCTION (RETRIEVES ENTIRE CONTEXT)
+// ========================================================
 export const getUserProfile = async (req, res) => {
   try {
-    if (req.user) {
+    // req.user is populated by your protectUser middleware. 
+    // We look up the user again to return the newly added address, city, phone, etc.
+    const user = await User.findById(req.user._id).select("-password");
+    
+    if (user) {
       return res.json({ 
         success: true, 
-        role: req.user.role, 
-        name: req.user.name 
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          phone: user.phone || "",
+          address: user.address || "",
+          city: user.city || "",
+          postalCode: user.postalCode || ""
+        }
       });
     } else {
       return res.status(404).json({ success: false, message: "User profile reference missing." });
@@ -209,7 +223,48 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
-// 👥 6. MASTER USER DIRECTORY STREAM CONTROLLER
+// ========================================================
+// 🚀 6. NEW CONTROLLER: UPDATE SECURED ACCOUNT PROFILE DATA
+// ========================================================
+export const updateUserProfile = async (req, res) => {
+  const { name, phone, address, city, postalCode, currentPassword, newPassword } = req.body;
+
+  try {
+    let user = await User.findById(req.user._id);
+    
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User profile not found in database records." });
+    }
+
+    // Update basic profiles fields safely
+    user.name = name || user.name;
+    user.phone = phone !== undefined ? phone : user.phone;
+    user.address = address !== undefined ? address : user.address;
+    user.city = city !== undefined ? city : user.city;
+    user.postalCode = postalCode !== undefined ? postalCode : user.postalCode;
+
+    // Optional: Handle secure password modifications
+    if (currentPassword && newPassword) {
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ success: false, message: "Current password check failed. Credentials rejected." });
+      }
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+    }
+
+    await user.save();
+    return res.json({ success: true, message: "Profile synchronized safely inside system database clusters!" });
+
+  } catch (error) {
+    console.error("Update Profile Controller Error Context:", error);
+    return res.status(500).json({ success: false, message: "Internal server database modification timeout." });
+  }
+};
+
+// ========================================================
+// 👥 7. MASTER USER DIRECTORY STREAM CONTROLLER
+// ========================================================
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({}).select("-password").sort({ date: -1 });

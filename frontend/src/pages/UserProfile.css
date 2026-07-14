@@ -1,17 +1,19 @@
 :root {
   --slate-dark: #0f172a;
+  --slate-dark-hover: #1e293b;
   --text-grey: #475569;
   --text-muted: #94a3b8;
   --brand-red: #ff4141;
   --bg-matte: #f8fafc;
   --border-slate: #e2e8f0;
+  --border-active: #0f172a;
   --easing-cubic: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .premium-profile-viewport {
   background-color: var(--bg-matte);
-  min-height: 85vh;
-  padding: 60px 0 120px 0;
+  min-height: 90vh;
+  padding: 80px 0 120px 0;
   font-family: system-ui, -apple-system, sans-serif;
 }
 
@@ -19,7 +21,7 @@
   max-width: 1440px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 2.4fr;
+  grid-template-columns: 1fr 2.6fr;
   gap: 40px;
   padding: 0 4%;
   align-items: flex-start;
@@ -28,10 +30,10 @@
 /* --- LEFT SIDE NAVIGATION CARD --- */
 .profile-identity-card {
   background: #ffffff;
-  padding: 40px 24px;
-  border-radius: 20px;
+  padding: 48px 32px;
+  border-radius: 24px;
   border: 1px solid var(--border-slate);
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.02);
+  box-shadow: 0 4px 30px rgba(15, 23, 42, 0.015);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,8 +41,8 @@
 }
 
 .user-avatar-avatar-badge {
-  width: 72px;
-  height: 72px;
+  width: 80px;
+  height: 80px;
   background-color: var(--slate-dark);
   color: #ffffff;
   border-radius: 50%;
@@ -48,101 +50,162 @@
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  font-size: 22px;
+  font-size: 24px;
   letter-spacing: -0.5px;
-  margin-bottom: 20px;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  margin-bottom: 24px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.15);
 }
 
 .user-title-headline {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 850;
   color: var(--slate-dark);
   letter-spacing: -0.5px;
-  margin: 0 0 4px 0;
+  margin: 0 0 6px 0;
 }
 
 .user-subtitle-string {
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--text-muted);
   font-weight: 500;
-  margin: 0 0 32px 0;
+  margin: 0 0 36px 0;
 }
 
 .profile-navigation-tabs {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .profile-nav-tab-btn {
   width: 100%;
-  height: 48px;
+  height: 52px;
   background: transparent;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   color: var(--text-grey);
-  font-size: 14.5px;
+  font-size: 15px;
   font-weight: 700;
   text-align: left;
-  padding: 0 20px;
+  padding: 0 24px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  transition: all 0.25s var(--easing-cubic);
+  transition: all 0.3s var(--easing-cubic);
+}
+
+.tab-icon {
+  margin-right: 12px;
+  font-size: 16px;
 }
 
 .profile-nav-tab-btn:hover {
-  background-color: var(--bg-matte);
+  background-color: #f1f5f9;
   color: var(--slate-dark);
 }
 
 .profile-nav-tab-btn.tab-active {
   background-color: var(--slate-dark);
   color: #ffffff;
-  box-shadow: 0 10px 25px -10px rgba(15, 23, 42, 0.35);
+  box-shadow: 0 12px 30px -8px rgba(15, 23, 42, 0.25);
 }
 
 /* --- RIGHT SIDE VIEWPORT CARD --- */
 .profile-main-settings-card {
   background: #ffffff;
-  padding: 45px;
-  border-radius: 20px;
+  padding: 56px;
+  border-radius: 24px;
   border: 1px solid var(--border-slate);
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.02);
-  min-height: 520px;
+  box-shadow: 0 4px 30px rgba(15, 23, 42, 0.015);
+  min-height: 560px;
 }
 
 .settings-section-header {
-  margin-bottom: 32px;
+  margin-bottom: 36px;
 }
 
 .settings-section-header h2 {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 900;
   color: var(--slate-dark);
   letter-spacing: -0.75px;
-  margin: 0 0 6px 0;
+  margin: 0 0 8px 0;
 }
 
 .settings-section-header p {
-  font-size: 14.5px;
+  font-size: 15px;
   color: var(--text-grey);
   margin: 0;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .settings-divider-dashed {
   border: none;
   border-top: 1px dashed var(--border-slate);
-  margin: 40px 0;
+  margin: 44px 0;
 }
 
-/* Form Layout Parameters */
+/* --- MODERN FLOATING LABELS INPUT FIELDS --- */
 .profile-ingestion-form {
   display: flex;
   flex-direction: column;
+  gap: 24px;
+}
+
+.form-row-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.input-field-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-field-wrapper input {
+  height: 56px;
+  width: 100%;
+  padding: 20px 18px 0 18px;
+  border: 1px solid var(--border-slate);
+  outline: none;
+  color: var(--slate-dark);
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  background: #ffffff;
+  box-sizing: border-box;
+  transition: all 0.25s var(--easing-cubic);
+}
+
+.input-field-wrapper .floating-label {
+  position: absolute;
+  top: 50%;
+  left: 18px;
+  transform: translateY(-50%);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: all 0.2s var(--easing-cubic);
+}
+
+/* Focus and input interaction hooks */
+.input-field-wrapper input:focus,
+.input-field-wrapper input:not(:placeholder-shown) {
+  border-color: var(--border-active);
+  box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
+}
+
+.input-field-wrapper input:focus + .floating-label,
+.input-field-wrapper input:not(:placeholder-shown) + .floating-label {
+  top: 14px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--slate-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .disabled-input {
@@ -152,27 +215,33 @@
   border-color: var(--border-slate) !important;
 }
 
+.disabled-input:focus {
+  border-color: var(--border-slate) !important;
+  box-shadow: none !important;
+}
+
+/* --- BUTTON UPGRADES --- */
 .profile-action-submit-btn {
-  height: 50px;
-  padding: 0 36px;
+  height: 52px;
+  padding: 0 44px;
   background-color: var(--brand-red);
   color: #ffffff;
   border: none;
   border-radius: 99px;
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 700;
   cursor: pointer;
   letter-spacing: 0.5px;
   align-self: flex-start;
   margin-top: 16px;
-  box-shadow: 0 10px 25px rgba(255, 65, 65, 0.2);
+  box-shadow: 0 10px 25px rgba(255, 65, 65, 0.15);
   transition: all 0.25s var(--easing-cubic);
 }
 
 .profile-action-submit-btn:hover:not(:disabled) {
   background-color: #ea3636;
   transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(255, 65, 65, 0.3);
+  box-shadow: 0 14px 28px rgba(255, 65, 65, 0.25);
 }
 
 .profile-action-submit-btn:disabled {
@@ -182,24 +251,30 @@
   box-shadow: none;
 }
 
-/* --- ORDER TIMELINE ENTRIES --- */
+/* --- PAST TIMELINE ENHANCEMENTS --- */
 .orders-timeline-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 32px;
 }
 
 .user-order-timeline-card {
   border: 1px solid var(--border-slate);
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
   background-color: #ffffff;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.01);
+  transition: transform 0.25s var(--easing-cubic);
+}
+
+.user-order-timeline-card:hover {
+  transform: translateY(-2px);
 }
 
 .order-card-top-summary {
   background-color: var(--bg-matte);
   border-bottom: 1px solid var(--border-slate);
-  padding: 20px 28px;
+  padding: 24px 32px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
@@ -218,14 +293,14 @@
 
 .order-card-top-summary h4 {
   margin: 0;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
   color: var(--slate-dark);
 }
 
 .order-date-text {
   margin: 0;
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 600;
   color: var(--text-grey);
 }
@@ -234,16 +309,32 @@
   color: var(--brand-red) !important;
 }
 
-/* Item Rows Inside Order Matrix */
+.order-status-pill {
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  text-align: center;
+}
+
+.order-status-pill.pending { background-color: #fff7ed; color: #c2410c; }
+.order-status-pill.shipped { background-color: #eff6ff; color: #1d4ed8; }
+.order-status-pill.delivered { background-color: #f0fdf4; color: #15803d; }
+.order-status-pill.cancelled { background-color: #fef2f2; color: #b91c1c; }
+
+/* Item Rows inside Order Timeline cards */
 .order-card-items-scroller-box {
-  padding: 8px 28px;
+  padding: 8px 32px;
 }
 
 .order-nested-item-row {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 18px 0;
+  gap: 24px;
+  padding: 20px 0;
   border-bottom: 1px solid var(--border-slate);
 }
 
@@ -252,10 +343,10 @@
 }
 
 .order-nested-thumb {
-  width: 48px;
-  height: 58px;
+  width: 56px;
+  height: 68px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 10px;
   border: 1px solid var(--border-slate);
 }
 
@@ -264,9 +355,9 @@
 }
 
 .order-nested-details h5 {
-  margin: 0 0 4px 0;
-  font-size: 14.5px;
-  font-weight: 700;
+  margin: 0 0 6px 0;
+  font-size: 15px;
+  font-weight: 750;
   color: var(--slate-dark);
 }
 
@@ -283,18 +374,18 @@
 }
 
 .order-nested-price {
-  font-size: 14.5px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 800;
   color: var(--slate-dark);
 }
 
 /* Feedback Notifications */
 .profile-inline-feedback-banner {
-  padding: 14px 20px;
-  border-radius: 12px;
-  font-size: 14px;
+  padding: 16px 24px;
+  border-radius: 14px;
+  font-size: 14.5px;
   font-weight: 600;
-  margin-bottom: 28px;
+  margin-bottom: 36px;
   border: 1px solid transparent;
 }
 
@@ -303,16 +394,16 @@
 
 .profile-empty-orders-state {
   text-align: center;
-  padding: 60px 24px;
+  padding: 72px 24px;
   background-color: var(--bg-matte);
   border: 1px dashed var(--border-slate);
-  border-radius: 14px;
+  border-radius: 18px;
 }
 
-/* Loading Screens views */
+/* Loading Screen Views */
 .profile-loading-vault {
   text-align: center;
-  padding: 160px 24px;
+  padding: 180px 24px;
   color: var(--text-muted);
   font-weight: 600;
   display: flex;
@@ -322,9 +413,9 @@
 }
 
 .profile-spinner-ring {
-  width: 40px;
-  height: 40px;
-  border: 3px solid #f1f5f9;
+  width: 44px;
+  height: 44px;
+  border: 3px solid #e2e8f0;
   border-top-color: var(--brand-red);
   border-radius: 50%;
   animation: profileSpin 0.8s linear infinite;
@@ -335,10 +426,11 @@
 /* --- RESPONSIVE WORKSPACE QUERIES --- */
 @media (max-width: 1024px) {
   .profile-workspace-container { grid-template-columns: 1fr; gap: 32px; }
-  .profile-main-settings-card { padding: 32px 24px; }
+  .profile-main-settings-card { padding: 40px 24px; }
 }
 
 @media (max-width: 640px) {
-  .order-card-top-summary { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; padding: 18px 20px; }
+  .form-row-grid { grid-template-columns: 1fr; gap: 24px; }
+  .order-card-top-summary { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; padding: 20px; }
   .profile-action-submit-btn { width: 100%; }
 }

@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShopContext } from '../../context/ShopContext';
 import './Navbar.css';
@@ -7,9 +7,48 @@ const Navbar = () => {
   const [menu, setMenu] = useState("shop");
   const [menuOpen, setMenuOpen] = useState(false);
   const [globalSearch, setGlobalSearch] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [userName, setUserName] = useState('');
   
   const { getTotalCartItems } = useContext(ShopContext);
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
+
+  // Fetch logged-in user details to display custom initials in the avatar
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const token = localStorage.getItem('auth-token');
+      if (!token) return;
+
+      try {
+        const response = await fetch("http://localhost:4000/api/users/profile", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+        if (data.success && data.user) {
+          setUserName(data.user.name || 'Shopper');
+        }
+      } catch (error) {
+        console.error("Error fetching user profile for navigation avatar:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+  // Close the dropdown immediately if the user clicks anywhere outside of it
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -17,6 +56,20 @@ const Navbar = () => {
       alert(`Searching globally for: ${globalSearch}`);
       setGlobalSearch("");
     }
+  };
+
+  const logoutHandler = () => {
+    localStorage.removeItem('auth-token');
+    setUserName('');
+    setDropdownOpen(false);
+    navigate('/');
+    window.location.reload(); // Refresh to clean memory traces
+  };
+
+  // Extract initials for the profile circle (e.g., "Umair Ahmad" -> "UA")
+  const getInitials = (fullName) => {
+    if (!fullName) return "US";
+    return fullName.split(' ').map(name => name[0]).slice(0, 2).join('').toUpperCase();
   };
 
   return (
@@ -61,9 +114,41 @@ const Navbar = () => {
 
         {/* Action Utility Buttons */}
         <div className="nav-action-cluster">
-          <Link to="/login" className="login-link-wrapper">
-            <button className="premium-login-trigger">Sign In</button>
-          </Link>
+          
+          {/* Dynamic Authentication Matrix / Profile Avatar */}
+          {localStorage.getItem('auth-token') ? (
+            <div className="nav-user-profile-menu-container" ref={dropdownRef}>
+              <button 
+                className="nav-profile-avatar-trigger" 
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                aria-label="Toggle user profile menu"
+              >
+                {getInitials(userName)}
+              </button>
+
+              {dropdownOpen && (
+                <div className="nav-profile-dropdown-box">
+                  <div className="dropdown-user-meta">
+                    <strong>{userName || "Client Profile"}</strong>
+                    <span>Store Account verified</span>
+                  </div>
+                  <div className="dropdown-divider-line" />
+                  
+                  <Link to="/my-account" className="dropdown-menu-item" onClick={() => setDropdownOpen(false)}>
+                    👤 My Profile & Orders
+                  </Link>
+                  
+                  <button onClick={logoutHandler} className="dropdown-menu-item logout-red-text">
+                    🚪 Logout Securely
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link to="/login" className="login-link-wrapper">
+              <button className="premium-login-trigger">Sign In</button>
+            </Link>
+          )}
           
           <div className="nav-cart-interactive-node" onClick={() => { setMenuOpen(false); navigate("/cart"); }}>
             <div className="cart-badge-anchor">
