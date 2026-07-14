@@ -10,6 +10,7 @@ import orderRouter from "./routes/orderRoutes.js";
 import productRouter from "./routes/productRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import analyticsRoutes from './routes/analyticsRoutes.js';
+import reviewRouter from "./routes/reviewRoutes.js";
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 app.use("/api/orders",orderRouter);
 app.use('/api/analytics', analyticsRoutes);
+app.use("/api/reviews", reviewRouter);
 
 /* ==========================================
    🖼️ MULTER MEDIA UPLOAD COMPONENT MATRIX

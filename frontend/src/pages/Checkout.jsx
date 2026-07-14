@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import './Checkout.css';
 import { useNavigate } from 'react-router-dom';
@@ -25,6 +25,46 @@ const Checkout = () => {
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   
   const navigate = useNavigate();
+
+  // 🚀 AUTO-FILL PROFILE PIPELINE
+  useEffect(() => {
+    const fetchSavedProfile = async () => {
+      const token = localStorage.getItem('auth-token');
+      if (!token) return; // Allow guest checkouts to proceed with empty form configurations
+
+      try {
+        const response = await fetch("http://localhost:4000/api/users/profile", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+
+        if (data.success && data.user) {
+            
+          const fullName = data.user.name ? data.user.name.trim() : "";
+          const nameParts = fullName.split(/\s+/);
+          const firstName = nameParts[0] || "";
+          const lastName = nameParts.slice(1).join(" ") || "";
+
+          setShippingInfo({
+            firstName: firstName,
+            lastName: lastName,
+            email: data.user.email || "",
+            address: data.user.address || "",
+            city: data.user.city || "",
+            postalCode: data.user.postalCode || "",
+            phone: data.user.phone || ""
+          });
+        }
+      } catch (error) {
+        console.error("Database connection failure auto-filling checkout fields:", error);
+      }
+    };
+
+    fetchSavedProfile();
+  }, []);
 
   const handleInputChange = (e) => {
     setShippingInfo({ ...shippingInfo, [e.target.name]: e.target.value });
@@ -250,7 +290,6 @@ const Checkout = () => {
           </div>
           <div className="premium-summary-sticky-card">
             <div className="summary-itemized-calc-rows">
-              {/* 🚀 Changed calculation output labels to Rs. */}
               <div className="summary-calc-row">
                 <span>Cart Subtotal</span>
                 <strong>Rs. {getSubtotalAmount().toLocaleString('en-PK')}</strong>

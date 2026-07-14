@@ -1052,3 +1052,61 @@
   .workspace-core-view { padding: 24px; }
   .form-input-row-grid, .admin-dual-pane-layout, .analytics-grid { grid-template-columns: 1fr; gap: 24px; }
 }
+
+/* ========================================================
+   🛡️ ADMINISTRATIVE PRODUCT REVIEWS MODERATION HUB STYLES
+   ======================================================== */
+
+/* Table Layout Enhancements */
+.admin-ledger-table tbody tr:hover {
+  background-color: #f8fafc; /* Adds a soft slate hover effect over active reviews */
+}
+
+/* Star Rating Layout inside Tables */
+.admin-ledger-table td .rating-stars-gold {
+  color: #f59e0b; /* Bright golden hue matching your store's review stars */
+  font-size: 15px;
+  letter-spacing: 1px;
+}
+
+/* Highlight Column for Moderated Product SKU tags */
+.review-sku-tag {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #64748b;
+  background-color: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Clean text trimming for extremely long comment reviews */
+.review-comment-cell {
+  max-width: 350px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #475569;
+  font-weight: 500;
+}
+
+/* Delete button hover transition to bright red matching other core actions */
+.table-row-delete-action-btn {
+  background-color: transparent;
+  color: #ef4444;
+  border: 1px solid #fee2e2;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.table-row-delete-action-btn:hover {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+  transform: translateY(-1px);
+}

@@ -5,7 +5,8 @@ import ManageOrders from './ManageOrders';
 import AdminAnalytics from './AdminAnalytics';
 import ManageCoupons from './ManageCoupons'; 
 import ManageUsers from './ManageUsers';     
-import AdminPortalAuth from './AdminPortalAuth'; 
+import ManageReviews from './ManageReviews'; // 🚀 IMPORTED THE NEW REVIEWS MODERATION HUB COMPONENT
+import AdminPortalAuth from './AdminPortalAuth';
 import './Admin.css';
 
 const Admin = () => {
@@ -109,6 +110,11 @@ const Admin = () => {
           <button className={`sidebar-link-btn ${activeTab === "users" ? "active" : ""}`} onClick={() => setActiveTab("users")}>
             <span className="nav-icon-glyph">👥</span> User Database
           </button>
+          
+          {/* 🚀 NEW LINK: ADDED MODERATION Tab button inside your list menu */}
+          <button className={`sidebar-link-btn ${activeTab === "reviews" ? "active" : ""}`} onClick={() => setActiveTab("reviews")}>
+            <span className="nav-icon-glyph" style={{ color: '#f59e0b' }}>⭐</span> Moderate Reviews
+          </button>
         </nav>
 
         <div className="sidebar-footer-exit">
@@ -128,6 +134,7 @@ const Admin = () => {
               {activeTab === "orders" && "Order Fulfillment Terminal"}
               {activeTab === "coupons" && "Campaign Coupon Manager"}
               {activeTab === "users" && "User Database Control Panel"}
+              {activeTab === "reviews" && "Product Review Moderation Portal"} {/* 🚀 MOUNTED TITLE */}
             </h1>
             <p>Authorized Master Administrative Control Environment</p>
           </div>
@@ -144,6 +151,7 @@ const Admin = () => {
           {activeTab === "orders" && <ManageOrders />}
           {activeTab === "coupons" && <ManageCoupons />}
           {activeTab === "users" && <ManageUsers />}
+          {activeTab === "reviews" && <ManageReviews />} {/* 🚀 MOUNTED WORKSPACE */}
         </div>
       </main>
     </div>

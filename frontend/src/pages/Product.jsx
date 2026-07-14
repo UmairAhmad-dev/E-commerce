@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import ProductDisplay from "../components/ProductDisplay/ProductDisplay";
+import ProductReviews from "../components/ProductReviews/ProductReviews"; // 🚀 Import the reviews panel component
 
 const Product = () => {
   const { all_product, loading } = useContext(ShopContext);
@@ -29,7 +30,14 @@ const Product = () => {
 
   return (
     <div className="product-page-wrapper-animated" style={{ animation: 'fadeIn 0.5s ease' }}>
-      <ProductDisplay product={product} />[cite: 16]
+      {/* 1. Main visual parameters showcase */}
+      <ProductDisplay product={product} />
+      
+      {/* 🚀 2. Connected User Reviews & Submission Engine Container */}
+      <div className="product-reviews-container-box" style={{ borderTop: '1px solid #e2e8f0', marginTop: '40px' }}>
+        <ProductReviews productId={product.id || product._id} />
+      </div>
+
       <style>{`@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }`}</style>
     </div>
   );

@@ -12,7 +12,7 @@
 .premium-checkout-viewport {
   background-color: var(--bg-matte);
   min-height: 90vh;
-  padding: 60px 0 120px 0; /* Elevated layout breathing room */
+  padding: 60px 0 120px 0;
   font-family: system-ui, -apple-system, sans-serif;
   position: relative;
 }
@@ -54,14 +54,14 @@
   color: #b91c1c;
 }
 
-/* --- 🚀 PREMIUM FLOATING SUCCESS TOAST NOTIFICATION --- */
+/* --- PREMIUM FLOATING TOAST NOTIFICATION --- */
 .premium-order-success-toast {
   position: fixed;
   top: 40px;
   right: 40px;
   background: #ffffff;
   border-left: 5px solid #10b981;
-  box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.12); /* Clean high-contrast premium drop shadows */
+  box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.12);
   padding: 20px 28px;
   border-radius: 14px;
   display: flex;
@@ -106,7 +106,7 @@
   to { transform: translateX(0); }
 }
 
-/* 🚀 Form Container Refactoring */
+/* Form Container Refactoring */
 .modern-checkout-form-card {
   background: #ffffff;
   padding: 45px;

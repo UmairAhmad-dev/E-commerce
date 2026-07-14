@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { ShopContext } from '../../context/ShopContext';
 import './ProductDisplay.css';
 
@@ -7,6 +7,28 @@ const ProductDisplay = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState("");
   const [notification, setNotification] = useState({ text: "", type: "" }); 
   const [stockMessage, setStockMessage] = useState({ text: "", type: "" });
+  
+  // 🚀 Dynamic ratings state
+  const [ratingMetadata, setRatingMetadata] = useState({ average: 5, count: 0 });
+
+  // Fetch real-time rating average summaries on load
+  useEffect(() => {
+    const fetchRatingSummary = async () => {
+      try {
+        const res = await fetch(`http://localhost:4000/api/reviews/product/${product.id || product._id}`);
+        const data = await res.json();
+        if (data.success) {
+          setRatingMetadata({
+            average: data.averageRating || 0,
+            count: data.totalReviews || 0
+          });
+        }
+      } catch (error) {
+        console.error("Error connecting with product review endpoints:", error);
+      }
+    };
+    fetchRatingSummary();
+  }, [product]);
 
   const safeStockMatrix = product.size_stock || {
     "S": 8, "M": 15, "L": 0, "XL": 5
@@ -49,6 +71,12 @@ const ProductDisplay = ({ product }) => {
 
   const sizes = ["S", "M", "L", "XL"];
 
+  // Helper to generate dynamic star visualizations
+  const renderRatingStars = (average) => {
+    const rounded = Math.round(average);
+    return "★".repeat(rounded) + "☆".repeat(5 - rounded);
+  };
+
   return (
     <div className="premium-display-canvas">
       
@@ -68,13 +96,19 @@ const ProductDisplay = ({ product }) => {
         <span className="particulars-collection-tag">STITCHED HERITAGE COLLECTION</span>
         <h1 className="particulars-title-headline">{product.name}</h1>
         
+        {/* 🚀 Dynamic Star Rating block */}
         <div className="particulars-reviews-row">
-          <div className="stars-vector-cluster">★★★★★</div>
-          <p>(144 Certified Customer Reviews)</p>
+          <div className="stars-vector-cluster" style={{ color: '#f59e0b', fontWeight: 'bold' }}>
+            {renderRatingStars(ratingMetadata.average)}
+          </div>
+          <p>
+            {ratingMetadata.count > 0 
+              ? `(${ratingMetadata.average.toFixed(1)} rating out of ${ratingMetadata.count} verified reviews)` 
+              : "(No reviews submitted yet)"}
+          </p>
         </div>
 
         <div className="particulars-price-dock">
-          {/* 🚀 Changed from $ to Rs. */}
           <span className="price-old-strike">Rs. {product.old_price.toLocaleString('en-PK')}</span>
           <span className="price-new-bold">Rs. {product.new_price.toLocaleString('en-PK')}</span>
         </div>
