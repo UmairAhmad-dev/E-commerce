@@ -76,7 +76,7 @@ const ProductReviews = ({ productId }) => {
         <div className="summary-score-block">
           <h3>{avgRating.toFixed(1)}</h3>
           <div className="star-rating">
-            {"★".repeat(Math.round(avgRating))}$$\text{ }$$ {"☆".repeat(5 - Math.round(avgRating))}
+            {"★".repeat(Math.round(avgRating))}{ } {"☆".repeat(5 - Math.round(avgRating))}
           </div>
           <p>{total} Verified Reviews</p>
         </div>
