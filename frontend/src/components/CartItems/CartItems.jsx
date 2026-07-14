@@ -4,10 +4,10 @@ import { ShopContext } from "../../context/ShopContext";
 import { useNavigate } from "react-router-dom";
 
 const CartItems = () => {
-  const { all_product, cartItems, removeFromCart, getTotalCartAmount } = useContext(ShopContext);
+  // 🚀 Included addToCart from Context to handle increment actions
+  const { all_product, cartItems, addToCart, removeFromCart, getTotalCartAmount } = useContext(ShopContext);
   const navigate = useNavigate();
 
-  // Custom state hooks to handle premium promo coupons cleanly
   const [couponCode, setCouponCode] = useState("");
   const [promoFeedback, setPromoFeedback] = useState({ text: "", type: "" });
   const [isApplying, setIsApplying] = useState(false);
@@ -29,7 +29,6 @@ const CartItems = () => {
 
     try {
       setIsApplying(true);
-      // Example structure matching MERN coupon router endpoints
       const response = await fetch("http://localhost:4000/api/coupons/validate", {
         method: "POST",
         headers: {
@@ -49,8 +48,6 @@ const CartItems = () => {
           text: `🎉 Code Applied: Rs. ${data.discountValue} has been deducted from your invoice total!`, 
           type: "success" 
         });
-        // Note: If you want this value to dynamically stick across route switching context views,
-        // map data.discountValue or data.code to a shared method inside your ShopContext provider!
       } else {
         setPromoFeedback({ text: `❌ ${data.message || "Invalid discount coupon structure."}`, type: "error" });
       }
@@ -98,8 +95,27 @@ const CartItems = () => {
                       <span className="cell-currency-symbol">Rs.</span>{e.new_price.toLocaleString('en-PK')}
                     </div>
                     
+                    {/* 🚀 Dynamic Quantity Stepper Container replaces legacy static badge */}
                     <div className="item-qty-cell">
-                      <div className="qty-counter-badge">{cartItems[e.id]}</div>
+                      <div className="qty-stepper-container">
+                        <button 
+                          type="button" 
+                          className="qty-step-btn" 
+                          onClick={() => removeFromCart(e.id)}
+                          aria-label="Decrease quantity"
+                        >
+                          —
+                        </button>
+                        <span className="qty-step-value">{cartItems[e.id]}</span>
+                        <button 
+                          type="button" 
+                          className="qty-step-btn" 
+                          onClick={() => addToCart(e.id)}
+                          aria-label="Increase quantity"
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
                     
                     <div className="item-total-cell">
@@ -109,7 +125,12 @@ const CartItems = () => {
                     <div className="item-remove-cell">
                       <button 
                         className="remove-trash-trigger" 
-                        onClick={() => removeFromCart(e.id)}
+                        onClick={() => {
+                          // Complete removal loop handler
+                          while (cartItems[e.id] > 0) {
+                            removeFromCart(e.id);
+                          }
+                        }}
                         aria-label="Remove item allocation"
                       >
                         ✕
