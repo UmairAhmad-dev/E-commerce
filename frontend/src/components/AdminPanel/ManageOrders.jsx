@@ -7,7 +7,8 @@ const ManageOrders = () => {
   const [selectedOrder, setSelectedOrder] = useState(null); 
 
   const fetchOrders = async () => {
-    const token = localStorage.getItem('auth-token');
+    // 🚀 Swapped from localStorage to sessionStorage
+    const token = sessionStorage.getItem('auth-token');
     try {
       setLoading(true);
       const res = await fetch("http://localhost:4000/api/orders/allorders", {
@@ -26,7 +27,8 @@ const ManageOrders = () => {
   useEffect(() => { fetchOrders(); }, []);
 
   const updateOrderStatus = async (orderId, newStatus) => {
-    const token = localStorage.getItem('auth-token');
+    // 🚀 Swapped from localStorage to sessionStorage
+    const token = sessionStorage.getItem('auth-token');
     try {
       const res = await fetch("http://localhost:4000/api/orders/updatestatus", {
         method: "POST",
@@ -102,7 +104,6 @@ const ManageOrders = () => {
                   <td><strong>#{order.orderId}</strong></td>
                   <td>{order.shippingAddress?.fullName}</td>
                   <td>{new Date(order.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}</td>
-                  {/* 🚀 Swapped $ symbol for Rs. */}
                   <td className="table-cell-price-bold">Rs. {order.totalAmount ? order.totalAmount.toLocaleString('en-PK') : "0"}</td>
                   <td><span className={`order-status-pill ${order.status?.toLowerCase()}`}>{order.status}</span></td>
                   <td style={{textAlign: 'center'}}>
@@ -145,7 +146,6 @@ const ManageOrders = () => {
                 <div className="itemized-manifest-list">
                   {selectedOrder.items?.map((item, idx) => (
                     <div key={idx} className="manifest-item-line-row">
-                      {/* 🚀 Inner table fields formatting updated */}
                       <span>👕 {item.name} ({item.size}) <strong className="qty-muted">x{item.quantity}</strong></span>
                       <strong>Rs. {(item.price * item.quantity).toLocaleString('en-PK')}</strong>
                     </div>
@@ -155,7 +155,6 @@ const ManageOrders = () => {
 
               <div className="modal-grand-invoice-footer">
                 <span>Grand Invoice:</span>
-                {/* 🚀 Grand Invoice overlay conversion */}
                 <span className="grand-invoice-price">Rs. {selectedOrder.totalAmount ? selectedOrder.totalAmount.toLocaleString('en-PK') : "0"}</span>
               </div>
               <p className="modal-status-footer-line">

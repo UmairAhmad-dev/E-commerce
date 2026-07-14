@@ -35,7 +35,8 @@ const ManageProducts = () => {
 
   const updateProductHandler = async (id) => {
     const payload = editStates[id];
-    const token = localStorage.getItem('auth-token');
+    // 🚀 Swapped from localStorage to sessionStorage
+    const token = sessionStorage.getItem('auth-token');
 
     if (!token) {
       alert("❌ Client Error: No session token found. Please log out and log back in.");
@@ -65,7 +66,8 @@ const ManageProducts = () => {
   };
 
   const removeProductHandler = async (id) => {
-    const token = localStorage.getItem('auth-token');
+    // 🚀 Swapped from localStorage to sessionStorage
+    const token = sessionStorage.getItem('auth-token');
     if (!token) return;
 
     if (window.confirm("Are you sure you want to delete this product from the database?")) {
@@ -106,7 +108,6 @@ const ManageProducts = () => {
               <th>Product Title</th>
               <th>Category</th>
               <th style={{ textAlign: "center" }}>Per-Size Inventory Stock Matrix</th>
-              {/* 🚀 Header descriptions switched to Rupees */}
               <th>Original Price (Rs.)</th>
               <th>Offer Price (Rs.)</th>
               <th>Actions Terminal</th>

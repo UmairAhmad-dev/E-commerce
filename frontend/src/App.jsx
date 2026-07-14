@@ -10,8 +10,8 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
-import Admin from './components/AdminPanel/Admin'; // Single administrative entry point
-
+import Admin from './components/AdminPanel/Admin'; 
+import UserProfile from './pages/UserProfile'; 
 const AppContent = () => {
   const location = useLocation();
   
@@ -40,6 +40,7 @@ const AppContent = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/order-success" element={<OrderSuccess />} />
+        <Route path="/my-account" element={<UserProfile />} />
         
         {/* 🛠️ Consolidated Admin Gateway Route */}
         <Route path="/admin" element={<Admin />} />

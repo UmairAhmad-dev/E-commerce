@@ -9,7 +9,8 @@ const ManageCoupons = () => {
   });
 
   const fetchCoupons = async () => {
-    const token = localStorage.getItem('auth-token');
+    // 🚀 Swapped from localStorage to sessionStorage
+    const token = sessionStorage.getItem('auth-token');
     try {
       const res = await fetch("http://localhost:4000/api/coupons/allcoupons", {
         headers: { "Authorization": `Bearer ${token}` }
@@ -31,7 +32,8 @@ const ManageCoupons = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('auth-token');
+    // 🚀 Swapped from localStorage to sessionStorage
+    const token = sessionStorage.getItem('auth-token');
     try {
       const res = await fetch("http://localhost:4000/api/coupons/addcoupon", {
         method: "POST",
@@ -55,7 +57,8 @@ const ManageCoupons = () => {
   };
 
   const deleteCouponHandler = async (id) => {
-    const token = localStorage.getItem('auth-token');
+    // 🚀 Swapped from localStorage to sessionStorage
+    const token = sessionStorage.getItem('auth-token');
     if (window.confirm("Permanently retire this promo discount code?")) {
       try {
         const res = await fetch("http://localhost:4000/api/coupons/removecoupon", {
@@ -94,7 +97,6 @@ const ManageCoupons = () => {
             <label>Discount Vector Type</label>
             <select name="discountType" value={newCoupon.discountType} onChange={handleInputChange}>
               <option value="percentage">Percentage Off (%)</option>
-              {/* 🚀 Updated Label text to reflect Rupees */}
               <option value="fixed">Fixed Price Reduction (Rs.)</option>
             </select>
           </div>
@@ -104,7 +106,6 @@ const ManageCoupons = () => {
             <input type="number" min="1" name="discountValue" placeholder={newCoupon.discountType === "percentage" ? "20" : "500"} value={newCoupon.discountValue} onChange={handleInputChange} required />
           </div>
 
-          {/* 🚀 Changed label string placeholder descriptor hint to Rs. */}
           <div className="form-input-block">
             <label>Minimum Basket Limit (Rs.)</label>
             <input type="number" min="0" name="minOrderAmount" placeholder="2500" value={newCoupon.minOrderAmount} onChange={handleInputChange} />
@@ -139,7 +140,6 @@ const ManageCoupons = () => {
                 coupons.map((coupon) => (
                   <tr key={coupon._id}>
                     <td><span className="coupon-code-pill">{coupon.code}</span></td>
-                    {/* 🚀 Dynamic presentation string adjustments */}
                     <td><strong>{coupon.discountType === "percentage" ? `${coupon.discountValue}% Off` : `Rs. ${coupon.discountValue} Off`}</strong></td>
                     <td>Rs. {coupon.minOrderAmount || "0"}</td>
                     <td>{new Date(coupon.expiryDate).toLocaleDateString()}</td>

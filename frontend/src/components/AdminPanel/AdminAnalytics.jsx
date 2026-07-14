@@ -7,7 +7,8 @@ const AdminAnalytics = () => {
   const [connectionError, setConnectionError] = useState(false);
 
   const fetchLiveAnalytics = async () => {
-    const token = localStorage.getItem('auth-token');
+    // 🚀 Swapped from localStorage to sessionStorage
+    const token = sessionStorage.getItem('auth-token');
     try {
       setLoading(true);
       setConnectionError(false);
@@ -73,7 +74,6 @@ const AdminAnalytics = () => {
         <div className="metric-icon revenue-bg">💰</div>
         <div className="metric-info">
           <span>Gross Retail Income</span>
-          {/* 🚀 Changed from $ to Rs. */}
           <h3>Rs. {currentMetrics.totalRevenue ? currentMetrics.totalRevenue.toLocaleString('en-PK') : "0"}</h3>
           <span className="trend-indicator positive">✨ Active Pipeline</span>
         </div>

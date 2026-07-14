@@ -5,7 +5,8 @@ const ManageUsers = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchUsersData = async () => {
-    const token = localStorage.getItem('auth-token');
+    // 🚀 Swapped from localStorage to sessionStorage
+    const token = sessionStorage.getItem('auth-token');
     try {
       setLoading(true);
       const res = await fetch("http://localhost:4000/api/users/allusers", {
