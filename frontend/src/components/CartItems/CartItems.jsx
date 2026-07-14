@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "./CartItems.css";
 import { ShopContext } from "../../context/ShopContext";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,60 @@ import { useNavigate } from "react-router-dom";
 const CartItems = () => {
   const { all_product, cartItems, removeFromCart, getTotalCartAmount } = useContext(ShopContext);
   const navigate = useNavigate();
+
+  // Custom state hooks to handle premium promo coupons cleanly
+  const [couponCode, setCouponCode] = useState("");
+  const [promoFeedback, setPromoFeedback] = useState({ text: "", type: "" });
+  const [isApplying, setIsApplying] = useState(false);
+
+  const handleApplyCoupon = async (e) => {
+    e.preventDefault();
+    setPromoFeedback({ text: "", type: "" });
+
+    if (!couponCode.trim()) {
+      setPromoFeedback({ text: "⚠️ Please type a coupon code string first.", type: "error" });
+      return;
+    }
+
+    const token = localStorage.getItem('auth-token') || sessionStorage.getItem('auth-token');
+    if (!token) {
+      setPromoFeedback({ text: "⚠️ Please login to apply discount coupons.", type: "error" });
+      return;
+    }
+
+    try {
+      setIsApplying(true);
+      // Example structure matching MERN coupon router endpoints
+      const response = await fetch("http://localhost:4000/api/coupons/validate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ 
+          code: couponCode.trim().toUpperCase(),
+          basketAmount: getTotalCartAmount()
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setPromoFeedback({ 
+          text: `🎉 Code Applied: Rs. ${data.discountValue} has been deducted from your invoice total!`, 
+          type: "success" 
+        });
+        // Note: If you want this value to dynamically stick across route switching context views,
+        // map data.discountValue or data.code to a shared method inside your ShopContext provider!
+      } else {
+        setPromoFeedback({ text: `❌ ${data.message || "Invalid discount coupon structure."}`, type: "error" });
+      }
+    } catch (error) {
+      setPromoFeedback({ text: "❌ Connection timeout validating promotional campaigns.", type: "error" });
+    } finally {
+      setIsApplying(false);
+    }
+  };
 
   return (
     <div className="premium-cart-view-container">
@@ -40,7 +94,6 @@ const CartItems = () => {
                       </div>
                     </div>
                     
-                    {/* 🚀 Changed cell markers to Rs. */}
                     <div className="item-price-cell">
                       <span className="cell-currency-symbol">Rs.</span>{e.new_price.toLocaleString('en-PK')}
                     </div>
@@ -85,7 +138,6 @@ const CartItems = () => {
             <div className="summary-calc-ledger">
               <div className="calc-row-item">
                 <span>Subtotal</span>
-                {/* 🚀 Changed to Rs. */}
                 <strong>Rs. {getTotalCartAmount().toLocaleString('en-PK')}</strong>
               </div>
               <div className="calc-row-item">
@@ -95,7 +147,6 @@ const CartItems = () => {
               <hr className="summary-divider-line" />
               <div className="calc-row-item total-grand-row">
                 <h4>Grand Total</h4>
-                {/* 🚀 Changed to Rs. */}
                 <h4>Rs. {getTotalCartAmount().toLocaleString('en-PK')}</h4>
               </div>
             </div>
@@ -110,10 +161,37 @@ const CartItems = () => {
 
             <div className="cart-promo-activation-dock">
               <p>Have a promotional campaign coupon code?</p>
-              <div className="promo-input-capsule">
-                <input type="text" placeholder="Enter coupon code..." />
-                <button type="button">Apply</button>
-              </div>
+              <form onSubmit={handleApplyCoupon} className="promo-input-capsule">
+                <input 
+                  type="text" 
+                  placeholder="Enter coupon code..." 
+                  value={couponCode}
+                  onChange={(e) => {
+                    setCouponCode(e.target.value);
+                    if (promoFeedback.text) setPromoFeedback({ text: "", type: "" });
+                  }}
+                  style={{ textTransform: "uppercase" }}
+                  disabled={isApplying}
+                />
+                <button type="submit" disabled={isApplying}>
+                  {isApplying ? "..." : "Apply"}
+                </button>
+              </form>
+              
+              {promoFeedback.text && (
+                <div 
+                  className={`promo-feedback-toast-text ${promoFeedback.type}`}
+                  style={{
+                    marginTop: "12px",
+                    fontSize: "12.5px",
+                    fontWeight: "600",
+                    lineHeight: "1.4",
+                    color: promoFeedback.type === "success" ? "#15803d" : "#ef4444"
+                  }}
+                >
+                  {promoFeedback.text}
+                </div>
+              )}
             </div>
           </div>
         </div>

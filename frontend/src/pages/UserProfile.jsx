@@ -104,7 +104,6 @@ const UserProfile = () => {
     <div className="premium-profile-viewport">
       <div className="profile-workspace-container">
         
-        {/* Left Side Navigation Sidebar Card */}
         <aside className="profile-identity-card">
           <div className="user-avatar-avatar-badge">
             {profileData.name ? profileData.name.substring(0, 2).toUpperCase() : 'US'}
@@ -128,7 +127,6 @@ const UserProfile = () => {
           </div>
         </aside>
 
-        {/* Right Side Settings Dashboard */}
         <main className="profile-main-settings-card">
           {message.text && (
             <div className={`profile-inline-feedback-banner ${message.type}`}>

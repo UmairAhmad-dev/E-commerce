@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './LoginSignup.css'; 
 import { useNavigate } from 'react-router-dom';
-import videoBg from '../assets/auth-bg.mp4'; // 🚀 Import the looping background video
+import videoBg from '../assets/auth-bg.mp4'; 
 
 const LoginSignup = () => {
   const [state, setState] = useState("Login");
@@ -23,6 +23,7 @@ const LoginSignup = () => {
   const handleStateToggle = (targetState) => {
     setIsAnimating(true);
     setAuthError("");
+    setFormData({ username: "", password: "", email: "" }); // Clear inputs on switch
     setTimeout(() => {
       setState(targetState);
       setIsAnimating(false);
@@ -52,7 +53,8 @@ const LoginSignup = () => {
           setAuthError("🎉 Verified Administrator. Launching console...");
           setTimeout(() => { navigate('/admin'); }, 1500);
         } else {
-          window.location.replace('/cart');
+          setAuthError("🎉 Login verified! Accessing basket...");
+          setTimeout(() => { window.location.replace('/cart'); }, 1200);
         }
       } else {
         setAuthError(data.message || "Invalid credentials.");
@@ -98,10 +100,7 @@ const LoginSignup = () => {
 
   return (
     <div className='loginsignup-viewport'>
-      {/* 🚀 VIDEO BACKGROUND CORE ENGINE */}
       <video className="auth-video-background" src={videoBg} autoPlay loop muted playsInline />
-      
-      {/* Dark overlay sheet to maintain crisp text contrast ratios */}
       <div className="video-dark-overlay"></div>
 
       <div className={`loginsignup-glass-card ${isAnimating ? 'state-leaving' : ''}`}>

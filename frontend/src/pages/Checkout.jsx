@@ -26,11 +26,10 @@ const Checkout = () => {
   
   const navigate = useNavigate();
 
-  // 🚀 AUTO-FILL PROFILE PIPELINE
   useEffect(() => {
     const fetchSavedProfile = async () => {
       const token = localStorage.getItem('auth-token');
-      if (!token) return; // Allow guest checkouts to proceed with empty form configurations
+      if (!token) return;
 
       try {
         const response = await fetch("http://localhost:4000/api/users/profile", {
@@ -42,7 +41,6 @@ const Checkout = () => {
         const data = await response.json();
 
         if (data.success && data.user) {
-            
           const fullName = data.user.name ? data.user.name.trim() : "";
           const nameParts = fullName.split(/\s+/);
           const firstName = nameParts[0] || "";

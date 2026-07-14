@@ -5,9 +5,16 @@ const ManageOrders = () => {
   const [loading, setLoading] = useState(true);
   const [orderSearch, setOrderSearch] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null); 
+  
+  // Custom status response text state
+  const [feedback, setFeedback] = useState({ text: "", type: "" });
+
+  const showFeedback = (text, type) => {
+    setFeedback({ text, type });
+    setTimeout(() => setFeedback({ text: "", type: "" }), 4500);
+  };
 
   const fetchOrders = async () => {
-    // 🚀 Swapped from localStorage to sessionStorage
     const token = sessionStorage.getItem('auth-token');
     try {
       setLoading(true);
@@ -27,7 +34,6 @@ const ManageOrders = () => {
   useEffect(() => { fetchOrders(); }, []);
 
   const updateOrderStatus = async (orderId, newStatus) => {
-    // 🚀 Swapped from localStorage to sessionStorage
     const token = sessionStorage.getItem('auth-token');
     try {
       const res = await fetch("http://localhost:4000/api/orders/updatestatus", {
@@ -41,16 +47,16 @@ const ManageOrders = () => {
       const data = await res.json();
       
       if (data.success) {
-        alert(`🎉 Status tracker shifted cleanly to ${newStatus}`);
+        showFeedback(`🎉 Status tracker shifted cleanly to ${newStatus}`, "success");
         setOrders(prev => prev.map(order => order.orderId === orderId ? { ...order, status: newStatus } : order));
         if (selectedOrder && selectedOrder.orderId === orderId) {
           setSelectedOrder({ ...selectedOrder, status: newStatus });
         }
       } else {
-        alert(`❌ Error shifting timeline state: ${data.message}`);
+        showFeedback(`❌ Error shifting timeline state: ${data.message}`, "error");
       }
     } catch (error) {
-      alert("❌ Server exception handling status mutation.");
+      showFeedback("❌ Server exception handling status mutation.", "error");
     }
   };
 
@@ -81,6 +87,19 @@ const ManageOrders = () => {
           />
         </div>
       </div>
+
+      {/* INLINE ACTIONS FEEDBACK TIMELINE STATE */}
+      {feedback.text && (
+        <div 
+          style={{
+            padding: "14px 20px", borderRadius: "12px", fontSize: "14px", fontWeight: "600", marginBottom: "20px", border: "1px solid",
+            background: feedback.type === "success" ? "#f0fdf4" : "#fef2f2", color: feedback.type === "success" ? "#15803d" : "#b91c1c",
+            borderColor: feedback.type === "success" ? "#bbf7d0" : "#fecaca"
+          }}
+        >
+          {feedback.text}
+        </div>
+      )}
 
       <div className="admin-responsive-table-scroll">
         <table className="admin-ledger-table">

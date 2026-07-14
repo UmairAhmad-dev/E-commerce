@@ -5,6 +5,16 @@ const ManageProducts = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editStates, setEditStates] = useState({});
+  
+  // Refactored custom interface state injections
+  const [feedback, setFeedback] = useState({ text: "", type: "" });
+  const [deleteTarget, setDeleteTarget] = useState(null);
+
+  const showFeedback = (text, type) => {
+    setFeedback({ text, type });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => setFeedback({ text: "", type: "" }), 4000);
+  };
 
   const fetchInfo = async () => {
     try {
@@ -35,11 +45,10 @@ const ManageProducts = () => {
 
   const updateProductHandler = async (id) => {
     const payload = editStates[id];
-    // 🚀 Swapped from localStorage to sessionStorage
     const token = sessionStorage.getItem('auth-token');
 
     if (!token) {
-      alert("❌ Client Error: No session token found. Please log out and log back in.");
+      showFeedback("❌ Client Error: No session token found. Please log out and log back in.", "error");
       return;
     }
 
@@ -57,38 +66,38 @@ const ManageProducts = () => {
       });
       const data = await response.json();
       if (data.success) {
-        alert("🎉 Inventory details synchronized cleanly inside cloud ledger clusters!");
+        showFeedback("🎉 Inventory details synchronized cleanly inside cloud ledger clusters!", "success");
         fetchInfo();
       }
     } catch (error) {
-      alert(`❌ Network/Fetch Error: ${error.message}`);
+      showFeedback(`❌ Network/Fetch Error: ${error.message}`, "error");
     }
   };
 
-  const removeProductHandler = async (id) => {
-    // 🚀 Swapped from localStorage to sessionStorage
+  const executeProductDeletion = async () => {
+    if (!deleteTarget) return;
     const token = sessionStorage.getItem('auth-token');
     if (!token) return;
 
-    if (window.confirm("Are you sure you want to delete this product from the database?")) {
-      try {
-        const response = await fetch("http://localhost:4000/api/products/removeproduct", {
-          method: "POST",
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}` 
-          },
-          body: JSON.stringify({ id: id }),
-        });
-        const data = await response.json();
-        if (data.success) {
-          alert("🗑️ Product removed successfully from database.");
-          await fetchInfo();
-        }
-      } catch (error) {
-        alert(`❌ Deletion Network Error: ${error.message}`);
+    try {
+      const response = await fetch("http://localhost:4000/api/products/removeproduct", {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` 
+        },
+        body: JSON.stringify({ id: deleteTarget }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        showFeedback("🗑️ Product removed successfully from database.", "success");
+        await fetchInfo();
       }
+    } catch (error) {
+      showFeedback(`❌ Deletion Network Error: ${error.message}`, "error");
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -99,6 +108,19 @@ const ManageProducts = () => {
       <div className="table-header-action-row">
         <h3>Live Product Inventory Ledgers ({allProducts.length} Total Items)</h3>
       </div>
+
+      {/* IMMUTABLE INLINE ACTIONS FEEDBACK CONTAINER */}
+      {feedback.text && (
+        <div 
+          style={{
+            padding: "14px 20px", borderRadius: "12px", fontSize: "14px", fontWeight: "600", marginBottom: "24px", border: "1px solid",
+            background: feedback.type === "success" ? "#f0fdf4" : "#fef2f2", color: feedback.type === "success" ? "#15803d" : "#b91c1c",
+            borderColor: feedback.type === "success" ? "#bbf7d0" : "#fecaca"
+          }}
+        >
+          {feedback.text}
+        </div>
+      )}
 
       <div className="admin-responsive-table-scroll">
         <table className="inventory-data-table">
@@ -189,7 +211,7 @@ const ManageProducts = () => {
                   <td>
                     <div className="table-row-action-buttons-cluster">
                       <button onClick={() => updateProductHandler(product.id)} className="table-action-save-btn">Save 💾</button>
-                      <button onClick={() => removeProductHandler(product.id)} className="table-row-delete-action-btn">Delete 🗑️</button>
+                      <button onClick={() => setDeleteTarget(product.id)} className="table-row-delete-action-btn">Delete 🗑️</button>
                     </div>
                   </td>
                 </tr>
@@ -198,6 +220,28 @@ const ManageProducts = () => {
           </tbody>
         </table>
       </div>
+
+      {/* DIALOG OVERLAY MODAL FOR PRODUCT INTERFACE REMOVAL */}
+      {deleteTarget && (
+        <div className="admin-modal-backdrop" onClick={() => setDeleteTarget(null)}>
+          <div className="admin-modal-content-card animated-fade" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "400px" }}>
+            <div className="modal-header-dock">
+              <h3>Delete Store Item</h3>
+              <button className="modal-close-trigger" onClick={() => setDeleteTarget(null)}>×</button>
+            </div>
+            <div className="modal-details-ledger-body" style={{ padding: "12px 0 24px 0" }}>
+              <p style={{ margin: 0, fontSize: "14.5px", color: "#475569", lineHeight: "1.6" }}>
+                Are you sure you want to completely erase this item from your retail stock? This operation directly flushes metadata entries from database catalogs.
+              </p>
+            </div>
+            <div className="modal-actions-bar" style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
+              <button className="table-action-inspect-btn text-muted" onClick={() => setDeleteTarget(null)} style={{ border: "1px solid #cbd5e1", padding: "8px 16px", borderRadius: "8px", background: "none" }}>Cancel</button>
+              <button onClick={executeProductDeletion} style={{ backgroundColor: "#ef4444", color: "#ffffff", border: "none", padding: "8px 20px", borderRadius: "8px", cursor: "pointer", fontWeight: "bold" }}>Yes, Delete 🗑️</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

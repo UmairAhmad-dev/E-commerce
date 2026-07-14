@@ -6,15 +6,27 @@ const AddProduct = () => {
     name: "", old_price: "", new_price: "", category: "mens", stock_qty: "", description: "", tags: ""
   });
   const [imageFile, setImageFile] = useState(null);
+  
+  // Custom feedback state replacing standard alert systems
+  const [feedback, setFeedback] = useState({ text: "", type: "" });
+
+  const showFeedback = (text, type) => {
+    setFeedback({ text, type });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (type === "success") {
+      setTimeout(() => setFeedback({ text: "", type: "" }), 5000);
+    }
+  };
 
   const handleInputChange = (e) => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
+    if (feedback.text) setFeedback({ text: "", type: "" });
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!imageFile) {
-      alert("Please select a product image file first!");
+      showFeedback("⚠️ Please select a product image file first!", "error");
       return;
     }
 
@@ -50,25 +62,45 @@ const AddProduct = () => {
         const finalData = await productResponse.json();
         
         if (finalData.success) {
-          alert(`🎉 Success! "${productDetails.name}" is now live in your cloud catalog.`);
+          showFeedback(`🎉 Success! "${productDetails.name}" is now live in your cloud catalog.`, "success");
           setProductDetails({ name: "", old_price: "", new_price: "", category: "mens", stock_qty: "", description: "", tags: "" });
           setImageFile(null);
           setActiveStep(1);
         } else {
-          alert("❌ Failed to push product meta fields to database.");
+          showFeedback("❌ Failed to push product meta fields to database.", "error");
         }
       } else {
-        alert("❌ Image upload system rejected the file stream.");
+        showFeedback("❌ Image upload system rejected the file stream.", "error");
       }
     } catch (error) {
       console.error("Full-Stack integration failed:", error);
-      alert("❌ Error: Unable to connect to your backend server node.");
+      showFeedback("❌ Error: Unable to connect to your backend server node.", "error");
     }
   };
 
   return (
     <div className="admin-card-view premium-ui-card animated-fade">
       
+      {/* INLINE FEEDBACK NOTIFICATION BANNER */}
+      {feedback.text && (
+        <div 
+          className={`profile-inline-feedback-banner ${feedback.type}`}
+          style={{
+            padding: "14px 20px",
+            borderRadius: "12px",
+            fontSize: "14px",
+            fontWeight: "600",
+            marginBottom: "24px",
+            border: "1px solid",
+            background: feedback.type === "success" ? "#f0fdf4" : "#fef2f2",
+            color: feedback.type === "success" ? "#15803d" : "#b91c1c",
+            borderColor: feedback.type === "success" ? "#bbf7d0" : "#fecaca"
+          }}
+        >
+          {feedback.text}
+        </div>
+      )}
+
       {/* MODERN STEPPER PROGRESS ROADMAP */}
       <div className="form-stepper-container">
         <div className={`step-node ${activeStep >= 1 ? 'active' : ''}`}>
@@ -140,7 +172,7 @@ const AddProduct = () => {
                   if(productDetails.name && productDetails.description) {
                     setActiveStep(2);
                   } else {
-                    alert("Please fill in the Product Name and Description first!");
+                    showFeedback("⚠️ Please fill in the Product Name and Description first!", "error");
                   }
                 }}
               >
@@ -155,12 +187,12 @@ const AddProduct = () => {
           <div className="stepper-content-view animated-fade">
             <div className="form-input-row-grid">
               <div className="form-input-block">
-                <label>Original Retail Price ($)</label>
-                <input type="number" step="0.01" name="old_price" placeholder="85.00" value={productDetails.old_price} onChange={handleInputChange} required />
+                <label>Original Retail Price (Rs.)</label>
+                <input type="number" step="1" name="old_price" placeholder="8500" value={productDetails.old_price} onChange={handleInputChange} required />
               </div>
               <div className="form-input-block">
-                <label>Sale Price ($)</label>
-                <input type="number" step="0.01" name="new_price" placeholder="55.00" value={productDetails.new_price} onChange={handleInputChange} required />
+                <label>Sale Price (Rs.)</label>
+                <input type="number" step="1" name="new_price" placeholder="5500" value={productDetails.new_price} onChange={handleInputChange} required />
               </div>
               <div className="form-input-block">
                 <label>Vault Stock Quantity</label>

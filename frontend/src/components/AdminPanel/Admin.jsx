@@ -5,7 +5,7 @@ import ManageOrders from './ManageOrders';
 import AdminAnalytics from './AdminAnalytics';
 import ManageCoupons from './ManageCoupons'; 
 import ManageUsers from './ManageUsers';     
-import ManageReviews from './ManageReviews'; // 🚀 IMPORTED THE NEW REVIEWS MODERATION HUB COMPONENT
+import ManageReviews from './ManageReviews'; 
 import AdminPortalAuth from './AdminPortalAuth';
 import './Admin.css';
 
@@ -13,6 +13,9 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState("analytics");
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [loading, setLoading] = useState(true); 
+  
+  // STATE FOR CUSTOM OVERLAY DIALOGUE
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   useEffect(() => {
     const checkAdminAuthorization = async () => {
@@ -47,17 +50,16 @@ const Admin = () => {
 
     checkAdminAuthorization();
 
-    // 🚀 THE UNMOUNT CLEANER: This triggers the exact second the admin leaves the admin panel route
+    // THE UNMOUNT CLEANER: This triggers the exact second the admin leaves the admin panel route
     return () => {
       sessionStorage.removeItem('auth-token');
     };
   }, []);
 
-  const logoutHandler = () => {
-    if (window.confirm("Are you sure you want to log out of the Admin Control Panel?")) {
-      sessionStorage.clear();  
-      setIsAuthorized(false); 
-    }
+  const executeLogout = () => {
+    sessionStorage.clear();  
+    setIsAuthorized(false); 
+    setShowLogoutConfirm(false);
   };
 
   if (loading) {
@@ -111,14 +113,13 @@ const Admin = () => {
             <span className="nav-icon-glyph">👥</span> User Database
           </button>
           
-          {/* 🚀 NEW LINK: ADDED MODERATION Tab button inside your list menu */}
           <button className={`sidebar-link-btn ${activeTab === "reviews" ? "active" : ""}`} onClick={() => setActiveTab("reviews")}>
             <span className="nav-icon-glyph" style={{ color: '#f59e0b' }}>⭐</span> Moderate Reviews
           </button>
         </nav>
 
         <div className="sidebar-footer-exit">
-          <button onClick={logoutHandler} className="exit-portal-btn">
+          <button onClick={() => setShowLogoutConfirm(true)} className="exit-portal-btn">
             <span>🚪 Secure Exit Portal</span>
           </button>
         </div>
@@ -134,7 +135,7 @@ const Admin = () => {
               {activeTab === "orders" && "Order Fulfillment Terminal"}
               {activeTab === "coupons" && "Campaign Coupon Manager"}
               {activeTab === "users" && "User Database Control Panel"}
-              {activeTab === "reviews" && "Product Review Moderation Portal"} {/* 🚀 MOUNTED TITLE */}
+              {activeTab === "reviews" && "Product Review Moderation Portal"} 
             </h1>
             <p>Authorized Master Administrative Control Environment</p>
           </div>
@@ -151,9 +152,51 @@ const Admin = () => {
           {activeTab === "orders" && <ManageOrders />}
           {activeTab === "coupons" && <ManageCoupons />}
           {activeTab === "users" && <ManageUsers />}
-          {activeTab === "reviews" && <ManageReviews />} {/* 🚀 MOUNTED WORKSPACE */}
+          {activeTab === "reviews" && <ManageReviews />} 
         </div>
       </main>
+
+      {/* PREMIUM CONFIRMATION OVERLAY MODAL */}
+      {showLogoutConfirm && (
+        <div className="admin-modal-backdrop" onClick={() => setShowLogoutConfirm(false)}>
+          <div className="admin-modal-content-card animated-fade" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "400px" }}>
+            <div className="modal-header-dock">
+              <h3>Admin Session Exit</h3>
+              <button className="modal-close-trigger" onClick={() => setShowLogoutConfirm(false)}>×</button>
+            </div>
+            
+            <div className="modal-details-ledger-body" style={{ padding: "12px 0 24px 0" }}>
+              <p style={{ margin: 0, fontSize: "14.5px", color: "#475569", lineHeight: "1.6" }}>
+                Are you sure you want to completely terminate your active admin connection tokens and log out of the dashboard portal workspace?
+              </p>
+            </div>
+            
+            <div className="modal-actions-bar" style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
+              <button 
+                className="table-action-inspect-btn text-muted" 
+                onClick={() => setShowLogoutConfirm(false)}
+                style={{ border: "1px solid #cbd5e1", padding: "8px 16px", borderRadius: "8px", background: "none", cursor: "pointer", fontWeight: "600" }}
+              >
+                Stay Logged In
+              </button>
+              <button 
+                onClick={executeLogout}
+                style={{ 
+                  backgroundColor: "#ef4444", 
+                  color: "#ffffff", 
+                  border: "none", 
+                  padding: "8px 20px", 
+                  borderRadius: "8px", 
+                  cursor: "pointer",
+                  fontWeight: "bold"
+                }}
+              >
+                Yes, Terminate 🚪
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
