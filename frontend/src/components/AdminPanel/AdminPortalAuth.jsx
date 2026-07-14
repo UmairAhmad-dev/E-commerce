@@ -1,18 +1,16 @@
 import { useState } from 'react';
 import './AdminPortalAuth.css';
-import videoBg from '../../assets/auth-bg.mp4'; // 🚀 Shared path: importing the exact same video as the user side
+import videoBg from '../../assets/auth-bg.mp4'; 
 
 const AdminPortalAuth = ({ onLoginSuccess }) => {
   const [isLoginState, setIsLoginState] = useState(true);
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
-  
-  // 🚀 REACTIVE INLINE ALERTS FEEDBACK STATE
   const [adminAuthError, setAdminAuthError] = useState("");
   const [isFormAnimating, setIsFormAnimating] = useState(false);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (adminAuthError) setAdminAuthError(""); // Clear active alerts reactively
+    if (adminAuthError) setAdminAuthError(""); 
   };
 
   const handlePanelStateToggle = () => {
@@ -42,7 +40,8 @@ const AdminPortalAuth = ({ onLoginSuccess }) => {
       const data = await response.json();
 
       if (data.success) {
-        localStorage.setItem('auth-token', data.token);
+        // 🚀 Saved to sessionStorage to isolate dashboard state management parameters
+        sessionStorage.setItem('auth-token', data.token);
         setAdminAuthError(isLoginState ? "🎉 Clearance accepted. Loading secure console..." : "🎉 Entity profile provisioned successfully!");
         
         if (isLoginState) {
@@ -67,17 +66,15 @@ const AdminPortalAuth = ({ onLoginSuccess }) => {
 
   return (
     <div className="admin-auth-viewport">
-      {/* 🚀 SHARED CINEMATIC BACKGROUND VIDEO FOR UNIFIED RETAILED BRANDING */}
       <video className="admin-video-canvas" src={videoBg} autoPlay loop muted playsInline />
       <div className="admin-video-tint-overlay"></div>
 
-      <div className={`admin-glass-control-card ${isFormAnimating ? 'panel-leaving' : ''}`}>
-        <div className="auth-brand-header">
+      <div className={`admin-glass-control-card ${isFormAnimating ? 'admin-panel-leaving' : ''}`}>
+        <div className="admin-auth-brand-header">
           <h2>SHOPPER CONTROL HUB</h2>
           <p>{isLoginState ? "Master Console Verification Gateway" : "Provision New System Administrator Entity"}</p>
         </div>
 
-        {/* 🚀 REACTIVE INLINE ALERTS LAYER HOOK */}
         {adminAuthError && (
           <div className={`admin-inline-feedback ${adminAuthError.startsWith('🎉') ? 'admin-msg-ok' : 'admin-msg-err'}`}>
             {adminAuthError}
@@ -107,7 +104,7 @@ const AdminPortalAuth = ({ onLoginSuccess }) => {
           </button>
         </form>
 
-        <p className="auth-toggle-string" onClick={handlePanelStateToggle}>
+        <p className="admin-auth-toggle-string" onClick={handlePanelStateToggle}>
           {isLoginState ? "🔧 Register secondary supervisor node" : "🔑 Return to secure console login gate"}
         </p>
       </div>

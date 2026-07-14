@@ -5,7 +5,6 @@
   --easing-cubic: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* 🚀 STRICT FIXED WINDOW BOUNDARY MATRIX */
 .admin-auth-viewport {
   position: fixed;
   top: 0;
@@ -18,10 +17,10 @@
   font-family: system-ui, -apple-system, sans-serif;
   overflow: hidden;
   padding: 24px;
-  z-index: 999999;
+  z-index: 9999999 !important; /* 🚀 Forces the admin panel to sit above all storefront layouts */
+  background-color: #090d16;
 }
 
-/* 🚀 FULL-SCALE CINEMATIC SHARED VIDEO LAYER */
 .admin-video-canvas {
   position: absolute;
   top: 0;
@@ -32,26 +31,20 @@
   z-index: -2;
 }
 
-/* 🚀 FIXED: Background gradient syntax error resolved perfectly */
 .admin-video-tint-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    180deg, 
-    rgba(15, 23, 42, 0.5) 0%, 
-    rgba(10, 15, 30, 0.75) 100%
-  );
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.5) 0%, rgba(10, 15, 30, 0.75) 100%);
   z-index: -1;
 }
 
-/* 🚀 HIGH-END DEEP GLASSMORPHIC ADMINISTRATION HUB */
 .admin-glass-control-card {
   width: 100%;
   max-width: 440px;
-  background: rgba(15, 23, 42, 0.5); 
+  background: rgba(15, 23, 42, 0.65); 
   backdrop-filter: blur(24px); 
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.12); 
@@ -64,17 +57,18 @@
   animation: adminEntrance 0.55s var(--easing-cubic) forwards;
 }
 
-.admin-glass-control-card.panel-leaving {
+.admin-glass-control-card.admin-panel-leaving {
   opacity: 0;
   transform: scale(0.96) translateY(5px);
 }
 
-.auth-brand-header {
+/* 🚀 Isolated Header Selectors */
+.admin-auth-brand-header {
   text-align: center;
   margin-bottom: 28px;
 }
 
-.auth-brand-header h2 {
+.admin-auth-brand-header h2 {
   font-size: 24px;
   font-weight: 900;
   color: #ffffff;
@@ -83,14 +77,13 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.auth-brand-header p {
+.admin-auth-brand-header p {
   font-size: 13.5px;
   color: #cbd5e1;
   margin: 0;
   line-height: 1.4;
 }
 
-/* INLINE ALERTS FEEDBACK BANNER */
 .admin-inline-feedback {
   padding: 12px 16px;
   border-radius: 10px;
@@ -121,7 +114,6 @@
   gap: 22px;
 }
 
-/* 🚀 CYBER-TECH INTERACTIVE LABELS MATRIX */
 .admin-input-group-animated {
   position: relative;
   width: 100%;
@@ -169,7 +161,6 @@
   letter-spacing: 0.75px;
 }
 
-/* 🚀 SUBMIT/AUTHORIZATION ACTION TRIGGER BUTTON */
 .admin-action-submit-btn-wide {
   width: 100%;
   height: 52px;
@@ -196,7 +187,8 @@
   transform: translateY(0);
 }
 
-.auth-toggle-string {
+/* 🚀 Isolated Toggle String */
+.admin-auth-toggle-string {
   font-size: 13px;
   font-weight: 600;
   color: #ff4141;
@@ -207,13 +199,12 @@
   transition: all 0.2s ease;
 }
 
-.auth-toggle-string:hover {
+.admin-auth-toggle-string:hover {
   color: var(--admin-cyan);
   text-decoration: underline;
   text-shadow: 0 0 8px rgba(0, 242, 254, 0.3);
 }
 
-/* KEYFRAMES ENTRANCE ANIMATIONS */
 @keyframes adminEntrance {
   from { opacity: 0; transform: translateY(16px) scale(0.97); }
   to { opacity: 1; transform: translateY(0) scale(1); }

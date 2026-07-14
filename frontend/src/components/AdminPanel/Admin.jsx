@@ -5,20 +5,20 @@ import ManageOrders from './ManageOrders';
 import AdminAnalytics from './AdminAnalytics';
 import ManageCoupons from './ManageCoupons'; 
 import ManageUsers from './ManageUsers';     
+import AdminPortalAuth from './AdminPortalAuth'; 
 import './Admin.css';
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("analytics");
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [loading, setLoading] = useState(true); 
 
- 
   useEffect(() => {
     const checkAdminAuthorization = async () => {
-      const token = localStorage.getItem('auth-token');
+      const token = sessionStorage.getItem('auth-token');
       
       if (!token) {
-        alert("⚠️ Access Denied: Authentication credentials missing. Redirecting to validation gateway.");
-        window.location.href = "http://localhost:5173/login";
+        setLoading(false); 
         return;
       }
 
@@ -35,27 +35,31 @@ const Admin = () => {
         if (response.ok && data.success && data.role === "admin") {
           setIsAuthorized(true);
         } else {
-          alert("🚫 Restricted Area: Administrative access credentials required.");
-          window.location.href = "http://localhost:5173/login";
+          sessionStorage.removeItem('auth-token'); 
         }
       } catch (error) {
         console.error("Security handshake verification error context:", error);
-        alert("❌ System connection timeout during verification. Evacuating panel area.");
-        window.location.href = "http://localhost:5173/login";
+      } finally {
+        setLoading(false); 
       }
     };
 
     checkAdminAuthorization();
+
+    // 🚀 THE UNMOUNT CLEANER: This triggers the exact second the admin leaves the admin panel route
+    return () => {
+      sessionStorage.removeItem('auth-token');
+    };
   }, []);
 
   const logoutHandler = () => {
     if (window.confirm("Are you sure you want to log out of the Admin Control Panel?")) {
-      localStorage.clear();  
-      window.location.href = "http://localhost:5173/login";
+      sessionStorage.clear();  
+      setIsAuthorized(false); 
     }
   };
 
-  if (!isAuthorized) {
+  if (loading) {
     return (
       <div className="admin-gate-pulse-loader">
         <div className="security-spinner-ring"></div>
@@ -64,10 +68,12 @@ const Admin = () => {
     );
   }
 
+  if (!isAuthorized) {
+    return <AdminPortalAuth onLoginSuccess={() => setIsAuthorized(true)} />;
+  }
+
   return (
     <div className="admin-dashboard-layout full-screen-override">
-      
-      {/* Left Navigation Sidebar Drawer Panel */}
       <aside className="admin-sidebar">
         <div className="admin-brand-profile">
           <h2>SHOPPER</h2>
@@ -75,7 +81,7 @@ const Admin = () => {
         </div>
         
         <div className="sidebar-user-card-profile">
-          <div className="profile-initial-circle">UN</div>
+          <div className="profile-initial-circle">UA</div>
           <div className="profile-meta-strings">
             <h4>Umair Ahmad</h4>
             <span className="role-indicator-badge">System Administrator</span>
@@ -84,7 +90,6 @@ const Admin = () => {
 
         <div className="sidebar-divider" />
         
-        {/* 🧭 NAVIGATION LINKS MENU */}
         <nav className="sidebar-menu-links">
           <button className={`sidebar-link-btn ${activeTab === "analytics" ? "active" : ""}`} onClick={() => setActiveTab("analytics")}>
             <span className="nav-icon-glyph">📊</span> Dashboard Analytics
@@ -113,7 +118,6 @@ const Admin = () => {
         </div>
       </aside>
 
-      {/* Main Control Panel Display Area */}
       <main className="admin-main-workspace">
         <header className="workspace-top-bar">
           <div className="bar-title">
